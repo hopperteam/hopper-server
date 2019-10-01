@@ -1,0 +1,19 @@
+{
+  "name": "hopper-backend",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf dist && cp -r webroot dist && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucaschimweg/hopper-backend.git"
+  },
+  "author": "The hopper team",
+  "license": "ISC",
+  "homepage": "https://hoppercloud.net",
+  "devDependencies": {
+    "typescript": "^3.6.3"
+  }
+}

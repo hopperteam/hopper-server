@@ -1,0 +1,4 @@
+*/node_modules
+out
+frontend/dist
+*/package-lock.json
