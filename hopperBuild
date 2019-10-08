@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+checkDependencies ( ) {
+  echo "Checking for NPM"
+  if ! type "npm" > /dev/null; then
+    echo "NPM not found, installing"
+    if ! type "apt-get" > /dev/null
+    then
+        echo "Apt-get not found, cannot install npm!"
+        exit 1
+    fi
+    apt-get install npm
+  else
+    echo "NPM found!"
+  fi
+}
+
+cleanUp ( ) {
+  echo "Cleaning up last build"
+  rm -rf out
+}
+
+buildBackend ( ) {
+  echo "Building backend"
+  pushd backend
+    npm install .
+    npm run build
+  popd
+}
+
+buildFrontend ( ) {
+  echo "Building frontend"
+  pushd frontend
+    npm install .
+    npm run build
+  popd
+}
+
+dist ( ) {
+  echo "Building release"
+
+  cp -r backend/dist out/
+  cp -r frontend/dist out/web/
+}
+
+build ( ) {
+  checkDependencies
+  cleanUp
+  buildBackend
+  buildFrontend
+  dist
+}
+
+run ( ) {
+  build
+  pushd out
+    node main.js
+  popd
+}
+
+help ( ) {
+  echo "~~~~~~ Hopper build system ~~~~~~"
+  echo "---- Core commands ----"
+  echo "build - Builds the whole project"
+  echo "run - Builds and runs the project"
+  echo "---- Minor commands ----"
+  echo "checkDependencies - Checks and installs required dependencies"
+  echo "cleanUp - Cleans up last build"
+  echo "buildBackend - Builds the backend"
+  echo "buildFrontend - Builds the frontend"
+  echo "dist - Packages the front- and backend"
+}
+
+if declare -f "$1" > /dev/null
+then
+  # call arguments verbatim
+  "$@"
+else
+  # Show a helpful error
+  if [ "$1" != "" ]; then
+    echo "'$1' is not a known function name!" >&2
+  fi
+  help
+fi
