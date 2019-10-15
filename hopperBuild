@@ -18,6 +18,8 @@ checkDependencies ( ) {
 cleanUp ( ) {
   echo "Cleaning up last build"
   rm -rf out
+  rm -rf backend/dist
+  rm -rf frontend/dist
 }
 
 buildBackend ( ) {
@@ -25,6 +27,7 @@ buildBackend ( ) {
   pushd backend
     npm install .
     npm run build
+    cp package.json dist/package.json
   popd
 }
 
@@ -38,7 +41,9 @@ buildFrontend ( ) {
 
 dist ( ) {
   echo "Building release"
-
+  pushd backend/dist
+    npm install . --production
+  popd
   cp -r backend/dist out/
   cp -r frontend/dist out/web/
 }
