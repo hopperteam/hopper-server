@@ -4,12 +4,24 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf ../.build/frontend/ && cp -r webroot ../.build/frontend && tsc"
+    "build": "webpack -p"
   },
   "author": "The hopper team",
   "license": "ISC",
   "homepage": "https://hoppercloud.net",
   "devDependencies": {
-    "typescript": "^3.6.3"
+    "@types/react": "^16.9.7",
+    "@types/react-dom": "^16.9.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "file-loader": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "ts-loader": "^6.2.0",
+    "typescript": "^3.6.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
+  },
+  "dependencies": {
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2"
   }
 }

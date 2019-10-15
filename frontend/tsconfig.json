@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "jsx": "react",
     "module": "commonjs",
-    "declaration": true,
-    "outDir": "../.build/frontend/js/",
-    "strict": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "lib": [
+      "dom",
+      "es6"
+    ]
   },
-  "include": ["./ts/*"],
+  "include": ["./src/*"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }
