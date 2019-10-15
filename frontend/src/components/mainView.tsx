@@ -1,11 +1,18 @@
 import * as React from 'react';
-const hopperLogo = require("../img/logo.svg");
+import {Notification} from 'types';
+import NotificationView from 'components/notificationView'
 
-export default class MainViewComponent extends React.Component {
+type MainViewProps = {
+    notifications: Notification[]
+}
+
+export default class MainView extends React.Component<MainViewProps> {
 
     render(): React.ReactNode {
         return <div>
-            <img src={hopperLogo} alt="hopperLogo" height="50" width="50" />
-        </div>
+            {this.props.notifications.map(value => {
+                return <NotificationView key={value.id} notification={value} />
+            })}
+        </div>;
     }
 }

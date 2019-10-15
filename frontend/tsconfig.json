@@ -6,11 +6,12 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "strict": true,
+    "baseUrl": "src",
     "lib": [
       "dom",
       "es6"
     ]
   },
-  "include": ["./src/*"],
+  "include": ["src"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }
