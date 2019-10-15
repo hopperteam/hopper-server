@@ -7,7 +7,7 @@ type CardProps = {
 
 export default class NotificationView extends React.Component<CardProps> {
     render(): React.ReactNode {
-        return <div>
+        return <div className="notification">
             <h1>{this.props.notification.heading}</h1>
         </div>
     }

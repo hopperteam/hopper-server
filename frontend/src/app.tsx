@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import MainView from "components/mainView";
-
 import {App, Notification} from "./types";
+
+const styles = require("css/app.css");
 
 let notifications: Notification[] = [];
 
