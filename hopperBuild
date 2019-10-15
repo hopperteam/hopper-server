@@ -18,8 +18,8 @@ checkDependencies ( ) {
 cleanUp ( ) {
   echo "Cleaning up last build"
   rm -rf out
-  rm -rf backend/dist
-  rm -rf frontend/dist
+  rm -rf .build
+  mkdir .build
 }
 
 buildBackend ( ) {
@@ -27,7 +27,8 @@ buildBackend ( ) {
   pushd backend
     npm install .
     npm run build
-    cp package.json dist/package.json
+    cp package.json ../.build/backend/package.json
+    cp package-lock.json ../.build/backend/package-lock.json
   popd
 }
 
@@ -41,11 +42,8 @@ buildFrontend ( ) {
 
 dist ( ) {
   echo "Building release"
-  pushd backend/dist
-    npm install . --production
-  popd
-  cp -r backend/dist out/
-  cp -r frontend/dist out/web/
+  cp -r .build/backend out/
+  cp -r .build/frontend out/web/
 }
 
 build ( ) {
@@ -56,8 +54,15 @@ build ( ) {
   dist
 }
 
-run ( ) {
+install ( ) {
   build
+  pushd out
+    npm install . --production
+  popd
+}
+
+run ( ) {
+  install
   pushd out
     node main.js
   popd
@@ -67,7 +72,8 @@ help ( ) {
   echo "~~~~~~ Hopper build system ~~~~~~"
   echo "---- Core commands ----"
   echo "build - Builds the whole project"
-  echo "run - Builds and runs the project"
+  echo "install - Builds and installs the project"
+  echo "run - Installs and runs the project"
   echo "---- Minor commands ----"
   echo "checkDependencies - Checks and installs required dependencies"
   echo "cleanUp - Cleans up last build"

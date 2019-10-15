@@ -1,7 +1,5 @@
 */node_modules
 out
-backend/dist
-frontend/dist
-*/package-lock.json
+.build
 .DS_Store
 .idea/

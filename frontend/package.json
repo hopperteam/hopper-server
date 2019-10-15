@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && cp -r webroot dist && tsc"
+    "build": "rm -rf ../.build/frontend/ && cp -r webroot ../.build/frontend && tsc"
   },
   "author": "The hopper team",
   "license": "ISC",
