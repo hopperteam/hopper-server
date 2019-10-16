@@ -1,6 +1,8 @@
 FROM node
 
+EXPOSE 80
 COPY out/ /app
-RUN cd /app && npm install . --production
+WORKDIR /app
+RUN npm install . --production
 
-CMD cd /app && node .
+ENTRYPOINT ["node", "."]
