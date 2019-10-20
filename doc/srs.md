@@ -22,7 +22,7 @@ Hopper is a tool, which allows you to merge your information streams into a simp
 
 ### 1.2 Scope  
 
-This software specification applies for the whole hopper project. Users will be able to register the specified services and their respective notifications will be funneled into one dashboard.  
+This software specification applies for the hopper server. Users will be able to register the specified services and their respective notifications will be funneled into one dashboard.  
 
 ### 1.3 Definitions, Acronyms, and Abbreviations  
 
