@@ -54,8 +54,8 @@ We are introducing a way to overcome this challenge – with hopper. Hopper is a
 The majority of information streams are based on notifications. You receive them, usually on your phone, and try to keep track of them all. Hopper is a central place for your notifications. It keeps track of them and lets you filter them, to only keep track of what is really important to you.
 
 ### 2.2 Use Case Diagram
-The following shows the envisioned use cases in a UCD: 
-TODO: create UCD
+![use case diagram](./ucd.svg "Use Case Diagram")
+
 
 ## 3. Specific Requirements  
 
