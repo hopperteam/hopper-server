@@ -24,10 +24,18 @@ export default class NotificationContainer extends React.Component<NotificationC
 export class NotificationView extends React.Component<NotificationViewProps> {
     render(): React.ReactNode {
         return <div className="notification">
-            <h2>{this.props.notification.heading}</h2>
-            <span>{this.props.notification.sender.name}</span>
-            <span> - </span>
-            <span>{this.props.notification.body}</span>
+            <div className="notificationMeta">
+                <span className="notificationSender">{this.props.notification.sender.name}</span>
+                <div className="notificationSenderSeperator" />
+                <span className="notificationTime">5m ago</span>
+            </div>
+            <div className="notificationContent">
+                <img className="notificationImage" alt="notificationImage" src={
+                    this.props.notification.imageLink != undefined ? this.props.notification.imageLink : this.props.notification.sender.imageLink}
+                />
+                <p className="notificationTitle">{this.props.notification.heading}</p>
+                <span className="notificationBody">{this.props.notification.body}</span>
+            </div>
         </div>
     }
 }

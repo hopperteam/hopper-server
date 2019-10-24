@@ -1,0 +1,52 @@
+.notification {
+    margin: 16px;
+    box-shadow: 0 2px 4px 2px rgba(0,0,0,0.75);
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 4px 0 0;
+}
+
+.notificationTitle {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.notificationImage {
+    height: 3rem;
+    width: 3rem;
+    margin-right: 8px;
+    float: left;
+}
+
+.notificationBody {
+    /*margin-top: 2px;*/
+}
+
+.notificationMeta {
+    font-size: 0.8rem;
+    color: #00bd84;
+    margin-left: 8px;
+    display: inline-block;
+}
+
+.notificationSender {
+    font-weight: bold;
+    float: left;
+}
+
+.notificationTime {
+    float: left;
+}
+
+.notificationSenderSeperator {
+    height: 0.2rem;
+    width: 0.2rem;
+    border-radius: 0.1rem;
+    background-color: #00bd84;
+    margin: .3rem;
+    float: left;
+}
+
+.notificationContent {
+    padding: 0 8px 8px;
+}

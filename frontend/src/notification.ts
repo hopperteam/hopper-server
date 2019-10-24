@@ -4,23 +4,27 @@ export class Notification {
     readonly heading: string;
     readonly body: string;
     readonly timestamp: number;
+    readonly imageLink: string|undefined;
 
-    constructor(id: number, sender: App, heading: string, body: string, timestamp: number) {
+    constructor(id: number, sender: App, heading: string, body: string, timestamp: number, imageLink: string|undefined = undefined) {
         this.id = id;
         this.sender = sender;
         this.heading = heading;
         this.body = body;
         this.timestamp = timestamp;
+        this.imageLink = imageLink;
     }
 }
 
 export class App {
     readonly id: number;
     readonly name: string;
+    readonly imageLink: string;
 
-    constructor(id: number, name: string) {
+    constructor(id: number, name: string, imageLink: string) {
         this.id = id;
         this.name = name;
+        this.imageLink = imageLink;
     }
 }
 

@@ -6,7 +6,8 @@ import MainView from "components/mainView";
 import LoadingView from "components/loadingView";
 import LoginView from "./components/loginView";
 
-const styles = require("css/app.css");
+require("css/app.css");
+require("css/notification.css");
 
 let user: User = new User("Max Mustermann", "max.mu@stermann.de");
 let notifications = new NotificationSet();
@@ -38,11 +39,11 @@ function updateView() {
 
 renderLoadingView();
 
-const app = new App(123, "WhatsApp");
+const app = new App(123, "Hopper", require("img/logo_small.svg"));
 
 function simulateData() {
-    const not = new Notification(1, app, "Message 1", "This is message 1", 123);
-    const not2 = new Notification(2, app, "Message 2", "This is message 2", 456);
+    const not = new Notification(1, app, "Account created", "Welcome to your hopper account!", 123);
+    const not2 = new Notification(2, app, "This is a notification", "Any app will appear here!", 456);
     notifications.integrateNotifications([not, not2]);
 }
 
@@ -54,5 +55,3 @@ loggedIn();
 simulateData();
 updateView();
 
-notifications.updateNotitifaction(new Notification(2, app, "Message 2 Updated", "yeah", 456));
-updateView();
