@@ -1,3 +1,5 @@
+const LOADING_TIME = 2000;
+
 export default class HopperApi {
     static async login(username: string, password: string): Promise<HopperApi|null> {
         return new Promise<HopperApi|null>((resolve) => {
@@ -8,7 +10,7 @@ export default class HopperApi {
                 } else {
                     resolve(null);
                 }
-            }, 2000);
+            }, LOADING_TIME);
         });
     }
 
