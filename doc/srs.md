@@ -117,12 +117,18 @@ The SP can delete the previously pushed notification
 The SP can update the previously pushed notification
 #### 3.1.10 Mark notification as done
 The user can mark a notification it received as done, it will not show on the overview page
+
+[Use Case Documentation](./uc-set-notification-done.md)
 #### 3.1.11 Notify user
 The user can be notified of an incoming notification
 #### 3.1.12 Start action
 The user can start actions provided with the notifications
 #### 3.1.13 Delete user
 All user data can be deleted
+#### 3.1.14 Filter for SP
+Filter notifications for one specific SP
+
+[Use Case Documentation](./uc-filter-for-sp.md)
 
 ### 3.2 Usability
 #### 3.2.1 Usable in web browsers
