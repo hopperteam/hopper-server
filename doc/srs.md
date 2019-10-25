@@ -91,7 +91,7 @@ We are introducing a way to overcome this challenge – with hopper. Hopper is a
 The majority of information streams are based on notifications. You receive them, usually on your phone, and try to keep track of them all. Hopper is a central place for your notifications. It keeps track of them and lets you filter them, to only keep track of what is really important to you.
 
 ### 2.2 Use Case Diagram
-![use case diagram](./ucd.svg "Use Case Diagram")  
+![use case diagram](img/ucd.svg "Use Case Diagram")  
 *The scope for the timespan until December, is to implement the hopper server (what you see above). In the next development cycle (from April to June) we will implement some default service providers and a provider store.*
 
 ## 3. Specific Requirements  
