@@ -27,6 +27,7 @@ buildBackend ( ) {
   pushd backend
     npm install .
     npm run build
+	cp ./src/config.json ../.build/backend/config.json
     cp package.json ../.build/backend/package.json
     cp package-lock.json ../.build/backend/package-lock.json
   popd
