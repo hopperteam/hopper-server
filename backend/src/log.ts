@@ -1,7 +1,7 @@
 ﻿
 enum LogLevel {
-    INFO = "INFO",
-    WARN = "WARN",
+    INFO = "INFO ",
+    WARN = "WARN ",
     ERROR = "ERROR"
 }
 
@@ -29,9 +29,14 @@ function log(logLevel: LogLevel, module: string, message: string) {
 
 export default class Log {
     private module: string;
+    private maxModuleLength: number = 16;
 
     constructor(module: string) {
-        this.module = module;
+        if (module.length <= this.maxModuleLength) {
+            this.module = module + (" ".repeat(this.maxModuleLength - module.length));
+        } else {
+            this.module = module.substr(0, this.maxModuleLength);
+        }
     }
 
     public info(message: string) {
