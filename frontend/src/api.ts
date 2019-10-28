@@ -5,9 +5,9 @@ const LOADING_TIME = 2000;
 
 const DEMO_APPS = [
     new App("1", "Hopper User Service", require("./img/logo_small.svg"), true, true,"hoppercloud.net", "https://app.hoppercloud.net"),
-    new App("2", "WhatsApp", require("./img/logo_small.svg"), true, false, "whatsapp.com", "https://manage.hopper.whatsapp.com"),
-    new App("3", "Deutsche Bank", require("./img/logo_small.svg"), true, false, "deutsche-bank.de", "https://hopper.deutsche-bank.de"),
-    new App("4", "Studierendenwerk Karlsruhe", require("./img/logo_small.svg"), false, true, "sw-ka.de", "https://account.hopper.sw-ka.de"),
+    new App("2", "WhatsApp", "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", true, false, "whatsapp.com", "https://manage.hopper.whatsapp.com"),
+    new App("3", "Deutsche Bank", "https://upload.wikimedia.org/wikipedia/commons/7/7b/Deutsche_Bank_logo_without_wordmark.svg", true, false, "deutsche-bank.de", "https://hopper.deutsche-bank.de"),
+    new App("4", "Studierendenwerk Karlsruhe", "https://www.jobs-studentenwerke.de/sites/default/files/styles/logo_studentenwerk/public/user-files/Studierendenwerk%20Karlsruhe/logos/swka_farbig.png?itok=55RSWEF6", false, true, "sw-ka.de", "https://account.hopper.sw-ka.de"),
 ];
 
 const DEMO_NOTIFICATIONS = [

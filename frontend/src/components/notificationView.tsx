@@ -3,6 +3,7 @@ import {NotificationIterator, NotificationSet} from 'notificationSet';
 import {App, Notification} from "../types";
 import LoadingController from "../loadingController";
 import {ChangeEvent} from "react";
+import loadingController from "../loadingController";
 
 type NotificationContainerProps = {
     notifications: NotificationSet,
@@ -29,8 +30,9 @@ type NotificationViewProps = {
 
 type NotificationFilterChooserProps = {
     includeDone: boolean,
-    notification: NotificationSet,
+    notifications: NotificationSet,
     currentApp: string | undefined,
+    loadingController: loadingController,
     onUpdate: (includeDone: boolean, currentApp: string | undefined) => void
 }
 
@@ -83,7 +85,7 @@ export class NotificationContainer extends React.Component<NotificationContainer
 
     render(): React.ReactNode {
         return <div id="notificationContainer" onScroll={ e => this.checkScrollState(e.target as HTMLElement) } >
-            <NotificationFilterChooser notification={this.props.notifications} currentApp={this.state.currentApp} includeDone={this.state.includeDone} onUpdate={this.onFilterUpdate.bind(this)}/>
+            <NotificationFilterChooser notifications={this.props.notifications} currentApp={this.state.currentApp} includeDone={this.state.includeDone} onUpdate={this.onFilterUpdate.bind(this)} loadingController={this.props.loadingController} />
             <NotificationList notifications={this.props.notifications} mapFunction={this.props.loadingController.getMapFunction(this.state.includeDone, this.state.currentApp)} showLoadingElement={!this.state.loadingFinished} />
         </div>
     }
@@ -99,9 +101,27 @@ export class NotificationFilterChooser extends React.Component<NotificationFilte
         this.props.onUpdate(evt.target.checked, this.props.currentApp);
     }
 
+    private onAppClick(appId: string) {
+        if (appId == this.props.currentApp) {
+            this.props.onUpdate(this.props.includeDone, undefined);
+        } else {
+            this.props.onUpdate(this.props.includeDone, appId);
+        }
+    }
+
     render(): React.ReactNode {
         return <div id="notificationFilterChooser" >
-            <input type="checkbox" onChange={this.onIncludeDoneChange.bind(this)} checked={this.props.includeDone} />
+            <input type="checkbox" onChange={this.onIncludeDoneChange.bind(this)} checked={this.props.includeDone} id="includeDoneSelector"/>
+            {
+                Object.keys(this.props.notifications.appCategories)
+                    .map(appId => {
+                        return {app: this.props.notifications.apps[appId], notifications: this.props.loadingController.getLoaded(false, appId)};
+                    })
+                    .sort((x, y) => y.notifications - x.notifications)
+                    .map(x => {
+                        return <img src={x.app.imageUrl} alt={x.app.name + " (" + x.notifications + ")"} onClick={() => this.onAppClick(x.app.id)} className={x.app.id == this.props.currentApp ? "appFilter appFilterSelected" : "appFilter"} />;
+                    })
+            }
         </div>
     }
 }

@@ -74,6 +74,9 @@ export default class LoadingController {
     }
 
     public isFullyLoaded(includeDone: boolean, app: string | undefined = undefined): boolean {
+        //if (!this.rootCategory.moreDoneAvailable) return true;
+        if (!includeDone && !this.rootCategory.moreUndoneAvailable) return true;
+
         let cat = (app != undefined) ? this.appCategories[app] : this.rootCategory;
         return includeDone ? !cat.moreDoneAvailable : !cat.moreUndoneAvailable;
     }
@@ -85,16 +88,19 @@ export default class LoadingController {
             return false;
         }
 
-        let notifications = await this.api.getNotifications(includeDone, app, this.getLoaded(includeDone, app), LOAD_BATCH_SIZE);
+        let loaded = this.getLoaded(includeDone, app);
+
+        let notifications = await this.api.getNotifications(includeDone, app, loaded, LOAD_BATCH_SIZE);
+
+        this.notificationSet.integrateNotifications(notifications);
 
         if (includeDone) {
+            cat.loaded = loaded + notifications.length;
+            // Could also add the notifications to the app category, pay attention not to double add them (in case of multiple loading at the same time)
             cat.moreDoneAvailable = (notifications.length == LOAD_BATCH_SIZE);
-            cat.loaded += notifications.length;
         } else {
             cat.moreUndoneAvailable = (notifications.length == LOAD_BATCH_SIZE);
         }
-
-        this.notificationSet.integrateNotifications(notifications);
 
         return notifications.length != 0;
     }
