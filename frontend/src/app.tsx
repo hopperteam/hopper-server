@@ -5,11 +5,13 @@ import {NotificationSet} from "notificationSet"
 import MainView from "components/mainView";
 import LoadingView from "components/loadingView";
 import LoginView from "components/loginView";
+import HopperApi from "./api";
+import LoadingController from "./loadingController";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
 
 require("css/app.css");
 require("css/notification.css");
-
-let user: User = new User("Max Mustermann", "max.mu@stermann.de");
 
 function renderLoadingView() {
     ReactDOM.render(
@@ -20,35 +22,36 @@ function renderLoadingView() {
 
 function renderLoginView() {
     ReactDOM.render(
-        <LoginView onLoggedIn={loggedIn} />,
+        <LoginView onLoggedIn={() => { console.log("Logged in!") }} />,
         document.getElementById("root")
     );
 }
 
-function loggedIn() {
-    updateView();
-}
-
-function updateView() {
+function updateView(user: User, notifications: NotificationSet) {
     ReactDOM.render(
         <MainView user={user} notifications={notifications} />,
         document.getElementById("root")
     );
 }
 
-renderLoadingView();
+async function main() {
+    renderLoadingView();
 
-function simulateData() {
-    const not = new Notification(1,"Account created", 1, Date.now(), undefined, false, false, "default", "Welcome to your hopper account!", []);
-    const not2 = new Notification(2,"This is a notification", 1,Date.now() - 1000, undefined, false, false, "default", "Any app will appear here!", []);
-    notifications.integrateNotifications([not, not2]);
+    let user: User = new User("Max Mustermann", "max.mu@stermann.de");
+
+    let notifications = new NotificationSet();
+    let api = new HopperApi("1234");
+
+    let loadingController = new LoadingController(api, notifications);
+    await loadingController.loadApps();
+    let loaded = await loadingController.loadNotifications(false, undefined);
+
+    console.log("Loaded: " + loaded);
+    console.log(loadingController);
+
+    updateView(user, notifications);
 }
 
-let notifications = new NotificationSet();
-let app = new App(1, "Hopper Welcome Service", require("./img/logo_small.svg"), true, false,"hoppercloud.net", "https://app.hoppercloud.net");
-notifications.insertApp(app);
+main();
 
-loggedIn();
-simulateData();
-updateView();
 
