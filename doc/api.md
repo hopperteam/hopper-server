@@ -24,7 +24,7 @@ from this point on, any request requires a valid session
 ### `DELETE /user`
 
 ## Notification Management
-### `GET /notifications (offset?: number, limit?: number, app?: number)`
+### `GET /notifications (offset?: number, limit?: number, app?: number, includeDone?: boolean)`
 ### `POST /notifications/done (id: number)` 
 ### `DELETE /notifications (id: number)`
 
