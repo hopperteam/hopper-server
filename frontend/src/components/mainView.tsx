@@ -29,7 +29,7 @@ export default class MainView extends React.Component<MainViewProps, MainViewSta
         console.log(this.props.notifications);
         return <div id="mainView">
             <TopBarView user={this.props.user} />
-            <NotificationContainer iterator={this.state.currentNotificationIterator} notifications={this.props.notifications} loadingController={this.props.loadingController} />
+            <NotificationContainer notifications={this.props.notifications} loadingController={this.props.loadingController} />
         </div>;
     }
 }

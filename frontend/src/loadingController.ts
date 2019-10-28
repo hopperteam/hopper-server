@@ -58,24 +58,30 @@ export default class LoadingController {
         }
     }
 
-    public map(includeDone: boolean, app: string | undefined, fnc: (x: Notification) => any): any[] {
-        let n = this.getLoaded(includeDone, app);
-        let d = this.getTol(includeDone, app);
+    public getMapFunction(includeDone: boolean, app: string | undefined): (fnc: (x: Notification) => any) => any[] {
+        return (fnc: (x: Notification) => any) => {
+            let n = this.getLoaded(includeDone, app);
+            let d = this.getTol(includeDone, app);
 
-        let el = [];
+            let el = [];
 
-        for (let i = 0; i < n; i++) {
-            el.push(fnc(this.notificationSet.getNotification(d.data[i].id)));
+            for (let i = 0; i < n; i++) {
+                el.push(fnc(this.notificationSet.getNotification(d.data[i].id)));
+            }
+
+            return el;
         }
+    }
 
-        return el;
+    public isFullyLoaded(includeDone: boolean, app: string | undefined = undefined): boolean {
+        let cat = (app != undefined) ? this.appCategories[app] : this.rootCategory;
+        return includeDone ? !cat.moreDoneAvailable : !cat.moreUndoneAvailable;
     }
 
     public async loadNotifications(includeDone: boolean, app: string | undefined = undefined): Promise<boolean> {
         let cat = (app != undefined) ? this.appCategories[app] : this.rootCategory;
-        let moreAv = includeDone ? cat.moreDoneAvailable : cat.moreUndoneAvailable;
 
-        if (!moreAv) {
+        if (this.isFullyLoaded(includeDone, app)) {
             return false;
         }
 

@@ -2,22 +2,22 @@ import * as React from 'react';
 import {NotificationIterator, NotificationSet} from 'notificationSet';
 import {App, Notification} from "../types";
 import LoadingController from "../loadingController";
-import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
+import {ChangeEvent} from "react";
 
 type NotificationContainerProps = {
-    iterator: NotificationIterator,
     notifications: NotificationSet,
     loadingController: LoadingController
 }
 
 type NotificationContainerState = {
     currentlyLoading: boolean,
-    loadingFinished: boolean
+    loadingFinished: boolean,
+    includeDone: boolean,
+    currentApp: string | undefined
 }
 
 type NotificationListProps = {
-    iterator: NotificationIterator,
+    mapFunction: (fnc: (x: Notification) => any) => any[],
     notifications: NotificationSet,
     showLoadingElement: boolean
 }
@@ -27,12 +27,17 @@ type NotificationViewProps = {
     sender: App
 }
 
+type NotificationFilterChooserProps = {
+    includeDone: boolean,
+    notification: NotificationSet,
+    currentApp: string | undefined,
+    onUpdate: (includeDone: boolean, currentApp: string | undefined) => void
+}
+
 export class NotificationContainer extends React.Component<NotificationContainerProps, NotificationContainerState> {
-
-
     constructor(props: Readonly<NotificationContainerProps>) {
         super(props);
-        this.state = { currentlyLoading: false, loadingFinished: false }
+        this.state = { currentlyLoading: false, loadingFinished: false, includeDone: false, currentApp: undefined }
     }
 
     private async checkScrollState(el: HTMLElement): Promise<void> {
@@ -43,7 +48,7 @@ export class NotificationContainer extends React.Component<NotificationContainer
             if (this.state.currentlyLoading) return;
             this.setState({currentlyLoading: true});
 
-            let loaded = await this.props.loadingController.loadNotifications(false, undefined);
+            let loaded = await this.props.loadingController.loadNotifications(this.state.includeDone, this.state.currentApp);
 
             this.setState({currentlyLoading: false, loadingFinished: !loaded});
         }
@@ -67,19 +72,44 @@ export class NotificationContainer extends React.Component<NotificationContainer
         window.removeEventListener("resize", this.resizeListener);
     }
 
+    private onFilterUpdate(includeDone: boolean, currentApp: string | undefined) {
+        this.setState({
+            currentApp: currentApp,
+            includeDone: includeDone,
+            currentlyLoading: false,
+            loadingFinished: this.props.loadingController.isFullyLoaded(includeDone, currentApp)
+        });
+    }
+
     render(): React.ReactNode {
-        this.props.iterator.reset();
         return <div id="notificationContainer" onScroll={ e => this.checkScrollState(e.target as HTMLElement) } >
-            <NotificationList notifications={this.props.notifications} iterator={this.props.iterator} showLoadingElement={!this.state.loadingFinished} />
+            <NotificationFilterChooser notification={this.props.notifications} currentApp={this.state.currentApp} includeDone={this.state.includeDone} onUpdate={this.onFilterUpdate.bind(this)}/>
+            <NotificationList notifications={this.props.notifications} mapFunction={this.props.loadingController.getMapFunction(this.state.includeDone, this.state.currentApp)} showLoadingElement={!this.state.loadingFinished} />
+        </div>
+    }
+
+    async componentDidUpdate(prevProps: Readonly<NotificationContainerProps>, prevState: Readonly<NotificationContainerState>, snapshot?: any) {
+        await this.callCheckScrollState();
+    }
+}
+
+export class NotificationFilterChooser extends React.Component<NotificationFilterChooserProps> {
+
+    private onIncludeDoneChange(evt: ChangeEvent<HTMLInputElement>) {
+        this.props.onUpdate(evt.target.checked, this.props.currentApp);
+    }
+
+    render(): React.ReactNode {
+        return <div id="notificationFilterChooser" >
+            <input type="checkbox" onChange={this.onIncludeDoneChange.bind(this)} checked={this.props.includeDone} />
         </div>
     }
 }
 
 export class NotificationList extends React.Component<NotificationListProps> {
     render(): React.ReactNode {
-        this.props.iterator.reset();
         return <div id="notificationList" >
-            {this.props.iterator.map(value => {
+            {this.props.mapFunction(value => {
                 return <NotificationView key={value.id} notification={value} sender={this.props.notifications.apps[value.serviceProvider]}/>
             })}
             { this.props.showLoadingElement ? <LoadingNotificationView /> : "" }
@@ -101,7 +131,7 @@ export class NotificationView extends React.Component<NotificationViewProps> {
             <div className="notificationMeta">
                 <span className="notificationSender">{this.props.sender.name}</span>
                 <div className="notificationSenderSeparator" />
-                <span className="notificationTime">5m ago</span>
+                <span className="notificationTime">{this.props.notification.timestamp}</span>
             </div>
             <div className="notificationContent">
                 <img className="notificationImage" alt="notificationImage" src={
