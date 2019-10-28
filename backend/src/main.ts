@@ -13,8 +13,7 @@ class App {
 
     constructor() {
         this.server = express();
-        this.server.use(express.static("web"));
-        this.server.use(bodyParser.json());
+        this.server.use(express.static("web", {'extensions': ['html']}));
     }
 
     private async init(): Promise<boolean> {
