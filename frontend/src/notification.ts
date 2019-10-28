@@ -4,14 +4,16 @@ export class Notification {
     readonly heading: string;
     readonly body: string;
     readonly timestamp: number;
+    readonly done: boolean;
     readonly imageLink: string|undefined;
 
-    constructor(id: number, sender: App, heading: string, body: string, timestamp: number, imageLink: string|undefined = undefined) {
+    constructor(id: number, sender: App, heading: string, body: string, timestamp: number, done: boolean, imageLink: string|undefined = undefined) {
         this.id = id;
         this.sender = sender;
         this.heading = heading;
         this.body = body;
         this.timestamp = timestamp;
+        this.done = done;
         this.imageLink = imageLink;
     }
 }
@@ -20,15 +22,20 @@ export class App {
     readonly id: number;
     readonly name: string;
     readonly imageLink: string;
+    readonly active: boolean;
+    readonly deleted: boolean;
 
-    constructor(id: number, name: string, imageLink: string) {
+
+    constructor(id: number, name: string, imageLink: string, active: boolean, deleted: boolean) {
         this.id = id;
         this.name = name;
         this.imageLink = imageLink;
+        this.active = active;
+        this.deleted = deleted;
     }
 }
 
-class TimestampOrderedList {
+export class TimestampOrderedList {
     public data: {id: number, timestamp: number}[];
 
     constructor() {
@@ -63,36 +70,61 @@ class TimestampOrderedList {
     }
 }
 
+class NotificationCategory {
+    public all: TimestampOrderedList;
+    public open: TimestampOrderedList;
+
+    constructor() {
+        this.all = new TimestampOrderedList();
+        this.open = new TimestampOrderedList();
+    }
+
+    public insertTimestamp(id: number, timestamp: number, done: boolean) {
+        this.all.insertTimestamp(id, timestamp);
+        if (done) {
+            this.open.insertTimestamp(id, timestamp);
+        }
+    }
+
+    public removeTimestamp(id: number, timestamp: number) {
+        this.all.removeTimestamp(id, timestamp);
+        this.open.removeTimestamp(id, timestamp);
+    }
+}
+
 export class NotificationSet {
-    notifications: { [index: number] : Notification};
-    apps: { [index: number] : TimestampOrderedList};
-    timeOrdered: TimestampOrderedList;
+    public notifications: { [index: number] : Notification};
+    public apps: { [index: number] : App};
+    public appCategories: { [index: number] : (NotificationCategory)};
+    public rootCategory: NotificationCategory;
 
     constructor() {
         this.notifications = {};
         this.apps = {};
-        this.timeOrdered = new TimestampOrderedList()
+        this.appCategories = {};
+        this.rootCategory = new NotificationCategory()
+    }
+
+    public insertApp(app: App) {
+        this.apps[app.id] = app;
+        this.appCategories[app.id] = new NotificationCategory();
     }
 
     private insertNotification(not: Notification) {
         this.notifications[not.id] = not;
-        this.timeOrdered.insertTimestamp(not.id, not.timestamp);
-        let x = this.apps[not.sender.id];
-        if (x == undefined) {
-            x = (this.apps[not.sender.id] = new TimestampOrderedList());
-        }
-        x.insertTimestamp(not.id, not.timestamp);
+        this.rootCategory.insertTimestamp(not.id, not.timestamp, not.done);
+        this.appCategories[not.sender.id].insertTimestamp(not.id, not.timestamp, not.done);
     }
 
-    public has(id: number): boolean {
+    public hasNotification(id: number): boolean {
         return id in this.notifications
     }
 
     public integrateNotifications(not: Notification[]) {
-        not.filter(n => !this.has(n.id)).forEach(n => this.insertNotification(n));
+        not.filter(n => !this.hasNotification(n.id)).forEach(n => this.insertNotification(n));
     }
 
-    public updateNotitifaction(not: Notification) {
+    public updateNotification(not: Notification) {
         this.deleteNotification(not.id);
         this.insertNotification(not);
     }
@@ -102,16 +134,28 @@ export class NotificationSet {
         if (not == undefined) return;
         delete this.notifications[id];
 
-        this.apps[not.sender.id].removeTimestamp(id, not.timestamp);
-        this.timeOrdered.removeTimestamp(id, not.timestamp);
+        this.appCategories[not.sender.id].removeTimestamp(id, not.timestamp);
+        this.rootCategory.removeTimestamp(id, not.timestamp);
     }
 
     public getNotification(id: number): Notification {
         return this.notifications[id];
     }
 
-    public getUnfilteredIterator(): NotificationIterator {
-        return new TimestampOrderedListIterator(this, this.timeOrdered);
+    public getOpenIterator(doneOnly: boolean): NotificationIterator {
+        if (doneOnly) {
+            return new TimestampOrderedListIterator(this, this.rootCategory.open);
+        } else {
+            return new TimestampOrderedListIterator(this, this.rootCategory.all)
+        }
+    }
+
+    public getIteratorForApp(app: number, doneOnly: boolean): NotificationIterator {
+        if (doneOnly) {
+            return new TimestampOrderedListIterator(this, this.appCategories[app].open);
+        } else {
+            return new TimestampOrderedListIterator(this, this.appCategories[app].all)
+        }
     }
 }
 
