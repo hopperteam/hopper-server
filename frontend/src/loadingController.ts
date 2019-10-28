@@ -15,7 +15,7 @@ export default class LoadingController {
     private notificationSet: NotificationSet;
 
     private readonly rootCategory: LoadedCategory;
-    private readonly appCategories: { [index: number]: (LoadedCategory) };
+    private readonly appCategories: { [index: string]: (LoadedCategory) };
 
 
     constructor(api: HopperApi, notificationSet: NotificationSet) {
@@ -34,7 +34,7 @@ export default class LoadingController {
         });
     }
 
-    public getLoaded(includeDone: boolean, app: number | undefined = undefined): number {
+    public getLoaded(includeDone: boolean, app: string | undefined = undefined): number {
         if (!includeDone) {
             if (app == undefined)
                 return this.notificationSet.rootCategory.open.data.length;
@@ -46,7 +46,7 @@ export default class LoadingController {
         }
     }
 
-    private getTol(includeDone: boolean, app: number | undefined): TimestampOrderedList {
+    private getTol(includeDone: boolean, app: string | undefined): TimestampOrderedList {
         if (!includeDone) {
             if (app == undefined)
                 return this.notificationSet.rootCategory.open;
@@ -58,7 +58,7 @@ export default class LoadingController {
         }
     }
 
-    public map(includeDone: boolean, app: number | undefined, fnc: (x: Notification) => any): any[] {
+    public map(includeDone: boolean, app: string | undefined, fnc: (x: Notification) => any): any[] {
         let n = this.getLoaded(includeDone, app);
         let d = this.getTol(includeDone, app);
 
@@ -71,7 +71,7 @@ export default class LoadingController {
         return el;
     }
 
-    public async loadNotifications(includeDone: boolean, app: number | undefined = undefined): Promise<boolean> {
+    public async loadNotifications(includeDone: boolean, app: string | undefined = undefined): Promise<boolean> {
         let cat = (app != undefined) ? this.appCategories[app] : this.rootCategory;
         let moreAv = includeDone ? cat.moreDoneAvailable : cat.moreUndoneAvailable;
 

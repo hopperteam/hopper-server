@@ -10,9 +10,9 @@ export class User {
 }
 
 export class Notification {
-    readonly id: number;
+    readonly id: string;
     readonly heading: string;
-    readonly serviceProvider: number;
+    readonly serviceProvider: string;
     readonly timestamp: number;
     readonly imageUrl: string | undefined;
     readonly isDone: boolean;
@@ -22,7 +22,7 @@ export class Notification {
     readonly actions: Action[];
 
 
-    constructor(id: number, heading: string, serviceProvider: number, timestamp: number, imageUrl: string | undefined, isDone: boolean, isSilent: boolean, type: string, content: any, actions: Action[]) {
+    constructor(id: string, heading: string, serviceProvider: string, timestamp: number, imageUrl: string | undefined, isDone: boolean, isSilent: boolean, type: string, content: any, actions: Action[]) {
         this.id = id;
         this.heading = heading;
         this.serviceProvider = serviceProvider;
@@ -52,7 +52,7 @@ export class Action {
 }
 
 export class App {
-    readonly id: number;
+    readonly id: string;
     readonly name: string;
     readonly imageUrl: string;
     readonly isActive: boolean;
@@ -61,7 +61,7 @@ export class App {
     readonly manageUrl: string;
 
 
-    constructor(id: number, name: string, imageUrl: string, isActive: boolean, isHidden: boolean, baseUrl: string, manageUrl: string) {
+    constructor(id: string, name: string, imageUrl: string, isActive: boolean, isHidden: boolean, baseUrl: string, manageUrl: string) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;

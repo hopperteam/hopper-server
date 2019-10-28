@@ -40,14 +40,11 @@ export class NotificationContainer extends React.Component<NotificationContainer
 
         if (invisibleSpaceBottom < 1000) {
             if (this.state.currentlyLoading) return;
-            console.log("loading....");
             this.setState({currentlyLoading: true});
 
             let loaded = await this.props.loadingController.loadNotifications(false, undefined);
 
-            console.log("done loading!");
             this.setState({currentlyLoading: false, loadingFinished: !loaded});
-            if (!loaded) console.log("Loaded all elements!");
         }
         return this.checkScrollState(el);
     }
