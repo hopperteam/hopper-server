@@ -18,7 +18,8 @@ type NotificationContainerState = {
 
 type NotificationListProps = {
     iterator: NotificationIterator,
-    notifications: NotificationSet
+    notifications: NotificationSet,
+    showLoadingElement: boolean
 }
 
 type NotificationViewProps = {
@@ -69,7 +70,7 @@ export class NotificationContainer extends React.Component<NotificationContainer
     render(): React.ReactNode {
         this.props.iterator.reset();
         return <div id="notificationContainer" onScroll={ e => this.checkScrollState(e.target as HTMLElement) } >
-            <NotificationList notifications={this.props.notifications} iterator={this.props.iterator} />
+            <NotificationList notifications={this.props.notifications} iterator={this.props.iterator} showLoadingElement={!this.state.loadingFinished} />
         </div>
     }
 }
@@ -81,6 +82,15 @@ export class NotificationList extends React.Component<NotificationListProps> {
             {this.props.iterator.map(value => {
                 return <NotificationView key={value.id} notification={value} sender={this.props.notifications.apps[value.serviceProvider]}/>
             })}
+            { this.props.showLoadingElement ? <LoadingNotificationView /> : "" }
+        </div>
+    }
+}
+
+export class LoadingNotificationView extends React.Component {
+    render(): React.ReactNode {
+        return <div className="notification">
+            ...
         </div>
     }
 }
