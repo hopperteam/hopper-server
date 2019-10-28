@@ -1,12 +1,14 @@
 import * as React from 'react';
 import {User} from 'types';
 import {NotificationIterator, NotificationSet} from "notificationSet";
-import NotificationContainer from 'components/notificationView'
+import {NotificationContainer} from 'components/notificationView'
 import TopBarView from 'components/topBarView'
+import LoadingController from "../loadingController";
 
 type MainViewProps = {
     user: User,
-    notifications: NotificationSet
+    notifications: NotificationSet,
+    loadingController: LoadingController
 }
 
 type MainViewState = {
@@ -25,9 +27,9 @@ export default class MainView extends React.Component<MainViewProps, MainViewSta
     render(): React.ReactNode {
         console.log(JSON.stringify(this.props.notifications));
         console.log(this.props.notifications);
-        return <div>
+        return <div id="mainView">
             <TopBarView user={this.props.user} />
-            <NotificationContainer iterator={this.state.currentNotificationIterator} notifications={this.props.notifications} />
+            <NotificationContainer iterator={this.state.currentNotificationIterator} notifications={this.props.notifications} loadingController={this.props.loadingController} />
         </div>;
     }
 }

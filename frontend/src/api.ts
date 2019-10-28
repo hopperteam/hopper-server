@@ -1,7 +1,7 @@
 import {App} from "./types";
 import {Notification} from "./types";
 
-const LOADING_TIME = 200;
+const LOADING_TIME = 2000;
 
 const DEMO_APPS = [
     new App(1, "Hopper User Service", require("./img/logo_small.svg"), true, true,"hoppercloud.net", "https://app.hoppercloud.net"),
@@ -17,7 +17,9 @@ const DEMO_NOTIFICATIONS = [
     new Notification(4,"2 new transactions", 3, Date.now(), undefined, false, false, "default", "- 200 € to Konrad Hartwig\n+ 7,50€ from DHBW Karlsruhe", []),
     new Notification(5,"1 new message from your caretaker", 4, Date.now(), undefined, true, false, "default", "1 new message", []),
     new Notification(6,"Max Müller", 2, Date.now(), undefined, false, false, "default", "Wanna have a drink tonight?", []),
-    new Notification(7,"Marie Mustermann", 2, Date.now(), undefined, true, false, "default", "What are you doing later today?", [])
+    new Notification(7,"Marie Mustermann", 2, Date.now() - 30, undefined, true, false, "default", "What are you doing later today?", []),
+    new Notification(8,"1 new message in your postbox", 3, Date.now() - 500, undefined, false, false, "default", "Tax refund", []),
+    new Notification(9,"You still have to pay your rent", 4, Date.now() - 200, undefined, false, false, "default", "2 days overdue", []),
 ];
 
 export default class HopperApi {
@@ -43,11 +45,15 @@ export default class HopperApi {
 
     public async getNotifications(includeDone: boolean, app: number|undefined, offset: number, limit: number): Promise<Notification[]> {
         return new Promise<Notification[]>(resolve => {
-            let filtered = DEMO_NOTIFICATIONS
-                .filter(x => (app == undefined) || x.serviceProvider == app)
-                .filter(x => includeDone || !x.isDone);
+            console.log("## DUMMY API ##: getNotifications(" + includeDone + ", " + app + ", " + offset + ", " + limit + ")");
+            setTimeout(() => {
+                let filtered = DEMO_NOTIFICATIONS
+                    .filter(x => (app == undefined) || x.serviceProvider == app)
+                    .filter(x => includeDone || !x.isDone)
+                    .sort((x, y) => y.timestamp - x.timestamp);
 
-            resolve(filtered.slice(offset, offset + limit));
+                resolve(filtered.slice(offset, offset + limit));
+            }, LOADING_TIME);
         });
     }
 

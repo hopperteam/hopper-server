@@ -27,9 +27,9 @@ function renderLoginView() {
     );
 }
 
-function updateView(user: User, notifications: NotificationSet) {
+function updateView(user: User, notifications: NotificationSet, loadingController: LoadingController) {
     ReactDOM.render(
-        <MainView user={user} notifications={notifications} />,
+        <MainView user={user} notifications={notifications} loadingController={loadingController} />,
         document.getElementById("root")
     );
 }
@@ -44,12 +44,10 @@ async function main() {
 
     let loadingController = new LoadingController(api, notifications);
     await loadingController.loadApps();
-    let loaded = await loadingController.loadNotifications(false, undefined);
 
-    console.log("Loaded: " + loaded);
     console.log(loadingController);
 
-    updateView(user, notifications);
+    updateView(user, notifications, loadingController);
 }
 
 main();

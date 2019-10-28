@@ -1,8 +1,22 @@
 import * as React from 'react';
 import {NotificationIterator, NotificationSet} from 'notificationSet';
 import {App, Notification} from "../types";
+import LoadingController from "../loadingController";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
 
 type NotificationContainerProps = {
+    iterator: NotificationIterator,
+    notifications: NotificationSet,
+    loadingController: LoadingController
+}
+
+type NotificationContainerState = {
+    currentlyLoading: boolean,
+    loadingFinished: boolean
+}
+
+type NotificationListProps = {
     iterator: NotificationIterator,
     notifications: NotificationSet
 }
@@ -12,11 +26,61 @@ type NotificationViewProps = {
     sender: App
 }
 
-export default class NotificationContainer extends React.Component<NotificationContainerProps> {
+export class NotificationContainer extends React.Component<NotificationContainerProps, NotificationContainerState> {
+
+
+    constructor(props: Readonly<NotificationContainerProps>) {
+        super(props);
+        this.state = { currentlyLoading: false, loadingFinished: false }
+    }
+
+    private async checkScrollState(el: HTMLElement): Promise<void> {
+        if (this.state.loadingFinished) return;
+        let invisibleSpaceBottom = el.scrollHeight - el.offsetHeight - el.scrollTop;
+
+        if (invisibleSpaceBottom < 1000) {
+            if (this.state.currentlyLoading) return;
+            console.log("loading....");
+            this.setState({currentlyLoading: true});
+
+            let loaded = await this.props.loadingController.loadNotifications(false, undefined);
+
+            console.log("done loading!");
+            this.setState({currentlyLoading: false, loadingFinished: !loaded});
+            if (!loaded) console.log("Loaded all elements!");
+        }
+        return this.checkScrollState(el);
+    }
+
+    private async callCheckScrollState() {
+        let x = document.getElementById("notificationContainer");
+        if (x == null) return;
+        return this.checkScrollState(x);
+    }
+
+    private resizeListener = this.callCheckScrollState.bind(this);
+
+    async componentDidMount() {
+        window.addEventListener("resize", this.resizeListener);
+        await this.callCheckScrollState();
+    }
+
+    componentWillUnmount(): void {
+        window.removeEventListener("resize", this.resizeListener);
+    }
 
     render(): React.ReactNode {
         this.props.iterator.reset();
-        return <div id="notificationContainer" >
+        return <div id="notificationContainer" onScroll={ e => this.checkScrollState(e.target as HTMLElement) } >
+            <NotificationList notifications={this.props.notifications} iterator={this.props.iterator} />
+        </div>
+    }
+}
+
+export class NotificationList extends React.Component<NotificationListProps> {
+    render(): React.ReactNode {
+        this.props.iterator.reset();
+        return <div id="notificationList" >
             {this.props.iterator.map(value => {
                 return <NotificationView key={value.id} notification={value} sender={this.props.notifications.apps[value.serviceProvider]}/>
             })}

@@ -4,3 +4,25 @@ html, body {
     margin: 0;
     font-family: sans-serif;
 }
+
+#root, #mainView {
+    height: 100%;
+    width: 100%;
+}
+
+#mainView {
+    display: flex;
+    flex-direction: column;
+}
+
+#topBar {
+    height: 3em;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+#notificationContainer {
+    overflow-y: scroll;
+    flex-grow: 1;
+    width: 100%;
+}
