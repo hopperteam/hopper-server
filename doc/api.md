@@ -36,9 +36,26 @@ from this point on, any request requires a valid session
 
 # Backend - Service Provider Communication
 
-### `POST /app (name: string, baseUrl: string, logoUrl: string, contactEmail: string)` 
-### `PUT /app (name?: string, logoUrl?: string, contactEmail?: string)`
+### `POST /app (name: string, baseUrl: string, logoUrl: string, contactEmail: string, cert: string)` 
+`cert` is a base64 encoded PEM-RSA Public Key. The private key is for authentication of the SP to the backend.
 
-### `POST /notification (notification: Notification)`
+### `PUT /app (id: string, data: string)`
+`data` is a JSON-Object which is encoded with the private key of the app. It has to contain the `id` of the app again.
+
+Updatable fields are:
+  - `name`
+  - `logoUrl`
+  - `contactEmail`
+  - `cert`
+
+### `POST /notification (id: number, notification: Notification)`
 ### `PUT /notification (id: number, notification?*: Notification)`
 ### `DELETE /notification (id: number)`
+
+### `GET /subscribeRequest (id: number, base64: string): SubscribeRequest`
+### `POST /subscribeRequest (id: number, base64: string): string`
+
+## Subscribe Process
+Navigate the user to `GET {{HOPPER-URL}}/subscribe (id: number, request: string)`
+
+`request` is a encrypted (with the app's key) and base64-encoded representation of the `SubscribeRequest`-JSON.
