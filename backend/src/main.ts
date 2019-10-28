@@ -7,13 +7,14 @@ const log = new Log("App");
 
 import GeneralHandler from './handler/generalHandler';
 
-class App {
+class ExpressApp {
 
     private server: express.Application;
 
     constructor() {
         this.server = express();
         this.server.use(express.static("web", {'extensions': ['html']}));
+        this.server.use(bodyParser.json());
     }
 
     private async init(): Promise<boolean> {
@@ -32,8 +33,7 @@ class App {
             });
         });
     }
-
 }
 
-const app = new App();
+const app = new ExpressApp();
 app.start();
