@@ -46,7 +46,7 @@ export default class GeneralHandler extends Handler {
             log.error("Register attempt failed (could not create user)");
             res.json({
                 "status": "error",
-                "reason": e
+                "reason": e.message
             });
             return;
         }

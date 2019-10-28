@@ -9,7 +9,7 @@ function persist(entry: string) {
     // persist log entry in database or log files
 }
 
-function getTimeStamp() {
+function getTimestamp() {
     let date = new Date();
     let year: number = date.getUTCFullYear();
     let month: number = date.getUTCMonth() + 1;
@@ -22,7 +22,7 @@ function getTimeStamp() {
 }
 
 function log(logLevel: LogLevel, module: string, message: string) {
-    let entry = `(${getTimeStamp()}) [${logLevel}] ${module}: ${message}`;
+    let entry = `(${getTimestamp()}) [${logLevel}] ${module}: ${message}`;
     persist(entry);
     console.log(entry);
 }

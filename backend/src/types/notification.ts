@@ -36,7 +36,7 @@ export default class Notification {
                 actions.push(Action.fromRequestJson(action));
             });
         } catch (e) {
-            throw new Error(e);
+            throw new Error(e.message);
         }
         return new Notification(
             undefined,
