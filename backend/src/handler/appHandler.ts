@@ -59,16 +59,16 @@ export default class AppHandler extends Handler {
 
     private async deleteApp(req: express.Request, res: express.Response): Promise<void> {
         try {
-            var id: number|undefined = ("id" in req.query) ? parseInt(req.query["id"]) : undefined;
-            if (id == undefined || isNaN(id)) {
+            let id: string | undefined = ("id" in req.query) ? req.query["id"] : undefined;
+            let appToRemove: App | undefined = this.apps.filter((app: App) => app.id == id)[0];
+            if (id == undefined || appToRemove == undefined) {
                 res.json({
                     "status": "error",
                     "reason": "please provide a valid index"
                 });
                 return;
             }
-            // await database to remove link
-            this.apps.splice(id,1);
+            this.apps[this.apps.indexOf(appToRemove)].isActive = false;
             log.info("App with id " + id + " removed");
             res.json({
                 "status": "succes"

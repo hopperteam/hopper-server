@@ -1,5 +1,6 @@
 ﻿import * as express from 'express';
 import Handler from './handler';
+import User from '../types/user'
 import Log from '../log';
 const config = require('../config');
 
@@ -39,11 +40,13 @@ export default class GeneralHandler extends Handler {
     }
 
     private async register(req: express.Request, res: express.Response): Promise<void> {
-        if (req.body.email == null || req.body.password == null || req.body.firstName == null || req.body.lastName == null) {
-            log.error("Register attempt failed (insufficiant register data)");
+        try {
+            var user: User = User.fromRequestJson(req.body);
+        } catch (e) {
+            log.error("Register attempt failed (could not create user)");
             res.json({
                 "status": "error",
-                "reason": "Please provide an email, password, firstName, lastName"
+                "reason": e
             });
             return;
         }
