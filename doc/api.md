@@ -24,15 +24,15 @@ from this point on, any request requires a valid session
 ### `DELETE /user`
 
 ## Notification Management
-### `GET /notifications (offset?: number, limit?: number, app?: number, includeDone?: boolean)`
-### `POST /notifications/done (id: number)` 
-### `DELETE /notifications (id: number)`
+### `GET /notifications (offset?: number, limit?: number, app?: string, includeDone?: boolean)`
+### `POST /notifications/done (id: string)` 
+### `DELETE /notifications (id: string)`
 
 ### `WebSocket /ws`
 
 ## App (=Service Provider) Management
 ### `GET /apps`
-### `DELETE /apps (id: number)`
+### `DELETE /apps (id: string)`
 
 # Backend - Service Provider Communication
 
@@ -48,12 +48,12 @@ Updatable fields are:
   - `contactEmail`
   - `cert`
 
-### `POST /notification (id: number, notification: Notification)`
-### `PUT /notification (id: number, notification?*: Notification)`
-### `DELETE /notification (id: number)`
+### `POST /notification (id: string, notification: Notification)`
+### `PUT /notification (id: string, notification?*: Notification)`
+### `DELETE /notification (id: string)`
 
-### `GET /subscribeRequest (id: number, base64: string): SubscribeRequest`
-### `POST /subscribeRequest (id: number, base64: string): string`
+### `GET /subscribeRequest (id: string, base64: string): SubscribeRequest`
+### `POST /subscribeRequest (id: string, base64: string): string`
 
 ## Subscribe Process
 Navigate the user to `GET {{HOPPER-URL}}/subscribe (id: number, request: string)`

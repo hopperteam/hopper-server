@@ -2,7 +2,7 @@
 ## `Notification`
   - `id: string`
   - `heading: string` 
-  - `serviceProvider: number`
+  - `serviceProvider: string`
   - `timestamp: number` 
   - `imageUrl: string?`
   - `isDone: boolean` 
