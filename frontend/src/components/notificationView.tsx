@@ -29,7 +29,7 @@ export class NotificationView extends React.Component<NotificationViewProps> {
         return <div className="notification">
             <div className="notificationMeta">
                 <span className="notificationSender">{this.props.sender.name}</span>
-                <div className="notificationSenderSeperator" />
+                <div className="notificationSenderSeparator" />
                 <span className="notificationTime">5m ago</span>
             </div>
             <div className="notificationContent">
