@@ -1,11 +1,14 @@
 import * as express from 'express';
+import * as cookieParser from 'cookie-parser';
 import Log from './log';
 import bodyParser = require('body-parser');
+import AuthMiddleware from './handler/authMiddleware';
 const config = require('./config.json');
 
 const log = new Log("App");
 
 import GeneralHandler from './handler/generalHandler';
+import AppHandler from './handler/appHandler';
 
 class ExpressApp {
 
@@ -18,7 +21,13 @@ class ExpressApp {
     }
 
     private async init(): Promise<boolean> {
+        this.server.use(cookieParser());
+
         this.server.use('/api/v1', new GeneralHandler().getRouter());
+
+        this.server.use(AuthMiddleware.auth());
+        this.server.use('/api/v1', new AppHandler().getRouter());
+
         return true;
     }
 
