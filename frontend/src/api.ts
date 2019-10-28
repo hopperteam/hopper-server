@@ -1,5 +1,5 @@
-import {App} from "./notification";
-import {Notification} from "./notification";
+import {App} from "./types";
+import {Notification} from "./types";
 
 const LOADING_TIME = 200;
 
@@ -21,10 +21,10 @@ export default class HopperApi {
         return new Promise<App[]>(resolve => {
             console.log("## DUMMY API ##: getApps()");
             resolve([
-                new App(1, "Hopper User Service", require("./img/logo_small.svg"), false, false),
-                new App(2, "WhatsApp", require("./img/logo_small.svg"), true, false),
-                new App(3, "Deutsche Bank", require("./img/logo_small.svg"), true, false),
-                new App(3, "Studierendenwerk Karlsruhe", require("./img/logo_small.svg"), false, true),
+                new App(1, "Hopper User Service", require("./img/logo_small.svg"), true, true,"hoppercloud.net", "https://app.hoppercloud.net"),
+                new App(2, "WhatsApp", require("./img/logo_small.svg"), true, false, "whatsapp.com", "https://manage.hopper.whatsapp.com"),
+                new App(3, "Deutsche Bank", require("./img/logo_small.svg"), true, false, "deutsche-bank.de", "https://hopper.deutsche-bank.de"),
+                new App(3, "Studierendenwerk Karlsruhe", require("./img/logo_small.svg"), false, true, "sw-ka.de", "https://account.hopper.sw-ka.de"),
             ]);
         })
     }

@@ -1,5 +1,6 @@
 import HopperApi from "./api";
-import {Notification, NotificationSet, TimestampOrderedList} from "./notification";
+import {NotificationSet, TimestampOrderedList} from "./notificationSet";
+import {Notification} from "./types";
 
 const LOAD_BATCH_SIZE = 5;
 
@@ -13,8 +14,8 @@ export default class LoadingController {
     private api: HopperApi;
     private notificationSet: NotificationSet;
 
-    private rootCategory: LoadedCategory;
-    private appCategories: { [index: number] : (LoadedCategory)};
+    private readonly rootCategory: LoadedCategory;
+    private readonly appCategories: { [index: number] : (LoadedCategory)};
 
 
     constructor(api: HopperApi, notificationSet: NotificationSet) {

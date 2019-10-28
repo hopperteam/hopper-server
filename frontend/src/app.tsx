@@ -1,16 +1,15 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
-import {User} from "./types";
-import {App, Notification, NotificationSet} from "notification"
+import {App, Notification, User} from "types";
+import {NotificationSet} from "notificationSet"
 import MainView from "components/mainView";
 import LoadingView from "components/loadingView";
-import LoginView from "./components/loginView";
+import LoginView from "components/loginView";
 
 require("css/app.css");
 require("css/notification.css");
 
 let user: User = new User("Max Mustermann", "max.mu@stermann.de");
-let notifications = new NotificationSet();
 
 function renderLoadingView() {
     ReactDOM.render(
@@ -39,18 +38,16 @@ function updateView() {
 
 renderLoadingView();
 
-const app = new App(123, "Hopper", require("img/logo_small.svg"));
-
 function simulateData() {
-    const not = new Notification(1, app, "Account created", "Welcome to your hopper account!", 123);
-    const not2 = new Notification(2, app, "This is a notification", "Any app will appear here!", 456);
+    const not = new Notification(1,"Account created", 1, Date.now(), undefined, false, false, "default", "Welcome to your hopper account!", []);
+    const not2 = new Notification(2,"This is a notification", 1,Date.now() - 1000, undefined, false, false, "default", "Any app will appear here!", []);
     notifications.integrateNotifications([not, not2]);
 }
 
-/*setTimeout(() => {
-    renderLoginView()
-}, 200);
-*/
+let notifications = new NotificationSet();
+let app = new App(1, "Hopper Welcome Service", require("./img/logo_small.svg"), true, false,"hoppercloud.net", "https://app.hoppercloud.net");
+notifications.insertApp(app);
+
 loggedIn();
 simulateData();
 updateView();
