@@ -40,7 +40,7 @@ from this point on, any request requires a valid session
 `cert` is a base64 encoded PEM-RSA Public Key. The private key is for authentication of the SP to the backend.
 
 ### `PUT /app (id: string, data: string)`
-`data` is a JSON-Object which is encoded with the private key of the app. It has to contain the `id` of the app again.
+`data` is a JSON-Object which is encrypted with the private key of the app and base64 encoded. It has to contain the `id` of the app again.
 
 Updatable fields are:
   - `name`
@@ -48,7 +48,7 @@ Updatable fields are:
   - `contactEmail`
   - `cert`
 
-### `POST /notification (id: string, notification: Notification)`
+### `POST /notification (subscriptionId: string, notification: Notification)`
 ### `PUT /notification (id: string, notification?*: Notification)`
 ### `DELETE /notification (id: string)`
 
