@@ -22,8 +22,8 @@ export default class User {
             undefined,
             json.email,
             json.password,
-            json.lastName,
-            json.firstName
+            json.firstName,
+            json.lastName
         );
     }
 
@@ -32,7 +32,7 @@ export default class User {
             json.id,
             json.email,
             undefined,
-            json.lastName,
+            json.firstName,
             json.lastName
         );
     }

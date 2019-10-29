@@ -9,6 +9,7 @@ const log = new Log("App");
 
 import GeneralHandler from './handler/generalHandler';
 import AppHandler from './handler/appHandler';
+import UserHandler from './handler/userHandler';
 
 class ExpressApp {
 
@@ -27,6 +28,7 @@ class ExpressApp {
 
         this.server.use(AuthMiddleware.auth());
         this.server.use('/api/v1', new AppHandler().getRouter());
+        this.server.use('/api/v1', new UserHandler().getRouter());
 
         return true;
     }
