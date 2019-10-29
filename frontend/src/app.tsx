@@ -7,11 +7,11 @@ import LoadingView from "components/loadingView";
 import LoginView from "components/loginView";
 import HopperApi from "./api";
 import LoadingController from "./loadingController";
-import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
 
 require("css/app.css");
 require("css/notification.css");
+
+const UPDATE_INTERVAL = 30000;
 
 function renderLoadingView() {
     ReactDOM.render(
@@ -32,6 +32,14 @@ function updateView(user: User, notifications: NotificationSet, loadingControlle
         <MainView user={user} notifications={notifications} loadingController={loadingController} />,
         document.getElementById("root")
     );
+    setTimeout(() => {
+        updateView(user, notifications, loadingController);
+    });
+}
+
+function updateLoop(user: User, notifications: NotificationSet, loadingController: LoadingController) {
+    setTimeout(() => updateLoop(user, notifications, loadingController), UPDATE_INTERVAL);
+    updateView(user, notifications, loadingController);
 }
 
 async function main() {

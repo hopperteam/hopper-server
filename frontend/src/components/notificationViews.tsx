@@ -7,21 +7,21 @@ function getTimeText(date: number): string {
     diff = Math.abs(diff);
 
     if (diff < 60) {
-        return (future) ? "In" + diff + "s" : diff + "s ago";
+        return "now";
     }
 
     diff = Math.floor(diff / 60);
     if (diff < 60) {
-        return (future) ? "In" + diff + " min" : diff + " min ago";
+        return (future) ? "In " + diff + " min" : diff + " min ago";
     }
 
     let d = new Date(date*1000);
     let dNow = new Date();
 
     if (d.toDateString() == dNow.toDateString()) {
-        return d.toLocaleTimeString();
+        return d.toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
     } else {
-        return d.toLocaleString();
+        return d.toLocaleString([], {year: "2-digit", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit"});
     }
 }
 
