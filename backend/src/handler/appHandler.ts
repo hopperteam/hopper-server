@@ -71,7 +71,7 @@ export default class AppHandler extends Handler {
             this.apps[this.apps.indexOf(appToRemove)].isActive = false;
             log.info("App with id " + id + " removed");
             res.json({
-                "status": "succes"
+                "status": "success"
             });
         } catch (e) {
             log.error(e);
