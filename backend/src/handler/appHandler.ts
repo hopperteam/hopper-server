@@ -45,9 +45,10 @@ export default class AppHandler extends Handler {
 
     private async getApps(req: express.Request, res: express.Response): Promise<void> {
         try {
-            //get apps from db
+            //get apps from db associated with the user
         } catch (e) {
             log.error(e);
+            res.status(500);
             res.json({
                 "status": "error",
                 "reason": "DB Error"
@@ -62,6 +63,7 @@ export default class AppHandler extends Handler {
             let id: string | undefined = ("id" in req.query) ? req.query["id"] : undefined;
             let appToRemove: App | undefined = this.apps.filter((app: App) => app.id == id)[0];
             if (id == undefined || appToRemove == undefined) {
+                res.status(404);
                 res.json({
                     "status": "error",
                     "reason": "please provide a valid index"
@@ -75,6 +77,7 @@ export default class AppHandler extends Handler {
             });
         } catch (e) {
             log.error(e);
+            res.status(500);
             res.json({
                 "status": "error",
                 "reason": "DB Error"

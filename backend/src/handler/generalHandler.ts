@@ -27,6 +27,7 @@ export default class GeneralHandler extends Handler {
     private async login(req: express.Request, res: express.Response): Promise<void> {
         if (req.body.email == null || req.body.password == null) {
             log.error("Login attempt failed (insufficiant login data)");
+            res.status(404);
             res.json({
                 "status": "error",
                 "reason": "Please provide an email and a password"
@@ -44,6 +45,7 @@ export default class GeneralHandler extends Handler {
             var user: User = User.fromRequestJson(req.body);
         } catch (e) {
             log.error("Register attempt failed (could not create user)");
+            res.status(404);
             res.json({
                 "status": "error",
                 "reason": e.message
@@ -59,6 +61,7 @@ export default class GeneralHandler extends Handler {
     private async forgetPassword(req: express.Request, res: express.Response): Promise<void> {
         if (req.body.email == null) {
             log.error("Reset attempt failed (insufficiant data)");
+            res.status(404);
             res.json({
                 "status": "error",
                 "reason": "Please provide an email"
