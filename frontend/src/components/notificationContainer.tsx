@@ -1,9 +1,10 @@
 import * as React from 'react';
-import {NotificationIterator, NotificationSet} from 'notificationSet';
+import {NotificationSet} from 'notificationSet';
 import {App, Notification} from "../types";
 import LoadingController from "../loadingController";
 import {ChangeEvent} from "react";
 import loadingController from "../loadingController";
+import {DefaultNotificationView} from "./notificationViews";
 
 type NotificationContainerProps = {
     notifications: NotificationSet,
@@ -23,11 +24,6 @@ type NotificationListProps = {
     showLoadingElement: boolean
 }
 
-type NotificationViewProps = {
-    notification: Notification,
-    sender: App
-}
-
 type NotificationFilterChooserProps = {
     includeDone: boolean,
     notifications: NotificationSet,
@@ -35,6 +31,17 @@ type NotificationFilterChooserProps = {
     loadingController: loadingController,
     onUpdate: (includeDone: boolean, currentApp: string | undefined) => void
 }
+
+
+export type NotificationViewProps = {
+    notification: Notification,
+    sender: App
+}
+
+const notificationTypes: { [index: string] : React.ClassType<NotificationViewProps, any, any>} = {
+    "default": DefaultNotificationView
+};
+
 
 export class NotificationContainer extends React.Component<NotificationContainerProps, NotificationContainerState> {
     constructor(props: Readonly<NotificationContainerProps>) {
@@ -130,7 +137,12 @@ export class NotificationList extends React.Component<NotificationListProps> {
     render(): React.ReactNode {
         return <div id="notificationList" >
             {this.props.mapFunction(value => {
-                return <NotificationView key={value.id} notification={value} sender={this.props.notifications.apps[value.serviceProvider]}/>
+                let x = notificationTypes[value.type];
+                if (x == undefined) {
+                    console.error("Could not render notification " + value.id + "! Invalid type " + value.type);
+                    return;
+                }
+                return React.createElement(x, {key: value.id, notification: value, sender: this.props.notifications.apps[value.serviceProvider]}, null);
             })}
             { this.props.showLoadingElement ? <LoadingNotificationView /> : "" }
         </div>
@@ -145,21 +157,3 @@ export class LoadingNotificationView extends React.Component {
     }
 }
 
-export class NotificationView extends React.Component<NotificationViewProps> {
-    render(): React.ReactNode {
-        return <div className="notification">
-            <div className="notificationMeta">
-                <span className="notificationSender">{this.props.sender.name}</span>
-                <div className="notificationSenderSeparator" />
-                <span className="notificationTime">{this.props.notification.timestamp}</span>
-            </div>
-            <div className="notificationContent">
-                <img className="notificationImage" alt="notificationImage" src={
-                    this.props.notification.imageUrl != undefined ? this.props.notification.imageUrl : this.props.sender.imageUrl}
-                />
-                <p className="notificationTitle">{this.props.notification.heading}</p>
-                <span className="notificationBody">{this.props.notification.content}</span>
-            </div>
-        </div>
-    }
-}

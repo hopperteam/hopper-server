@@ -1,7 +1,7 @@
 import {App} from "./types";
 import {Notification} from "./types";
 
-const LOADING_TIME = 2000;
+const LOADING_TIME = 1000;
 
 const DEMO_APPS = [
     new App("1", "Hopper User Service", require("./img/logo_small.svg"), true, true,"hoppercloud.net", "https://app.hoppercloud.net"),
