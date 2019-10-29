@@ -38,7 +38,15 @@ export class DefaultNotificationView extends React.Component<NotificationViewPro
                     this.props.notification.imageUrl != undefined ? this.props.notification.imageUrl : this.props.sender.imageUrl}
                 />
                 <p className="notificationTitle">{this.props.notification.heading}</p>
-                <span className="notificationBody">{this.props.notification.content}</span>
+                <div className="notificationBody">
+                    {(this.props.notification.content as string).split("\n")
+                        .map((line, key) => {
+                        return <span key={key}>
+                            {line}
+                            <br />
+                        </span>
+                    })}
+                </div>
             </div>
         </div>
     }
