@@ -58,7 +58,7 @@ export default class AuthMiddleware {
         return async function (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
             let sid = req.cookies.sid;
             if (sid == null) {
-                res.status(403);
+                res.status(401);
                 res.json({
                     "status": "error",
                     "reason": "unauthorized"
@@ -72,7 +72,7 @@ export default class AuthMiddleware {
                 req.session = new Session(sessions[0].USERID);
                 next();
             } else {
-                res.status(403);
+                res.status(401);
                 res.json({
                     "status": "error",
                     "reason": "unauthorized"

@@ -64,7 +64,7 @@ export default class UserHandler extends Handler {
             let user: User | undefined = this.users.find((u: User) => u.id == req.session.userId);
             if (user == undefined) {
                 log.error("cannot edit other user");
-                res.status(404);
+                res.status(400);
                 res.json({
                     "status": "error",
                     "reason": "wrong user id"
@@ -82,7 +82,7 @@ export default class UserHandler extends Handler {
             this.users[index] = user;
             log.info("User with id " + req.session.userId + " edited");
             res.json({
-                "status": "succes"
+                "status": "success"
             });
         } catch (e) {
             log.error(e);

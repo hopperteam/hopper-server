@@ -63,7 +63,7 @@ export default class AppHandler extends Handler {
             let id: string | undefined = ("id" in req.query) ? req.query["id"] : undefined;
             let appToRemove: App | undefined = this.apps.filter((app: App) => app.id == id)[0];
             if (id == undefined || appToRemove == undefined) {
-                res.status(404);
+                res.status(400);
                 res.json({
                     "status": "error",
                     "reason": "please provide a valid index"
