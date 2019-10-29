@@ -106,57 +106,6 @@ export class NotificationSet {
     public getNotification(id: string): Notification {
         return this.notifications[id];
     }
-
-    public getGeneralIterator(includeDone: boolean): NotificationIterator {
-        if (!includeDone) {
-            return new TimestampOrderedListIterator(this, this.rootCategory.open);
-        } else {
-            return new TimestampOrderedListIterator(this, this.rootCategory.all)
-        }
-    }
-
-    public getIteratorForApp(app: string, doneOnly: boolean): NotificationIterator {
-        if (doneOnly) {
-            return new TimestampOrderedListIterator(this, this.appCategories[app].open);
-        } else {
-            return new TimestampOrderedListIterator(this, this.appCategories[app].all)
-        }
-    }
 }
 
-export interface NotificationIterator {
-    available(): boolean
-    next(): Notification
-    reset(): void
-    map(fnc: ((x: Notification) => any)): any
-}
 
-class TimestampOrderedListIterator implements NotificationIterator {
-    private tol: TimestampOrderedList;
-    private set: NotificationSet;
-    private ind: number = 0;
-
-    constructor(set: NotificationSet, tol: TimestampOrderedList) {
-        this.tol = tol;
-        this.set = set;
-    }
-
-    available(): boolean {
-        return this.ind < this.tol.data.length;
-    }
-
-    next(): Notification {
-        return this.set.getNotification(this.tol.data[this.ind++].id);
-    }
-
-    reset(): void {
-        this.ind = 0;
-    }
-
-    map(fnc: (x: Notification) => any): any {
-        return this.tol.data.map( i => {
-            return fnc(this.set.getNotification(i.id));
-        })
-    }
-
-}
