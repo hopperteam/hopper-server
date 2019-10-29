@@ -4,12 +4,14 @@ import Log from './log';
 import bodyParser = require('body-parser');
 import AuthMiddleware from './handler/authMiddleware';
 const config = require('./config.json');
+import * as mongoose from 'mongoose';
 
 const log = new Log("App");
 
 import GeneralHandler from './handler/generalHandler';
 import AppHandler from './handler/appHandler';
 import UserHandler from './handler/userHandler';
+import NotificationHandler from './handler/notificationHandler';
 
 class ExpressApp {
 
@@ -19,10 +21,20 @@ class ExpressApp {
         this.server = express();
         this.server.use(express.static("web", {'extensions': ['html']}));
         this.server.use(bodyParser.json());
+        this.server.use(cookieParser());
     }
 
     private async init(): Promise<boolean> {
-        this.server.use(cookieParser());
+        var e: any = null;
+        try {
+            await mongoose.connect(config.localDbPath, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            });
+        } catch (e) {
+            log.error("Could not connect to DB (" + e.message + ")");
+            return false;
+        }
 
         this.server.use('/api/v1', new GeneralHandler().getRouter());
 

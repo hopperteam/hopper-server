@@ -1,6 +1,7 @@
 ﻿import * as express from 'express';
 import Handler from './handler';
 import User from '../types/user'
+import Session from '../types/session';
 import Log from '../log';
 const config = require('../config');
 
@@ -25,37 +26,51 @@ export default class GeneralHandler extends Handler {
     }
 
     private async login(req: express.Request, res: express.Response): Promise<void> {
-        if (req.body.email == null || req.body.password == null) {
-            log.error("Login attempt failed (insufficiant login data)");
-            res.status(400);
-            res.json({
-                "status": "error",
-                "reason": "Please provide an email and a password"
-            });
-            return;
-        }
-        // determine if valid login data and provide session/cookie stuff
-        res.json({
-            "status": "success"
-        });
-    }
-
-    private async register(req: express.Request, res: express.Response): Promise<void> {
         try {
-            var user: User = User.fromRequestJson(req.body);
+            const user = await User.findOne({ email: req.body.email, password: req.body.password });
+            if (!user)
+                throw new Error("No user found");
+            let ts = Math.round(Date.now() / 1000) + 86400; // session will expire in 24h
+            const session = await Session.create({
+                userId: user._id,
+                expTs: ts
+            });
+            res.cookie("sid", session._id.toString(), { maxAge: 86400000 });
+            res.json({
+                "status": "success"
+            });
         } catch (e) {
-            log.error("Register attempt failed (could not create user)");
+            log.error("Login attempt failed (" + e.message + ")");
             res.status(400);
             res.json({
                 "status": "error",
                 "reason": e.message
             });
-            return;
         }
-        // add user to the database and provide session/cookie stuff
-        res.json({
-            "status": "success"
-        });
+    }
+
+    private async register(req: express.Request, res: express.Response): Promise<void> {
+        try {
+            if (await User.findOne({ email: req.body.email }))
+                throw new Error("Email is already in use");
+            const user = await User.create(req.body);
+            let ts = Math.round(Date.now() / 1000) + 86400; // session will expire in 24h
+            const session = await Session.create({
+                userId: user._id,
+                expTs: ts
+            });
+            res.cookie("sid", session._id.toString(), { maxAge: 86400000 });
+            res.json({
+                "status": "success"
+            });
+        } catch (e) {
+            log.error("Register attempt failed (" + e.message + ")");
+            res.status(400);
+            res.json({
+                "status": "error",
+                "reason": e.message
+            });
+        }
     }
 
     private async forgetPassword(req: express.Request, res: express.Response): Promise<void> {
