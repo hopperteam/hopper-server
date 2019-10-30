@@ -13,6 +13,8 @@ import AppHandler from './handler/appHandler';
 import UserHandler from './handler/userHandler';
 import NotificationHandler from './handler/notificationHandler';
 
+const LOCAL: boolean = true;
+
 class ExpressApp {
 
     private server: express.Application;
@@ -25,22 +27,26 @@ class ExpressApp {
     }
 
     private async init(): Promise<boolean> {
-        var e: any = null;
-        try {
-            await mongoose.connect(config.localDbPath, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
-        } catch (e) {
-            log.error("Could not connect to DB (" + e.message + ")");
-            return false;
+        if (LOCAL) {
+            try {
+                await mongoose.connect(config.localDbPath, {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true
+                });
+            } catch (e) {
+                log.error("Could not connect to DB (" + e.message + ")");
+                return false;
+            }
+
+            setInterval(AuthMiddleware.daemon, 60000);
+
+            this.server.use('/api/v1', new GeneralHandler().getRouter());
+
+            this.server.use(AuthMiddleware.auth());
+            this.server.use('/api/v1', new AppHandler().getRouter());
+            this.server.use('/api/v1', new UserHandler().getRouter());
+            this.server.use('/api/v1', new NotificationHandler().getRouter());
         }
-
-        this.server.use('/api/v1', new GeneralHandler().getRouter());
-
-        this.server.use(AuthMiddleware.auth());
-        this.server.use('/api/v1', new AppHandler().getRouter());
-        this.server.use('/api/v1', new UserHandler().getRouter());
 
         return true;
     }
