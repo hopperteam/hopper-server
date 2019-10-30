@@ -5,4 +5,4 @@ COPY out/ /app
 WORKDIR /app
 RUN npm install . --production
 
-ENTRYPOINT ["node", "."]
+ENTRYPOINT ["node", ".", "/var/hopper/config.json"]
