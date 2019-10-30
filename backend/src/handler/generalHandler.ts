@@ -4,7 +4,7 @@ import Handler from './handler';
 import User from '../types/user'
 import Session from '../types/session';
 import Log from '../log';
-const config = require('../config');
+import {Config} from "../config";
 
 const log: Log = new Log("GeneralHandler");
 
@@ -21,8 +21,8 @@ export default class GeneralHandler extends Handler {
     private async ping(req: express.Request, res: express.Response): Promise<void> {
         log.info("Pinged by a user");
         res.json({
-            "version": config.version,
-            "type": config.type
+            "version": Config.HOPPER_VERSION,
+            "type": Config.HOPPER_VERSION_TYPE
         });
     }
 

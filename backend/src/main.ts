@@ -3,7 +3,7 @@ import * as cookieParser from 'cookie-parser';
 import Log from './log';
 import bodyParser = require('body-parser');
 import AuthMiddleware from './handler/authMiddleware';
-const config = require('./config.json');
+import {Config} from "./config";
 import * as mongoose from 'mongoose';
 
 const log = new Log("App");
@@ -11,11 +11,9 @@ const log = new Log("App");
 import GeneralHandler from './handler/generalHandler';
 import AppHandler from './handler/appHandler';
 import UserHandler from './handler/userHandler';
-import NotificationHandler from './handler/notificationHandler';
+//import NotificationHandler from './handler/notificationHandler';
 
-const LOCAL: boolean = false;
-
-class ExpressApp {
+class HopperApp {
 
     private server: express.Application;
 
@@ -26,13 +24,32 @@ class ExpressApp {
         this.server.use(cookieParser());
     }
 
+    private loadConfig(): boolean {
+        if (process.argv.length <= 2) {
+            log.error("Specify config to load!");
+            return false;
+        }
+
+        log.info("Loading config from " + process.argv[2]);
+        try {
+            Config.initConfig(process.argv[2]);
+        } catch (e) {
+            log.error("Could not start: " + e.toString());
+            return false;
+        }
+
+        return true;
+    }
+
     private async init(): Promise<boolean> {
-        if (LOCAL) {
+
+        if (Config.instance.startBackend) {
+            log.info("Starting backend");
             try {
-                await mongoose.connect(config.localDbPath, {
+                /*await mongoose.connect(config.localDbPath, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true
-                });
+                });*/
             } catch (e) {
                 log.error("Could not connect to DB (" + e.message + ")");
                 return false;
@@ -45,24 +62,23 @@ class ExpressApp {
             this.server.use(AuthMiddleware.auth());
             this.server.use('/api/v1', new AppHandler().getRouter());
             this.server.use('/api/v1', new UserHandler().getRouter());
-            this.server.use('/api/v1', new NotificationHandler().getRouter());
+            //this.server.use('/api/v1', new NotificationHandler().getRouter());
         }
 
         return true;
     }
 
     public async start(): Promise<void> {
-        this.init().then((success) => {
-            if (!success) {
-                log.error("Could not initalize app");
-                return;
-            }
-            this.server.listen(config.port, () => {
-                log.info("Server listening on port: " + config.port);
-            });
+        if (!(this.loadConfig() && await this.init())) {
+            log.error("Could not initalize app");
+            return;
+        }
+
+        this.server.listen(Config.instance.port, () => {
+            log.info("Server listening on port: " + Config.instance.port);
         });
     }
 }
 
-const app = new ExpressApp();
+const app = new HopperApp();
 app.start();
