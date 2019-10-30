@@ -1,10 +1,10 @@
 ﻿import * as express from 'express';
-import * as crypto from 'crypto';
 import Handler from './handler';
 import User from '../types/user'
 import Session from '../types/session';
 import Log from '../log';
-import {Config} from "../config";
+import * as utils from '../utils';
+import { Config } from "../config";
 
 const log: Log = new Log("GeneralHandler");
 
@@ -28,31 +28,18 @@ export default class GeneralHandler extends Handler {
 
     private async login(req: express.Request, res: express.Response): Promise<void> {
         try {
-            const hash = crypto.createHash('sha256');
             const user = await User.findOne({ email: req.body.email });
             if (!user)
                 throw new Error("No user found");
-            hash.update(user.salt);
-            hash.update(req.body.password);
-            let password: string = hash.digest('hex');
-            if (user.password != password)
+            if (user.password != utils.hashPassword(req.body.password, user.salt).password)
                 throw new Error("Wrong password");
-            let ts = Math.round(Date.now() / 1000) + 86400; // session will expire in 24h
-            const session = await Session.create({
-                userId: user._id,
-                expTs: ts
-            });
-            res.cookie("sid", session._id.toString(), { maxAge: 86400000 });
+            const session = Session.create(user._id);
+            res.cookie("sid", session.id, { maxAge: Session.MAX_AGE });
             res.json({
                 "status": "success"
             });
         } catch (e) {
-            log.error("Login attempt failed (" + e.message + ")");
-            res.status(400);
-            res.json({
-                "status": "error",
-                "reason": e.message
-            });
+            utils.handleError(e, log, res);
         }
     }
 
@@ -60,40 +47,23 @@ export default class GeneralHandler extends Handler {
         try {
             if (await User.findOne({ email: req.body.email }))
                 throw new Error("Email is already in use");
-            const hash = crypto.createHash('sha256');
-            const salt = crypto.randomBytes(128).toString('base64');
-            hash.update(salt);
-            hash.update(req.body.password);
-            req.body.password = hash.digest('hex');
-            req.body.salt = salt;
+            let hash = utils.hashPassword(req.body.password);
+            req.body.password = hash.password;
+            req.body.salt = hash.salt;
             const user = await User.create(req.body);
-            let ts = Math.round(Date.now() / 1000) + 86400; // session will expire in 24h
-            const session = await Session.create({
-                userId: user._id,
-                expTs: ts
-            });
-            res.cookie("sid", session._id.toString(), { maxAge: 86400000 });
+            const session = await Session.create(user._id);
+            res.cookie("sid", session.id.toString(), { maxAge: Session.MAX_AGE });
             res.json({
                 "status": "success"
             });
         } catch (e) {
-            log.error("Register attempt failed (" + e.message + ")");
-            res.status(400);
-            res.json({
-                "status": "error",
-                "reason": e.message
-            });
+            utils.handleError(e, log, res);
         }
     }
 
     private async forgetPassword(req: express.Request, res: express.Response): Promise<void> {
-        if (req.body.email == null) {
-            log.error("Reset attempt failed (insufficiant data)");
-            res.status(400);
-            res.json({
-                "status": "error",
-                "reason": "Please provide an email"
-            });
+        if (!req.body.email) {
+            utils.handleError(new Error("Email not provided"), log, res);
             return;
         }
         // send out email with a link to change the password

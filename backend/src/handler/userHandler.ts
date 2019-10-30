@@ -1,9 +1,9 @@
 ﻿import * as express from 'express';
-import * as crypto from 'crypto';
 import Handler from './handler';
 import User from '../types/user'
 import Log from '../log';
 import Session from '../types/session';
+import * as utils from '../utils';
 
 const log: Log = new Log("UserHandler");
 
@@ -23,54 +23,36 @@ export default class UserHandler extends Handler {
                 throw new Error("User with a valid session does not exist, not good!");
             res.json(user);
         } catch (e) {
-            log.error(e.message);
-            res.status(500);
-            res.json({
-                "status": "error",
-                "reason": "DB Error (" + e.message + ")"
-            });
+            utils.handleError(e, log, res);
         }
     }
 
     private async putUser(req: express.Request, res: express.Response): Promise<void> {
         try {
             if (req.body.password) {
-                const hash = crypto.createHash('sha256');
-                const salt = crypto.randomBytes(128).toString('base64');
-                hash.update(salt);
-                hash.update(req.body.password);
-                req.body.password = hash.digest('hex');
-                req.body.salt = salt;
+                let hash = utils.hashPassword(req.body.password);
+                req.body.password = hash.password;
+                req.body.salt = hash.salt;
             }
             await User.findByIdAndUpdate(req.session.userId, req.body);
             res.json({
                 "status": "success"
             });
         } catch (e) {
-            log.error(e.message);
-            res.status(500);
-            res.json({
-                "status": "error",
-                "reason": "DB Error (" + e.message + ")"
-            });
+            utils.handleError(e, log, res);
         }
     }
 
     private async deleteUser(req: express.Request, res: express.Response): Promise<void> {
         try {
             await User.findByIdAndDelete(req.session.userId);
-            await Session.deleteMany({ userId: req.session.userId });
+            await Session.deleteAssociated(req.session.userId);
             // clean up more data that is associated with the user
             res.json({
                 "status": "success"
             });
         } catch (e) {
-            log.error(e.message);
-            res.status(500);
-            res.json({
-                "status": "error",
-                "reason": "DB Error (" + e.message + ")"
-            });
+            utils.handleError(e, log, res);
         }
     }
 }

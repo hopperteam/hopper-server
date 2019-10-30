@@ -21,7 +21,7 @@ export namespace Config {
             this.dbHost = data.dbHost;
             this.dbPassword = data.dbPassword;
             this.dbUser = data.dbUser;
-            this.dbName = data.dbPassword;
+            this.dbName = data.dbName;
             this.startBackend = data.startBackend || true;
             this.port = data.port || 80;
 

@@ -6,7 +6,7 @@ import AuthMiddleware from './handler/authMiddleware';
 import {Config} from "./config";
 import * as mongoose from 'mongoose';
 
-const log = new Log("App");
+const log = new Log("HopperApp");
 
 import GeneralHandler from './handler/generalHandler';
 import AppHandler from './handler/appHandler';
@@ -46,10 +46,12 @@ class HopperApp {
         if (Config.instance.startBackend) {
             log.info("Starting backend");
             try {
-                /*await mongoose.connect(config.localDbPath, {
+                await mongoose.connect(`mongodb://${Config.instance.dbHost}/${Config.instance.dbName}`, {
                     useNewUrlParser: true,
-                    useUnifiedTopology: true
-                });*/
+                    useUnifiedTopology: true,
+                    user: Config.instance.dbUser,
+                    pass: Config.instance.dbPassword
+                });
             } catch (e) {
                 log.error("Could not connect to DB (" + e.message + ")");
                 return false;
