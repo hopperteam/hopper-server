@@ -13,7 +13,7 @@ import AppHandler from './handler/appHandler';
 import UserHandler from './handler/userHandler';
 import NotificationHandler from './handler/notificationHandler';
 
-const LOCAL: boolean = true;
+const LOCAL: boolean = false;
 
 class ExpressApp {
 
