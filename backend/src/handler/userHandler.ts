@@ -1,4 +1,5 @@
 ﻿import * as express from 'express';
+import * as crypto from 'crypto';
 import Handler from './handler';
 import User from '../types/user'
 import Log from '../log';
@@ -17,7 +18,7 @@ export default class UserHandler extends Handler {
 
     private async getUser(req: express.Request, res: express.Response): Promise<void> {
         try {
-            const user = await User.findById({ _id: req.session.userId });
+            const user = await User.findById({ _id: req.session.userId }, { _id: 0, password: 0, salt: 0 });
             if (!user)
                 throw new Error("User with a valid session does not exist, not good!");
             res.json(user);
@@ -33,6 +34,14 @@ export default class UserHandler extends Handler {
 
     private async putUser(req: express.Request, res: express.Response): Promise<void> {
         try {
+            if (req.body.password) {
+                const hash = crypto.createHash('sha256');
+                const salt = crypto.randomBytes(128).toString('base64');
+                hash.update(salt);
+                hash.update(req.body.password);
+                req.body.password = hash.digest('hex');
+                req.body.salt = salt;
+            }
             await User.findByIdAndUpdate(req.session.userId, req.body);
             res.json({
                 "status": "success"

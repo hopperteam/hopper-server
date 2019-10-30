@@ -1,4 +1,5 @@
 ﻿import * as express from 'express';
+import * as crypto from 'crypto';
 import Handler from './handler';
 import User from '../types/user'
 import Session from '../types/session';
@@ -27,9 +28,15 @@ export default class GeneralHandler extends Handler {
 
     private async login(req: express.Request, res: express.Response): Promise<void> {
         try {
-            const user = await User.findOne({ email: req.body.email, password: req.body.password });
+            const hash = crypto.createHash('sha256');
+            const user = await User.findOne({ email: req.body.email });
             if (!user)
                 throw new Error("No user found");
+            hash.update(user.salt);
+            hash.update(req.body.password);
+            let password: string = hash.digest('hex');
+            if (user.password != password)
+                throw new Error("Wrong password");
             let ts = Math.round(Date.now() / 1000) + 86400; // session will expire in 24h
             const session = await Session.create({
                 userId: user._id,
@@ -53,6 +60,12 @@ export default class GeneralHandler extends Handler {
         try {
             if (await User.findOne({ email: req.body.email }))
                 throw new Error("Email is already in use");
+            const hash = crypto.createHash('sha256');
+            const salt = crypto.randomBytes(128).toString('base64');
+            hash.update(salt);
+            hash.update(req.body.password);
+            req.body.password = hash.digest('hex');
+            req.body.salt = salt;
             const user = await User.create(req.body);
             let ts = Math.round(Date.now() / 1000) + 86400; // session will expire in 24h
             const session = await Session.create({
