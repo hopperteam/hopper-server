@@ -29,3 +29,6 @@ Then(/^Notification "([^"]*)" should be done$/, function () {
 Then(/^Notification "([^"]*)" should( not)? be visible$/, function () {
 
 });
+Then(/^AppFilter "([^"]*)" should( not)? be selected$/, function () {
+
+});
