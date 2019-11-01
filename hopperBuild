@@ -18,6 +18,7 @@ checkDependencies ( ) {
 cleanUp ( ) {
   echo "Cleaning up last build"
   rm -rf out
+  rm -rf frontend/test/.build
   rm -rf .build
   mkdir .build
 }
@@ -40,6 +41,19 @@ buildFrontend ( ) {
   popd
 }
 
+buildTest ( ) {
+  pushd frontend/test
+    npm install .
+    npm run build
+  popd
+}
+
+runTest ( ) {
+  pushd frontend/test
+    npm test
+  popd
+}
+
 dist ( ) {
   echo "Building release"
   cp -r .build/backend out/
@@ -52,6 +66,11 @@ build ( ) {
   buildBackend
   buildFrontend
   dist
+}
+
+test ( ) {
+  buildTest
+  runTest
 }
 
 install ( ) {
@@ -74,6 +93,7 @@ help ( ) {
   echo "build - Builds the whole project"
   echo "install - Builds and installs the project"
   echo "run - Installs and runs the project"
+  echo "test - Runs Tests"
   echo "---- Minor commands ----"
   echo "checkDependencies - Checks and installs required dependencies"
   echo "cleanUp - Cleans up last build"

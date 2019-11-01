@@ -1,7 +1,8 @@
 Feature: Mark notification as done
 
   Scenario: Simple marking and disappear
-    Given User is logged in
+    Given User is on hopper
+    And User is logged in
     And User has a Notification "Test" by "TestApp"
     And Notification "Test" is undone
     And No AppFilter is selected
@@ -11,7 +12,8 @@ Feature: Mark notification as done
     And Notification "Test" should not be visible
 
   Scenario: Simple marking and no disappear
-    Given User is logged in
+    Given User is on hopper
+    And User is logged in
     And User has a Notification "Test" by "TestApp"
     And Notification "Test" is undone
     And No AppFilter is selected
@@ -21,7 +23,8 @@ Feature: Mark notification as done
     And Notification "Test" should be visible
 
   Scenario: App Selected and disappear
-    Given User is logged in
+    Given User is on hopper
+    And User is logged in
     And User has a Notification "Test" by "TestApp"
     And Notification "Test" is undone
     And AppFilter "TestApp" is selected
@@ -31,7 +34,8 @@ Feature: Mark notification as done
     And Notification "Test" should not be visible
 
   Scenario: App Selected and no disappear
-    Given User is logged in
+    Given User is on hopper
+    And User is logged in
     And User has a Notification "Test" by "TestApp"
     And Notification "Test" is undone
     And AppFilter "TestApp" is selected

@@ -1,7 +1,8 @@
 Feature: Filter for SP
 
   Scenario: Simple filter for SP
-    Given User is logged in
+    Given User is on hopper
+    And User is logged in
     And User has a Notification "Test" by "TestApp"
     And Notification "Test" is undone
     And User has a Notification "Test2" by "TestApp2"
@@ -14,7 +15,8 @@ Feature: Filter for SP
     Then AppFilter "Test" should be selected
 
   Scenario: Deselect filter for SP
-    Given User is logged in
+    Given User is on hopper
+    And User is logged in
     And User has a Notification "Test" by "TestApp"
     And Notification "Test" is undone
     And User has a Notification "Test2" by "TestApp2"
@@ -27,7 +29,8 @@ Feature: Filter for SP
     Then AppFilter "TestApp" should not be selected
 
   Scenario: Switch filter for SP
-    Given User is logged in
+    Given User is on hopper
+    And User is logged in
     And User has a Notification "Test" by "TestApp"
     And Notification "Test" is undone
     And User has a Notification "Test2" by "TestApp2"

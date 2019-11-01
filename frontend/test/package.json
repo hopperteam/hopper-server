@@ -1,0 +1,21 @@
+{
+  "name": "hopper-frontend-test",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "cucumber-js filter_for_sp.feature notification_done.feature --require .build",
+    "build": "tsc"
+  },
+  "author": "The hopper team",
+  "license": "ISC",
+  "homepage": "https://hoppercloud.net",
+  "devDependencies": {},
+  "dependencies": {
+    "@types/cucumber": "^4.0.7",
+    "chai": "^4.2.0",
+    "chromedriver": "^78.0.1",
+    "cucumber": "^6.0.3",
+    "selenium-webdriver": "^4.0.0-alpha.5",
+    "typescript": "^3.6.3"
+  }
+}
