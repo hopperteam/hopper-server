@@ -16,6 +16,9 @@ When the user selects one SP, only notifications by this SP should be visible.
 ### 2.1.2 Mock-up
 ![Mockup](./mockups/hopper_main.png)
 
+### 2.1.3 Gherkin File
+The productive gherkin file can be found [in the project](./../frontend/test/filter_for_sp.feature).
+
 ## 2.2 Alternative Flows
 (n/a)
 
