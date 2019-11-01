@@ -49,6 +49,7 @@ class HopperApp {
                 await mongoose.connect(`mongodb://${Config.instance.dbHost}/${Config.instance.dbName}`, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
+                    useCreateIndex: true,
                     user: Config.instance.dbUser,
                     pass: Config.instance.dbPassword
                 });

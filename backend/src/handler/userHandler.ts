@@ -18,7 +18,7 @@ export default class UserHandler extends Handler {
 
     private async getUser(req: express.Request, res: express.Response): Promise<void> {
         try {
-            const user = await User.findById({ _id: req.session.userId }, { _id: 0, password: 0, salt: 0 });
+            const user = await User.findById({ _id: req.session.userId }, { _id: 0 });
             if (!user)
                 throw new Error("User with a valid session does not exist, not good!");
             res.json(user);

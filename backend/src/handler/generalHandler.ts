@@ -28,11 +28,9 @@ export default class GeneralHandler extends Handler {
 
     private async login(req: express.Request, res: express.Response): Promise<void> {
         try {
-            const user = await User.findOne({ email: req.body.email });
+            const user = await User.findOne({ email: req.body.email, password: utils.hashPassword(req.body.password) });
             if (!user)
-                throw new Error("No user found");
-            if (user.password != utils.hashPassword(req.body.password))
-                throw new Error("Wrong password");
+                throw new Error("Invalid login data");
             const session = Session.create(user._id);
             res.cookie("sid", session.id, { maxAge: Session.MAX_AGE });
             res.json({
