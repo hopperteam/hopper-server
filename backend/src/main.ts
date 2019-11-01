@@ -11,6 +11,7 @@ const log = new Log("HopperApp");
 import GeneralHandler from './handler/generalHandler';
 import AppHandler from './handler/appHandler';
 import UserHandler from './handler/userHandler';
+import SPHandler from './handler/spHandler';
 //import NotificationHandler from './handler/notificationHandler';
 
 class HopperApp {
@@ -49,6 +50,7 @@ class HopperApp {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
                     useCreateIndex: true,
+                    useFindAndModify: false,
                     user: Config.instance.dbUser,
                     pass: Config.instance.dbPassword
                 });
@@ -64,6 +66,7 @@ class HopperApp {
             this.server.use(AuthMiddleware.auth());
             this.server.use('/api/v1', new AppHandler().getRouter());
             this.server.use('/api/v1', new UserHandler().getRouter());
+            this.server.use('/api/v1', new SPHandler().getRouter());
             //this.server.use('/api/v1', new NotificationHandler().getRouter());
         }
 
