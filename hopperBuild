@@ -16,6 +16,15 @@ checkDependencies ( ) {
   fi
 }
 
+checkTestDependencies ( ) {
+  if ! type "apt-get" > /dev/null
+  then
+      echo "Apt-get not found, cannot install Chrome, assuming you already have it!"
+      apt-get install chromium-browser
+  fi
+}
+
+
 cleanUp ( ) {
   echo "Cleaning up last build"
   rm -rf out
@@ -88,7 +97,8 @@ run ( ) {
   popd
 }
 
-testStandalone ( ) {
+testStandalone ( ) {g
+  checkTestDependencies
   install
   pushd out
     node main.js ../frontend/test/testConfig.json &
