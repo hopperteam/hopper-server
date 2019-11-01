@@ -1,33 +1,6 @@
 #!/usr/bin/env bash
 set -x
 
-checkDependencies ( ) {
-  echo "Checking for NPM"
-  if ! type "npm" > /dev/null; then
-    echo "NPM not found, installing"
-    if ! type "apt-get" > /dev/null
-    then
-        echo "Apt-get not found, cannot install npm!"
-        exit 1
-    fi
-    apt-get update
-    apt-get install npm
-  else
-    echo "NPM found!"
-  fi
-}
-
-checkTestDependencies ( ) {
-  if ! type "apt-get" > /dev/null
-  then
-      echo "Apt-get not found, cannot install Chrome, assuming you already have it!"
-  else
-      apt-get update
-      apt-get install chromium-browser
-  fi
-}
-
-
 cleanUp ( ) {
   echo "Cleaning up last build"
   rm -rf out
@@ -74,7 +47,6 @@ dist ( ) {
 }
 
 build ( ) {
-  checkDependencies
   cleanUp
   buildBackend
   buildFrontend
@@ -101,7 +73,6 @@ run ( ) {
 }
 
 testStandalone ( ) {
-  checkTestDependencies
   install
   pushd out
     node main.js ../frontend/test/testConfig.json &
