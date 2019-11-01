@@ -6,8 +6,14 @@ require("chromedriver");
 
 // driver setup
 const capabilities = Capabilities.chrome();
-capabilities.set('chromeOptions', { "w3c": false });
+capabilities.set('chromeOptions',
+    {
+        "w3c": false,
+        'args': ['--disable-gpu', '--disable-dev-shm-usage', '--no-sandbox', '-headless']
+    }
+);
 const driver = new Builder().withCapabilities(capabilities).build();
+
 
 Given(/^User is on hopper$/, function () {
     driver.get("http://localhost/")
@@ -28,7 +34,7 @@ Given(/^Checkbox "([^"]*)" is( not)? checked$/, function (checkbox, not) {
 
 });
 When(/^User clicks on button "([^"]*)" in Notification "([^"]*)"$/, function (button, notification) {
-
+    //expect(false).to.equal(true);
 });
 When(/^User clicks on AppFilter "([^"]*)"$/, function (filter) {
 
