@@ -3,6 +3,8 @@ import * as crypto from 'crypto';
 
 import Log from './log';
 
+const SALT = "2346ad27d7568ba9896f1b7da6b5991251debdf2";
+
 export function handleError(err: Error, log: Log, res: express.Response, statusCode: number = 400) {
     log.error(err.message);
     res.status(statusCode);
@@ -12,16 +14,11 @@ export function handleError(err: Error, log: Log, res: express.Response, statusC
     });
 }
 
-export function hashPassword(password: string, salt: string | undefined = undefined): any {
+export function hashPassword(password: string): string {
     const hash = crypto.createHash('sha256');
-    if (!salt)
-        salt = crypto.randomBytes(128).toString('base64');
-    hash.update(salt);
+    hash.update(SALT);
     hash.update(password);
-    return {
-        password: hash.digest('hex'),
-        salt: salt
-    };
+    return hash.digest('hex');
 }
 
 export function generateId(): string {

@@ -31,7 +31,7 @@ export default class GeneralHandler extends Handler {
             const user = await User.findOne({ email: req.body.email });
             if (!user)
                 throw new Error("No user found");
-            if (user.password != utils.hashPassword(req.body.password, user.salt).password)
+            if (user.password != utils.hashPassword(req.body.password))
                 throw new Error("Wrong password");
             const session = Session.create(user._id);
             res.cookie("sid", session.id, { maxAge: Session.MAX_AGE });
@@ -47,9 +47,7 @@ export default class GeneralHandler extends Handler {
         try {
             if (await User.findOne({ email: req.body.email }))
                 throw new Error("Email is already in use");
-            let hash = utils.hashPassword(req.body.password);
-            req.body.password = hash.password;
-            req.body.salt = hash.salt;
+            req.body.password = utils.hashPassword(req.body.password);
             const user = await User.create(req.body);
             const session = await Session.create(user._id);
             res.cookie("sid", session.id.toString(), { maxAge: Session.MAX_AGE });

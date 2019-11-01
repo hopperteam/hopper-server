@@ -29,11 +29,8 @@ export default class UserHandler extends Handler {
 
     private async putUser(req: express.Request, res: express.Response): Promise<void> {
         try {
-            if (req.body.password) {
-                let hash = utils.hashPassword(req.body.password);
-                req.body.password = hash.password;
-                req.body.salt = hash.salt;
-            }
+            if (req.body.password)
+                req.body.password = utils.hashPassword(req.body.password);
             await User.findByIdAndUpdate(req.session.userId, req.body);
             res.json({
                 "status": "success"
