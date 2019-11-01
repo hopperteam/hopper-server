@@ -97,7 +97,7 @@ run ( ) {
   popd
 }
 
-testStandalone ( ) {g
+testStandalone ( ) {
   checkTestDependencies
   install
   pushd out
