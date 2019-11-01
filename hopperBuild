@@ -10,6 +10,7 @@ checkDependencies ( ) {
         echo "Apt-get not found, cannot install npm!"
         exit 1
     fi
+    apt-get update
     apt-get install npm
   else
     echo "NPM found!"
@@ -20,6 +21,8 @@ checkTestDependencies ( ) {
   if ! type "apt-get" > /dev/null
   then
       echo "Apt-get not found, cannot install Chrome, assuming you already have it!"
+  else
+      apt-get update
       apt-get install chromium-browser
   fi
 }
