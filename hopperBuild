@@ -64,7 +64,7 @@ install ( ) {
 run ( ) {
   install
   pushd out
-    node main.js
+    node main.js "$2"
   popd
 }
 
