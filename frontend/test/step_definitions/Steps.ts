@@ -20,6 +20,9 @@ Given(/^Checkbox "([^"]*)" is( not)? checked$/, function () {
 When(/^User clicks on button "([^"]*)" in Notification "([^"]*)"$/, function () {
 
 });
+When(/^User clicks on AppFilter "([^"]*)"$/, function () {
+
+});
 Then(/^Notification "([^"]*)" should be done$/, function () {
 
 });
