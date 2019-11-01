@@ -22,7 +22,7 @@ export namespace Config {
             this.dbPassword = data.dbPassword;
             this.dbUser = data.dbUser;
             this.dbName = data.dbName;
-            this.startBackend = data.startBackend || true;
+            this.startBackend = data.startBackend;
             this.port = data.port || 80;
 
             if (this.dbHost == undefined || this.dbUser == undefined || this.dbPassword == undefined || this.dbName == undefined) {

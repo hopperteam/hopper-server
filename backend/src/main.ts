@@ -42,7 +42,6 @@ class HopperApp {
     }
 
     private async init(): Promise<boolean> {
-
         if (Config.instance.startBackend) {
             log.info("Starting backend");
             try {

@@ -87,6 +87,15 @@ run ( ) {
   popd
 }
 
+testStandalone ( ) {
+  install
+  pushd out
+    node main.js ../frontend/test/testConfig.json &
+  popd
+  test
+  kill $!
+}
+
 help ( ) {
   echo "~~~~~~ Hopper build system ~~~~~~"
   echo "---- Core commands ----"
