@@ -26,3 +26,8 @@ export function generateId(): string {
     hash.update(crypto.randomBytes(128).toString('base64'));
     return hash.digest('hex');
 }
+
+export function decryptContent(key: string, content: string): any {
+    let resBuffer: Buffer = crypto.publicDecrypt(Buffer.from(key, "base64"), Buffer.from(content, "base64"));
+    return JSON.parse(resBuffer.toString("utf-8"));
+}
