@@ -12,7 +12,7 @@ import GeneralHandler from './handler/generalHandler';
 import AppHandler from './handler/appHandler';
 import UserHandler from './handler/userHandler';
 import SPHandler from './handler/spHandler';
-//import NotificationHandler from './handler/notificationHandler';
+import NotificationHandler from './handler/notificationHandler';
 
 class HopperApp {
 
@@ -62,12 +62,12 @@ class HopperApp {
             setInterval(AuthMiddleware.daemon, 60000);
 
             this.server.use('/api/v1', new GeneralHandler().getRouter());
+            this.server.use('/api/v1', new SPHandler().getRouter());
 
             this.server.use(AuthMiddleware.auth());
             this.server.use('/api/v1', new AppHandler().getRouter());
             this.server.use('/api/v1', new UserHandler().getRouter());
-            this.server.use('/api/v1', new SPHandler().getRouter());
-            //this.server.use('/api/v1', new NotificationHandler().getRouter());
+            this.server.use('/api/v1', new NotificationHandler().getRouter());
         }
 
         return true;

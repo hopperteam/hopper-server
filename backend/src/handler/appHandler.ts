@@ -16,7 +16,7 @@ export default class AppHandler extends Handler {
     
     private async getApps(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let user = await User.findById(req.session.userId).populate('apps');
+            let user = await User.findById(req.session.userId).populate('apps', { cert: 0 });
             if (!user)
                 throw new Error("Cannot find user")
             res.json(user.apps);

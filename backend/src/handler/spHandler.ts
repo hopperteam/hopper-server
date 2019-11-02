@@ -19,7 +19,6 @@ export default class SPHandler extends Handler {
         try {
             let app = await App.create(req.body);
             res.json({
-                "status": "success",
                 "id": app._id
             });
         } catch (e) {
