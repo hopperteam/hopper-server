@@ -31,3 +31,5 @@ The user is navigated to the callback, specified in the `SubscripeRequest`. The 
   
 After that, the subscription process is done and the SP can send notifications to the user using the `subscriptionId`.
 
+![flow diagram](img/subsriptionProcess.svg "Flow Diagram")
+
