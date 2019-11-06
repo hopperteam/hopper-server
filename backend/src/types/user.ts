@@ -5,15 +5,13 @@ interface IUser extends mongoose.Document {
     password: string;
     firstName: string;
     lastName: string;
-    apps: any[];
 }
 
 const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, index: true },
     password: { type: String, required: true, select: false },
     firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    apps: [{ type: mongoose.Schema.Types.ObjectId, ref: 'App'}]
+    lastName: { type: String, required: true }
 }, {
     versionKey: false // set to true to keep track of version of document
 });

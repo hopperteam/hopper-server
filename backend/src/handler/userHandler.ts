@@ -4,6 +4,7 @@ import User from '../types/user'
 import Log from '../log';
 import Session from '../types/session';
 import Notification from '../types/notification';
+import Subscription from '../types/subscription';
 import * as utils from '../utils';
 
 const log: Log = new Log("UserHandler");
@@ -46,6 +47,7 @@ export default class UserHandler extends Handler {
             await User.findByIdAndDelete(req.session.userId);
             await Session.deleteAssociated(req.session.userId);
             await Notification.deleteMany({ userId: req.session.userId });
+            await Subscription.deleteMany({ userId: req.session.userId });
             // clean up more data that is associated with the user
             res.json({
                 "status": "success"
