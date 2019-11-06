@@ -12,7 +12,7 @@ interface INotification extends mongoose.Document {
     isArchived: boolean;
     type: string;
     content: string;
-    actions: any[];
+    actions: Action[];
 }
 
 const NotificationSchema = new mongoose.Schema({
