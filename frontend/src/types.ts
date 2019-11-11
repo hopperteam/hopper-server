@@ -1,12 +1,7 @@
-export class User {
-    readonly name: string;
+export type User = {
+    readonly firstName: string;
+    readonly lastName: string;
     readonly email: string;
-
-
-    constructor(name: string, email: string) {
-        this.name = name;
-        this.email = email;
-    }
 }
 
 export class Notification {

@@ -44,21 +44,23 @@ function navigateToLogin() {
 async function main() {
     renderLoadingView();
     let api: IHopperApi|undefined;
+    let user: User|undefined;
 
     if (SerializationUtil.hasStoredSession()) {
         api = SerializationUtil.getStoredSession();
-        if (!await api.hasValidSession()) {
+        user = await api.getCurrentUser();
+        if (user == undefined) {
             navigateToLogin();
+            return;
         }
     } else {
         navigateToLogin();
+        return;
     }
-
-    let user: User = new User("Max Mustermann", "max.mu@stermann.de");
 
     let notifications = new NotificationSet();
 
-    let loadingController = new LoadingController(api!, notifications);
+    let loadingController = new LoadingController(api, notifications);
     await loadingController.loadApps();
 
     console.log(loadingController);

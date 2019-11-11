@@ -1,4 +1,4 @@
-import {App, Notification} from "types";
+import {App, Notification, User} from "types";
 import {IHopperApi} from "api/hopperApi";
 
 const LOADING_TIME = 1000;
@@ -48,10 +48,10 @@ export default class DummyHopperApi implements IHopperApi {
         });
     }
 
-    hasValidSession(): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
+    getCurrentUser(): Promise<User|undefined> {
+        return new Promise<User|undefined>(resolve => {
             setTimeout(() => {
-                resolve(true);
+                resolve({firstName: "Test", lastName: "User", email: "testuser@hoppercloud.net"});
             }, LOADING_TIME);
         });
     }

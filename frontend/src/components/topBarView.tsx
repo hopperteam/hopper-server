@@ -8,7 +8,7 @@ export default class TopBarView extends React.Component<TopBarViewProps> {
 
     render(): React.ReactNode {
         return <div id="topBar">
-            <span>{this.props.user.name}</span>
+            <span>{this.props.user.firstName} {this.props.user.lastName}</span>
         </div>;
     }
 }

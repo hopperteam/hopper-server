@@ -5,7 +5,7 @@ import LoginView from "components/loginView";
 import LoadingView from "components/loadingView"
 import DummyHopperApi from "api/dummyHopperApi";
 import SerializationUtil from "serializationUtil";
-import {IHopperApi} from "./api/hopperApi";
+import {HopperApi, IHopperApi} from "./api/hopperApi";
 
 function renderLoadingView() {
     ReactDOM.render(
@@ -14,7 +14,10 @@ function renderLoadingView() {
     );
 }
 
-let api: IHopperApi = new DummyHopperApi();
+let api: IHopperApi = (document.location.hash == "#dummy") ? new DummyHopperApi(): new HopperApi();
+if (document.location.hash == "#dummy") {
+    console.log("Using dummy api!");
+}
 
 function render() {
     ReactDOM.render(
@@ -31,8 +34,10 @@ function loginComplete() {
 async function main() {
     if (SerializationUtil.hasStoredSession()) {
         api = SerializationUtil.getStoredSession();
-        if (await api.hasValidSession()) {
+        let user = await api.getCurrentUser();
+        if (user != undefined) {
             loginComplete();
+            return;
         }
     }
 

@@ -1,9 +1,9 @@
-import {App, Notification} from "types";
+import {App, Notification, User} from "types";
 import ApiBase from "api/restfulApi";
 
 export interface IHopperApi {
     login(email: string, password: string): Promise<boolean>
-    hasValidSession(): Promise<boolean>
+    getCurrentUser(): Promise<User|undefined>
     getApps(): Promise<App[]>
     getNotifications(includeDone: boolean, app: string|undefined, offset: number, limit: number): Promise<Notification[]>
 }
@@ -31,8 +31,10 @@ export class HopperApi extends ApiBase implements IHopperApi {
         return res.status == 200 && res.result.status == "success";
     }
 
-    async hasValidSession(): Promise<boolean> {
-        return false;
+    async getCurrentUser(): Promise<User|undefined> {
+        let req = await this.get("/user");
+        if (req.status != 200) return undefined;
+        return req.result;
     }
 
 }

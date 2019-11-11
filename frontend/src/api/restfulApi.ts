@@ -39,6 +39,7 @@ export default abstract class RestfulApi {
                     });
                 }
             };
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.send(body);
         });
     }
