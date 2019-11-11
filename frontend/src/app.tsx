@@ -4,9 +4,10 @@ import {User} from "types";
 import {NotificationSet} from "notificationSet"
 import MainView from "components/mainView";
 import LoadingView from "components/loadingView";
-import LoginView from "components/loginView";
 import LoadingController from "loadingController";
 import DummyHopperApi from "api/dummyHopperApi";
+import SerializationUtil from "./serializationUtil";
+import {IHopperApi} from "./api/hopperApi";
 
 require("css/app.css");
 require("css/notification.css");
@@ -16,13 +17,6 @@ const UPDATE_INTERVAL = 30000;
 function renderLoadingView() {
     ReactDOM.render(
         <LoadingView />,
-        document.getElementById("root")
-    );
-}
-
-function renderLoginView() {
-    ReactDOM.render(
-        <LoginView onLoggedIn={() => { console.log("Logged in!") }} />,
         document.getElementById("root")
     );
 }
@@ -42,15 +36,29 @@ function updateLoop(user: User, notifications: NotificationSet, loadingControlle
     updateView(user, notifications, loadingController);
 }
 
+function navigateToLogin() {
+    SerializationUtil.deleteStoredSession();
+    document.location.assign("/");
+}
+
 async function main() {
     renderLoadingView();
+    let api: IHopperApi|undefined;
+
+    if (SerializationUtil.hasStoredSession()) {
+        api = SerializationUtil.getStoredSession();
+        if (!await api.hasValidSession()) {
+            navigateToLogin();
+        }
+    } else {
+        navigateToLogin();
+    }
 
     let user: User = new User("Max Mustermann", "max.mu@stermann.de");
 
     let notifications = new NotificationSet();
-    let api = new DummyHopperApi();
 
-    let loadingController = new LoadingController(api, notifications);
+    let loadingController = new LoadingController(api!, notifications);
     await loadingController.loadApps();
 
     console.log(loadingController);

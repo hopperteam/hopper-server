@@ -3,18 +3,28 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-    entry: './src/app.tsx',
+    entry: {
+        app: './src/app.tsx',
+        login: './src/loginApp.tsx',
+    },
     plugins: [
         new CleanWebpackPlugin({
             cleanAfterEveryBuildPatterns: ['../.build/frontend']
         }),
         new HtmlWebpackPlugin({
-            template: 'src/templates/index.html'
+            template: 'src/templates/index.html',
+            filename: 'app.html',
+            chunks: ['app']
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/templates/index.html',
+            filename: 'index.html',
+            chunks: ['login']
         }),
     ],
     output: {
         path: __dirname + '/../.build/frontend',
-        filename: 'main.js'
+        filename: '[name].bundle.js',
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js'],

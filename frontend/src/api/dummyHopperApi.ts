@@ -48,4 +48,12 @@ export default class DummyHopperApi implements IHopperApi {
         });
     }
 
+    hasValidSession(): Promise<boolean> {
+        return new Promise<boolean>(resolve => {
+            setTimeout(() => {
+                resolve(true);
+            }, LOADING_TIME);
+        });
+    }
+
 }

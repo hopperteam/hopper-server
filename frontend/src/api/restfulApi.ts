@@ -14,7 +14,7 @@ export default abstract class RestfulApi {
         return url;
     }
 
-    protected readonly apiRoot: string = "/";
+    readonly apiRoot: string = "";
 
     protected constructor(apiRoot: string) {
         this.apiRoot = apiRoot;
