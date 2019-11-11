@@ -1,12 +1,12 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
-import {App, Notification, User} from "types";
+import {User} from "types";
 import {NotificationSet} from "notificationSet"
 import MainView from "components/mainView";
 import LoadingView from "components/loadingView";
 import LoginView from "components/loginView";
-import HopperApi from "./api";
-import LoadingController from "./loadingController";
+import LoadingController from "loadingController";
+import DummyHopperApi from "api/dummyHopperApi";
 
 require("css/app.css");
 require("css/notification.css");
@@ -48,7 +48,7 @@ async function main() {
     let user: User = new User("Max Mustermann", "max.mu@stermann.de");
 
     let notifications = new NotificationSet();
-    let api = new HopperApi("1234");
+    let api = new DummyHopperApi();
 
     let loadingController = new LoadingController(api, notifications);
     await loadingController.loadApps();

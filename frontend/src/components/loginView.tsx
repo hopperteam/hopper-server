@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {ChangeEvent, FormEvent} from "react";
-import HopperApi from "../api";
+import HopperApi from "../api/restfulApi";
 
 type LoginViewProps = {
     onLoggedIn: Function
@@ -41,13 +41,7 @@ export default class LoginView extends React.Component<LoginViewProps, LoginView
     onLogin(evt: FormEvent<HTMLFormElement>): boolean {
         this.setState({working: true});
 
-        HopperApi.login(this.state.username, this.state.password).then(value => {
-            if (value == null) {
-                this.setState({working: false, loginFailed: true})
-            } else {
-                this.props.onLoggedIn()
-            }
-        });
+        // TODO login
 
         evt.preventDefault();
         return false;

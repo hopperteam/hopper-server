@@ -1,10 +1,10 @@
-import {App} from "./types";
-import {Notification} from "./types";
+import {App, Notification} from "types";
+import {IHopperApi} from "api/hopperApi";
 
 const LOADING_TIME = 1000;
 
 const DEMO_APPS = [
-    new App("1", "Hopper User Service", require("./img/logo_small.svg"), true, true,"hoppercloud.net", "https://app.hoppercloud.net"),
+    new App("1", "Hopper User Service", require("../img/logo_small.svg"), true, true,"hoppercloud.net", "https://app.hoppercloud.net"),
     new App("2", "WhatsApp", "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", true, false, "whatsapp.com", "https://manage.hopper.whatsapp.com"),
     new App("3", "Deutsche Bank", "https://upload.wikimedia.org/wikipedia/commons/7/7b/Deutsche_Bank_logo_without_wordmark.svg", true, false, "deutsche-bank.de", "https://hopper.deutsche-bank.de"),
     new App("4", "Studierendenwerk Karlsruhe", "https://www.jobs-studentenwerke.de/sites/default/files/styles/logo_studentenwerk/public/user-files/Studierendenwerk%20Karlsruhe/logos/swka_farbig.png?itok=55RSWEF6", false, true, "sw-ka.de", "https://account.hopper.sw-ka.de"),
@@ -22,28 +22,19 @@ const DEMO_NOTIFICATIONS = [
     new Notification("9","You still have to pay your rent", "4", Math.floor(Date.now() / 1000)  - 200, undefined, false, false, "default", "2 days overdue", []),
 ];
 
-export default class HopperApi {
-    static async login(username: string, password: string): Promise<HopperApi|null> {
-        return new Promise<HopperApi|null>((resolve) => {
-            console.log("## DUMMY API ##: login(" + username + ", " + password + ")");
-            setTimeout(() => {
-                if (username == "max" && password == "1234") {
-                    resolve(new HopperApi("34n22"));
-                } else {
-                    resolve(null);
-                }
-            }, LOADING_TIME);
-        });
+export default class DummyHopperApi implements IHopperApi {
+    public async login(email: string, password: string) {
+        return true;
     }
 
     public async getApps(): Promise<App[]> {
         return new Promise<App[]>(resolve => {
             console.log("## DUMMY API ##: getApps()");
             resolve(DEMO_APPS);
-        })
+        });
     }
 
-    public async getNotifications(includeDone: boolean, app: string|undefined, offset: number, limit: number): Promise<Notification[]> {
+    public async getNotifications(includeDone: boolean, app: string | undefined, offset: number, limit: number): Promise<Notification[]> {
         return new Promise<Notification[]>(resolve => {
             console.log("## DUMMY API ##: getNotifications(" + includeDone + ", " + app + ", " + offset + ", " + limit + ")");
             setTimeout(() => {
@@ -55,12 +46,6 @@ export default class HopperApi {
                 resolve(filtered.slice(offset, offset + limit));
             }, LOADING_TIME);
         });
-    }
-
-    private sessionId: string;
-
-    constructor(sessionId: string) {
-        this.sessionId = sessionId;
     }
 
 }

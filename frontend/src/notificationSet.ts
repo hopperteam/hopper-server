@@ -1,4 +1,4 @@
-import {App, Notification} from "./types";
+import {App, Notification} from "types";
 
 export class TimestampOrderedList {
     public data: {id: string, timestamp: number}[];
