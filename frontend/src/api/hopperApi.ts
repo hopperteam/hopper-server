@@ -18,7 +18,12 @@ class HopperApi extends ApiBase implements IHopperApi {
     }
 
     async login(email: string, password: string): Promise<boolean> {
-        return false;
+        let res = await this.post("login", {
+            "email": email,
+            "password": password
+        });
+
+        return res.status == 200 && res.result.status == "success";
     }
 
 }
