@@ -20,5 +20,10 @@ const AppSchema = new mongoose.Schema({
     versionKey: false // set to true to keep track of version of document
 });
 
+AppSchema.set('toJSON', {
+    virtuals: true,
+    transform: function (doc, ret) { delete ret._id }
+});
+
 const App = mongoose.model<IApp>("App", AppSchema);
 export default App;

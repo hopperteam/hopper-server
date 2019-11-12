@@ -36,5 +36,10 @@ const NotificationSchema = new mongoose.Schema({
     versionKey: false // set to true to keep track of version of document
 });
 
+NotificationSchema.set('toJSON', {
+    virtuals: true,
+    transform: function (doc, ret) { delete ret._id }
+});
+
 const Notification = mongoose.model<INotification>("Notification", NotificationSchema);
 export default Notification;
