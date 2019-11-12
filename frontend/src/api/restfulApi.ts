@@ -5,11 +5,14 @@ export type ApiCallResult = {
 }
 
 export default abstract class RestfulApi {
-    public static buildUrl(url: string, fields: { [index: string]: (string|number|boolean) }): string {
+    public static buildUrl(url: string, fields: { [index: string]: (string|number|boolean|undefined) }): string {
         let first = true;
         for (let x in fields) {
-            url += ((first) ? "?" : "&") + x + encodeURIComponent(fields[x]);
-            first = false;
+            let val = fields[x];
+            if (val != undefined) {
+                url += ((first) ? "?" : "&") + x + "=" + encodeURIComponent(val);
+                first = false;
+            }
         }
         return url;
     }
@@ -44,11 +47,11 @@ export default abstract class RestfulApi {
         });
     }
 
-    protected get(url: string, fields: { [index: string]: (string|number|boolean) } = {}): Promise<ApiCallResult> {
+    protected get(url: string, fields: { [index: string]: (string|number|boolean|undefined) } = {}): Promise<ApiCallResult> {
         return this.sendRequest(RestfulApi.buildUrl(url, fields), "GET", undefined);
     }
 
-    protected delete(url: string, fields: { [index: string]: (string|number|boolean) } = {}): Promise<ApiCallResult> {
+    protected delete(url: string, fields: { [index: string]: (string|number|boolean|undefined) } = {}): Promise<ApiCallResult> {
         return this.sendRequest(RestfulApi.buildUrl(url, fields), "DELETE", undefined);
     }
 

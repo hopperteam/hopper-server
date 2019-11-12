@@ -8,18 +8,9 @@ export interface IHopperApi {
     getNotifications(includeDone: boolean, app: string|undefined, offset: number, limit: number): Promise<Notification[]>
 }
 
-
 export class HopperApi extends ApiBase implements IHopperApi {
     constructor(apiPath: string = "/api/v1") {
         super(apiPath);
-    }
-
-    async getApps(): Promise<App[]> {
-        return [];
-    }
-
-    async getNotifications(includeDone: boolean, app: string | undefined, offset: number, limit: number): Promise<Notification[]> {
-        return [];
     }
 
     async login(email: string, password: string): Promise<boolean> {
@@ -32,9 +23,25 @@ export class HopperApi extends ApiBase implements IHopperApi {
     }
 
     async getCurrentUser(): Promise<User|undefined> {
-        let req = await this.get("/user");
-        if (req.status != 200) return undefined;
-        return req.result;
+        let resp = await this.get("/user");
+        if (resp.status != 200) return undefined;
+        return resp.result;
     }
 
+    async getApps(): Promise<App[]> {
+        let resp = await this.get("/apps");
+        if (resp.status != 200) return [];
+        return resp.result;
+    }
+
+    async getNotifications(includeDone: boolean, app: string | undefined, offset: number, limit: number): Promise<Notification[]> {
+        let resp = await this.get("/notifications", {
+            includeDone: includeDone,
+            app: app,
+            skip: offset,
+            limit: limit
+        });
+        if (resp.status != 200) return [];
+        return resp.result;
+    }
 }

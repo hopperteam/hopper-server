@@ -4,7 +4,7 @@ export type User = {
     readonly email: string;
 }
 
-export class Notification {
+export type Notification = {
     readonly id: string;
     readonly heading: string;
     readonly serviceProvider: string;
@@ -15,38 +15,16 @@ export class Notification {
     readonly type: string;
     readonly content: any;
     readonly actions: Action[];
-
-
-    constructor(id: string, heading: string, serviceProvider: string, timestamp: number, imageUrl: string | undefined, isDone: boolean, isSilent: boolean, type: string, content: any, actions: Action[]) {
-        this.id = id;
-        this.heading = heading;
-        this.serviceProvider = serviceProvider;
-        this.timestamp = timestamp;
-        this.imageUrl = imageUrl;
-        this.isDone = isDone;
-        this.isSilent = isSilent;
-        this.type = type;
-        this.content = content;
-        this.actions = actions;
-    }
 }
 
-export class Action {
+export type Action = {
     readonly type: string;
     readonly url: string;
     readonly markAsDone: boolean;
     readonly text: string;
-
-
-    constructor(type: string, url: string, markAsDone: boolean, text: string) {
-        this.type = type;
-        this.url = url;
-        this.markAsDone = markAsDone;
-        this.text = text;
-    }
 }
 
-export class App {
+export type App = {
     readonly id: string;
     readonly name: string;
     readonly imageUrl: string;
@@ -54,15 +32,4 @@ export class App {
     readonly isHidden: boolean;
     readonly baseUrl: string;
     readonly manageUrl: string;
-
-
-    constructor(id: string, name: string, imageUrl: string, isActive: boolean, isHidden: boolean, baseUrl: string, manageUrl: string) {
-        this.id = id;
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.isActive = isActive;
-        this.isHidden = isHidden;
-        this.baseUrl = baseUrl;
-        this.manageUrl = manageUrl;
-    }
 }

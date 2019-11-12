@@ -1,25 +1,52 @@
-import {App, Notification, User} from "types";
+import {Action, App, Notification, User} from "types";
 import {IHopperApi} from "api/hopperApi";
 
 const LOADING_TIME = 1000;
 
+function _createApp (id: string, name: string, imageUrl: string, isActive: boolean, isHidden: boolean, baseUrl: string, manageUrl: string): App {
+    return {
+        id: id,
+        name: name,
+        imageUrl: imageUrl,
+        isActive: isActive,
+        isHidden: isHidden,
+        baseUrl: baseUrl,
+        manageUrl: manageUrl
+    };
+}
+
 const DEMO_APPS = [
-    new App("1", "Hopper User Service", require("../img/logo_small.svg"), true, true,"hoppercloud.net", "https://app.hoppercloud.net"),
-    new App("2", "WhatsApp", "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", true, false, "whatsapp.com", "https://manage.hopper.whatsapp.com"),
-    new App("3", "Deutsche Bank", "https://upload.wikimedia.org/wikipedia/commons/7/7b/Deutsche_Bank_logo_without_wordmark.svg", true, false, "deutsche-bank.de", "https://hopper.deutsche-bank.de"),
-    new App("4", "Studierendenwerk Karlsruhe", "https://www.jobs-studentenwerke.de/sites/default/files/styles/logo_studentenwerk/public/user-files/Studierendenwerk%20Karlsruhe/logos/swka_farbig.png?itok=55RSWEF6", false, true, "sw-ka.de", "https://account.hopper.sw-ka.de"),
+    _createApp("1", "Hopper User Service", require("../img/logo_small.svg"), true, true,"hoppercloud.net", "https://app.hoppercloud.net"),
+    _createApp("2", "WhatsApp", "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", true, false, "whatsapp.com", "https://manage.hopper.whatsapp.com"),
+    _createApp("3", "Deutsche Bank", "https://upload.wikimedia.org/wikipedia/commons/7/7b/Deutsche_Bank_logo_without_wordmark.svg", true, false, "deutsche-bank.de", "https://hopper.deutsche-bank.de"),
+    _createApp("4", "Studierendenwerk Karlsruhe", "https://www.jobs-studentenwerke.de/sites/default/files/styles/logo_studentenwerk/public/user-files/Studierendenwerk%20Karlsruhe/logos/swka_farbig.png?itok=55RSWEF6", false, true, "sw-ka.de", "https://account.hopper.sw-ka.de"),
 ];
 
+function _createNotification(id: string, heading: string, serviceProvider: string, timestamp: number, imageUrl: string | undefined, isDone: boolean, isSilent: boolean, type: string, content: any, actions: Action[]): Notification {
+    return {
+        id: id,
+        heading: heading,
+        serviceProvider: serviceProvider,
+        timestamp: timestamp,
+        imageUrl: imageUrl,
+        isDone: isDone,
+        isSilent: isSilent,
+        type: type,
+        content: content,
+        actions: actions
+    };
+}
+
 const DEMO_NOTIFICATIONS = [
-    new Notification("1","Account created", "1", Math.floor(Date.now() / 1000) - 100, undefined, false, false, "default", "Welcome to your hopper account!", []),
-    new Notification("2","Welcome!", "1", Math.floor(Date.now() / 1000), undefined, false, false, "default", "Notifications will appear here!", []),
-    new Notification("3","1 new transaction", "3", Math.floor(Date.now() / 1000), undefined, false, true, "default", "+ 500€ from Marc Jacob", []),
-    new Notification("4","2 new transactions", "3", Math.floor(Date.now() / 1000), undefined, false, false, "default", "- 200 € to Konrad Hartwig\n+ 7,50€ from DHBW Karlsruhe", []),
-    new Notification("5","1 new message from your caretaker", "4", Math.floor(Date.now() / 1000) - 4000, undefined, true, false, "default", "1 new message", []),
-    new Notification("6","Max Müller", "2", Math.floor(Date.now() / 1000) - 23000, undefined, false, false, "default", "Wanna have a drink tonight?", []),
-    new Notification("7","Marie Mustermann", "2", Math.floor(Date.now() / 1000)  - 30, undefined, true, false, "default", "What are you doing later today?", []),
-    new Notification("8","1 new message in your postbox", "3", Math.floor(Date.now() / 1000)  - 500, undefined, false, false, "default", "Tax refund", []),
-    new Notification("9","You still have to pay your rent", "4", Math.floor(Date.now() / 1000)  - 200, undefined, false, false, "default", "2 days overdue", []),
+    _createNotification("1","Account created", "1", Math.floor(Date.now() / 1000) - 100, undefined, false, false, "default", "Welcome to your hopper account!", []),
+    _createNotification("2","Welcome!", "1", Math.floor(Date.now() / 1000), undefined, false, false, "default", "Notifications will appear here!", []),
+    _createNotification("3","1 new transaction", "3", Math.floor(Date.now() / 1000), undefined, false, true, "default", "+ 500€ from Marc Jacob", []),
+    _createNotification("4","2 new transactions", "3", Math.floor(Date.now() / 1000), undefined, false, false, "default", "- 200 € to Konrad Hartwig\n+ 7,50€ from DHBW Karlsruhe", []),
+    _createNotification("5","1 new message from your caretaker", "4", Math.floor(Date.now() / 1000) - 4000, undefined, true, false, "default", "1 new message", []),
+    _createNotification("6","Max Müller", "2", Math.floor(Date.now() / 1000) - 23000, undefined, false, false, "default", "Wanna have a drink tonight?", []),
+    _createNotification("7","Marie Mustermann", "2", Math.floor(Date.now() / 1000)  - 30, undefined, true, false, "default", "What are you doing later today?", []),
+    _createNotification("8","1 new message in your postbox", "3", Math.floor(Date.now() / 1000)  - 500, undefined, false, false, "default", "Tax refund", []),
+    _createNotification("9","You still have to pay your rent", "4", Math.floor(Date.now() / 1000)  - 200, undefined, false, false, "default", "2 days overdue", []),
 ];
 
 export default class DummyHopperApi implements IHopperApi {
