@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "testVisual": "cucumber-js filter_for_sp.feature notification_done.feature --require .build",
-    "test": "cucumber-js filter_for_sp.feature notification_done.feature --require .build --format node_modules/cucumber-teamcity-formatter",
+    "test": "cucumber-js filter_for_sp.feature notification_done.feature --require .build --format node_modules/cucumber-junit",
     "build": "tsc"
   },
   "author": "The hopper team",
@@ -19,6 +19,7 @@
     "chai": "^4.2.0",
     "chromedriver": "^77.0.0",
     "cucumber": "^6.0.3",
+    "cucumber-junit": "^1.7.1",
     "cucumber-teamcity-formatter": "^2.0.1",
     "selenium-webdriver": "^4.0.0-alpha.5",
     "typescript": "^3.6.3"
