@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "testVisual": "cucumber-js filter_for_sp.feature notification_done.feature --require .build",
-    "test": "cucumber-js filter_for_sp.feature notification_done.feature --require .build --format node_modules/cucumber-junit",
+    "test": "cucumber-js filter_for_sp.feature notification_done.feature --require .build --format json | node_modules/.bin/cucumber-junit",
     "build": "tsc"
   },
   "author": "The hopper team",
