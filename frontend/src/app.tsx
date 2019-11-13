@@ -61,9 +61,21 @@ async function main() {
     let notifications = new NotificationSet();
 
     let loadingController = new LoadingController(api, notifications);
-    await loadingController.loadApps();
+    if (api instanceof DummyHopperApi) {
+        // @ts-ignore
+        document._hopperApi = api; // For Testing API access
+        // @ts-ignore
+        document._loadingController = loadingController;
+        let _user = user;
+        let _notifications = notifications;
+        let _lC = loadingController;
+        // @ts-ignore
+        document._updateHopperUi = () => {
 
-    console.log(loadingController);
+            updateView(_user, _notifications, _lC);
+        }
+    }
+    await loadingController.loadApps();
 
     updateView(user, notifications, loadingController);
 }

@@ -10,7 +10,8 @@
       "dom",
       "es6"
     ],
-    "outDir": ".build"
+    "outDir": ".build",
+    "allowJs": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "**/__tests__/*"]

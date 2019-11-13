@@ -27,7 +27,7 @@ function getTimeText(date: number): string {
 
 export class DefaultNotificationView extends React.Component<NotificationViewProps> {
     render(): React.ReactNode {
-        return <div className="notification">
+        return <div id={"not-" + this.props.notification.id} className="notification">
             <div className="notificationMeta">
                 <span className="notificationSender">{this.props.sender.name}</span>
                 <div className="notificationSenderSeparator" />

@@ -126,7 +126,7 @@ export class NotificationFilterChooser extends React.Component<NotificationFilte
                     })
                     .sort((x, y) => y.notifications - x.notifications)
                     .map(x => {
-                        return <img src={x.app.imageUrl} alt={x.app.name + " (" + x.notifications + ")"} onClick={() => this.onAppClick(x.app.id)} className={x.app.id == this.props.currentApp ? "appFilter appFilterSelected" : "appFilter"} />;
+                        return <img src={x.app.imageUrl} alt={x.app.name + " (" + x.notifications + ")"} onClick={() => this.onAppClick(x.app.id)} id={"app-" + x.app.id} className={x.app.id == this.props.currentApp ? "appFilter appFilterSelected" : "appFilter"} />;
                     })
             }
         </div>

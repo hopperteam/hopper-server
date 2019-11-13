@@ -60,7 +60,7 @@ export default class LoginView extends React.Component<LoginViewProps, LoginView
                 { this.state.loginFailed && <span id="loginFailed">Login failed!</span> }
                 <input name="username" placeholder="username" type="text" onChange={this.onUsernameChange.bind(this)} value={this.state.username} disabled={this.state.working} />
                 <input name="password" placeholder="password" type="password" onChange={this.onPasswordChange.bind(this)} value={this.state.password} disabled={this.state.working} />
-                <input type="submit" value="Login" disabled={this.state.working} />
+                <input type="submit" value="Login" id="loginButton" disabled={this.state.working} />
             </form>
         </div>;
     }

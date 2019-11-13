@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "testVisual": "cucumber-js filter_for_sp.feature notification_done.feature --require .build",
     "test": "cucumber-js filter_for_sp.feature notification_done.feature --require .build --format node_modules/cucumber-teamcity-formatter",
     "build": "tsc"
   },
   "author": "The hopper team",
   "license": "ISC",
   "homepage": "https://hoppercloud.net",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/chai": "^4.2.5",
+    "@types/selenium-webdriver": "^4.0.5"
+  },
   "dependencies": {
     "@types/cucumber": "^4.0.7",
     "chai": "^4.2.0",

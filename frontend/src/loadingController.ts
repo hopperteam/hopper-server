@@ -12,7 +12,7 @@ class LoadedCategory {
 
 export default class LoadingController {
     private api: IHopperApi;
-    private notificationSet: NotificationSet;
+    readonly notificationSet: NotificationSet;
 
     private readonly rootCategory: LoadedCategory;
     private readonly appCategories: { [index: string]: (LoadedCategory) };
