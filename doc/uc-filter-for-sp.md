@@ -24,26 +24,22 @@ Feature: Filter for SP
   Scenario: Simple filter for SP
     Given User is on hopper
     And User is logged in
-    And User has a Notification "Test" by "TestApp"
-    And Notification "Test" is undone
-    And User has a Notification "Test2" by "TestApp2"
-    And Notification "Test2" is undone
+    And User has open Notification "Test" by "TestApp"
+    And User has open Notification "Test2" by "TestApp2"
     And No AppFilter is selected
-    And Checkbox "seeAllNotification" is not checked
+    And Checkbox "SeeAllNotifications" is not checked
     When User clicks on AppFilter "TestApp"
     Then Notification "Test" should be visible
     Then Notification "Test2" should not be visible
-    Then AppFilter "Test" should be selected
+    Then AppFilter "TestApp" should be selected
 
   Scenario: Deselect filter for SP
     Given User is on hopper
     And User is logged in
-    And User has a Notification "Test" by "TestApp"
-    And Notification "Test" is undone
-    And User has a Notification "Test2" by "TestApp2"
-    And Notification "Test2" is undone
+    And User has open Notification "Test" by "TestApp"
+    And User has open Notification "Test2" by "TestApp2"
     And AppFilter "TestApp" is selected
-    And Checkbox "seeAllNotification" is not checked
+    And Checkbox "SeeAllNotifications" is not checked
     When User clicks on AppFilter "TestApp"
     Then Notification "Test" should be visible
     Then Notification "Test2" should be visible
@@ -52,12 +48,10 @@ Feature: Filter for SP
   Scenario: Switch filter for SP
     Given User is on hopper
     And User is logged in
-    And User has a Notification "Test" by "TestApp"
-    And Notification "Test" is undone
-    And User has a Notification "Test2" by "TestApp2"
-    And Notification "Test2" is undone
+    And User has open Notification "Test" by "TestApp"
+    And User has open Notification "Test2" by "TestApp2"
     And AppFilter "TestApp" is selected
-    And Checkbox "seeAllNotification" is not checked
+    And Checkbox "SeeAllNotifications" is not checked
     When User clicks on AppFilter "TestApp2"
     Then Notification "Test" should not be visible
     Then Notification "Test2" should be visible
