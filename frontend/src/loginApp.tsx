@@ -14,7 +14,20 @@ function renderLoadingView() {
     );
 }
 
-let api: IHopperApi = (document.location.hash == "#dummy") ? new DummyHopperApi(): new HopperApi();
+function getUrlParameter(sParam: string) {
+    let sPageURL = window.location.search.substring(1);
+    let sURLVariables = sPageURL.split('&');
+
+    for (let i = 0; i < sURLVariables.length; i++) {
+        let sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+}
+
+let api: IHopperApi = (getUrlParameter("redirect")) ? new DummyHopperApi(): new HopperApi();
 if (document.location.hash == "#dummy") {
     console.log("Using dummy api!");
 }
@@ -28,7 +41,13 @@ function render() {
 
 function loginComplete() {
     SerializationUtil.storeSession(api);
-    document.location.assign("/app")
+
+    let redirect = getUrlParameter("redirect");
+    if (redirect && typeof(redirect) === 'string') {
+        document.location.assign(redirect);
+        return
+    }
+    document.location.assign("/app");
 }
 
 async function main() {
