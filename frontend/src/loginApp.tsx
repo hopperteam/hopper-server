@@ -27,8 +27,9 @@ function getUrlParameter(sParam: string) {
     }
 }
 
-let api: IHopperApi = (getUrlParameter("redirect")) ? new DummyHopperApi(): new HopperApi();
-if (document.location.hash == "#dummy") {
+let useDummyApi = !!getUrlParameter("dummy");
+let api: IHopperApi = (useDummyApi) ? new DummyHopperApi(): new HopperApi();
+if (useDummyApi) {
     console.log("Using dummy api!");
 }
 
