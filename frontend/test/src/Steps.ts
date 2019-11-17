@@ -23,7 +23,7 @@ async function sleep(ms: number) {
 Given(/^User is on hopper$/, async function () {
     await driver.manage().deleteAllCookies();
     (await driver.manage().getTimeouts()).implicit = 2 * 1000;
-    await driver.get("http://localhost/#dummy")
+    await driver.get("http://localhost/?dummy")
 });
 
 Given(/^User is logged in$/, async function () {
