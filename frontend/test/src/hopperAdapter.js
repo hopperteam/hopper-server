@@ -55,6 +55,8 @@ export default class HopperAdapter {
                     timestamp: Date.now(),
                 }
             ]);
+            controller.rootCategory.loaded += 1;
+            controller.appCategories[arguments[2]].loaded += 1;
             document._updateHopperUi();
         }, this.getNotificationId(name), name, await this.getAppId(sender, driver));
     }

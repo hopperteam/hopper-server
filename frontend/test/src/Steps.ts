@@ -1,5 +1,5 @@
 import {Given, When, Then, AfterAll} from 'cucumber'
-import {Builder, By, Capabilities, Key, until} from 'selenium-webdriver';
+import {Builder, By, Capabilities, Key, until, WebElement, WebElementPromise} from 'selenium-webdriver';
 import { expect } from 'chai';
 import HopperAdapter from "./hopperAdapter";
 
@@ -70,8 +70,20 @@ Given(/^Checkbox "([^"]*)" is( not)? checked$/, async function (checkbox, not) {
     }
 });
 
-When(/^User clicks on button "([^"]*)" in Notification "([^"]*)"$/, function (button, notification) {
-    return "pending"
+When(/^User clicks on button "([^"]*)" in Notification "([^"]*)"$/, async function (button, notification) {
+    let id = adapter.getNotificationId(notification);
+    let el = driver.findElement(By.id('not-' + id));
+    let buttonEl: WebElement|undefined;
+    switch (button) {
+        case "done":
+            buttonEl = await el.findElement(By.className("markDoneButton"));
+            break;
+        default:
+            expect.fail("Unknown checkbox!");
+    }
+    expect(buttonEl).not.to.be.undefined;
+
+    await buttonEl!.click();
 });
 
 When(/^User clicks on AppFilter "([^"]*)"$/, async function (filter) {
