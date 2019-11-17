@@ -54,6 +54,10 @@ export default class DummyHopperApi implements IHopperApi {
         return true;
     }
 
+    public async register(email: string, password: string, firstName: string, lastName: string): Promise<[boolean, string]> {
+        return [true, ""];
+    }
+
     public async getApps(): Promise<App[]> {
         return new Promise<App[]>(resolve => {
             console.log("## DUMMY API ##: getApps()");

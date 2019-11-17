@@ -7,6 +7,7 @@ import DummyHopperApi from "api/dummyHopperApi";
 import SerializationUtil from "serializationUtil";
 import {HopperApi, IHopperApi} from "./api/hopperApi";
 import {HopperUtil} from "./hopperUtil";
+import LoginSignUpView from "./components/loginSignUpView";
 
 function renderLoadingView() {
     ReactDOM.render(
@@ -24,7 +25,7 @@ if (useDummyApi) {
 
 function render() {
     ReactDOM.render(
-        <LoginView onLoggedIn={loginComplete} api={api}/>,
+        <LoginSignUpView onLoggedIn={loginComplete} api={api}/>,
         document.getElementById("root")
     );
 }

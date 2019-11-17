@@ -3,6 +3,7 @@ import ApiBase from "api/restfulApi";
 
 export interface IHopperApi {
     login(email: string, password: string): Promise<boolean>
+    register(email: string, password: string, firstName: string, lastName: string): Promise<[boolean, string]>
     getCurrentUser(): Promise<User|undefined>
     getApps(): Promise<App[]>
     getNotifications(includeDone: boolean, app: string|undefined, offset: number, limit: number): Promise<Notification[]>
@@ -22,6 +23,22 @@ export class HopperApi extends ApiBase implements IHopperApi {
         });
 
         return res.status == 200 && res.result.status == "success";
+    }
+
+    async register(email: string, password: string, firstName: string, lastName: string): Promise<[boolean, string]> {
+        let res = await this.post("/register", {
+            "email": email,
+            "password": password,
+            "firstName": firstName,
+            "lastName": lastName
+        });
+
+        let success =  res.status == 200 && res.result.status == "success";
+        let error = "";
+        if (!success && res.resultParsable) {
+            error = res.result.reason;
+        }
+        return [success, error]
     }
 
     async getCurrentUser(): Promise<User|undefined> {
