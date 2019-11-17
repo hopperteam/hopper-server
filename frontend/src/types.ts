@@ -33,3 +33,10 @@ export type App = {
     readonly baseUrl: string;
     readonly manageUrl: string;
 }
+
+export type SubscribeRequest = {
+    readonly id: string;
+    readonly callback: string;
+    readonly name: string;
+    readonly requestedInfos: string[];
+}

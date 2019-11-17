@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         app: './src/app.tsx',
         login: './src/loginApp.tsx',
+        subscribe: './src/subscribeApp.tsx',
     },
     plugins: [
         new CleanWebpackPlugin({
@@ -20,6 +21,11 @@ module.exports = {
             template: 'src/templates/index.html',
             filename: 'index.html',
             chunks: ['login']
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/templates/index.html',
+            filename: 'subscribe.html',
+            chunks: ['subscribe']
         }),
     ],
     output: {

@@ -1,4 +1,4 @@
-import {App, Notification, User} from "types";
+import {App, Notification, SubscribeRequest, User} from "types";
 import ApiBase from "api/restfulApi";
 
 export interface IHopperApi {
@@ -6,6 +6,8 @@ export interface IHopperApi {
     getCurrentUser(): Promise<User|undefined>
     getApps(): Promise<App[]>
     getNotifications(includeDone: boolean, app: string|undefined, offset: number, limit: number): Promise<Notification[]>
+    getSubscribeRequest(data: string, appId: string): Promise<SubscribeRequest|undefined>
+    postSubscribeRequest(data: string, appId: string): Promise<string|undefined>
 }
 
 export class HopperApi extends ApiBase implements IHopperApi {
@@ -43,5 +45,23 @@ export class HopperApi extends ApiBase implements IHopperApi {
         });
         if (resp.status != 200) return [];
         return resp.result;
+    }
+
+    async getSubscribeRequest(data: string, appId: string): Promise<SubscribeRequest|undefined> {
+        let resp = await this.get("/subscribeRequest", {
+            data: data,
+            id: appId
+        });
+        if (resp.status != 200) return undefined;
+        return resp.result.subscribeRequest;
+    }
+
+    async postSubscribeRequest(data: string, appId: string): Promise<string|undefined> {
+        let resp = await this.post("/subscribeRequest", {
+            data: data,
+            id: appId
+        });
+        if (resp.status != 200) return undefined;
+        return resp.result.subscriptionId;
     }
 }

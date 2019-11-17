@@ -1,4 +1,4 @@
-import {Action, App, Notification, User} from "types";
+import {Action, App, Notification, SubscribeRequest, User} from "types";
 import {IHopperApi} from "api/hopperApi";
 
 const LOADING_TIME = 1000;
@@ -81,6 +81,19 @@ export default class DummyHopperApi implements IHopperApi {
                 resolve({firstName: "Test", lastName: "User", email: "testuser@hoppercloud.net"});
             }, LOADING_TIME);
         });
+    }
+
+    async getSubscribeRequest(data: string, appId: string): Promise<SubscribeRequest | undefined> {
+        return {
+            id: "1",
+            name: "Max Mustermann",
+            callback: "https://dummy.hoppercloud.net/cb?usrId=1234",
+            requestedInfos: []
+        };
+    }
+
+    async postSubscribeRequest(data: string, appId: string): Promise<string | undefined> {
+        return "1234563241324718973";
     }
 
 }

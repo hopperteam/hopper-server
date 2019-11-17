@@ -35,7 +35,7 @@ function loginComplete() {
     let redirect = HopperUtil.getUrlParameter("redirect");
     if (redirect && typeof(redirect) === 'string') {
         document.location.assign(redirect);
-        return
+        return;
     }
     document.location.assign("/app");
 }
