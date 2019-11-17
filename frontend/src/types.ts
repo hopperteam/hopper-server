@@ -10,7 +10,7 @@ export type Notification = {
     readonly serviceProvider: string;
     readonly timestamp: number;
     readonly imageUrl: string | undefined;
-    readonly isDone: boolean;
+    isDone: boolean;
     readonly isSilent: boolean;
     readonly type: string;
     readonly content: any;

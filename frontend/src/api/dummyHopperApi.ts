@@ -100,4 +100,14 @@ export default class DummyHopperApi implements IHopperApi {
         return "1234563241324718973";
     }
 
+    async markNotificationAsDone(notificationId: string): Promise<boolean> {
+        for (let x of DEMO_NOTIFICATIONS) {
+            if (x.id == notificationId) {
+                x.isDone = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

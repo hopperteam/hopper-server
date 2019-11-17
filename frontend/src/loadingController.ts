@@ -17,6 +17,7 @@ export default class LoadingController {
     private readonly rootCategory: LoadedCategory;
     private readonly appCategories: { [index: string]: (LoadedCategory) };
 
+    onUpdateListener: () => void = () => {};
 
     constructor(api: IHopperApi, notificationSet: NotificationSet) {
         this.api = api;
@@ -103,5 +104,17 @@ export default class LoadingController {
         }
 
         return notifications.length != 0;
+    }
+
+    public async markAsDone(notification: Notification) {
+        if (notification.isDone) return;
+        notification.isDone = true;
+        this.notificationSet.updateNotification(notification);
+        if (!await this.api.markNotificationAsDone(notification.id)) {
+            // Error
+            notification.isDone = false;
+            this.notificationSet.updateNotification(notification);
+        }
+        this.onUpdateListener()
     }
 }

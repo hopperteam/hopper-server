@@ -21,7 +21,8 @@ type NotificationContainerState = {
 type NotificationListProps = {
     mapFunction: (fnc: (x: Notification) => any) => any[],
     notifications: NotificationSet,
-    showLoadingElement: boolean
+    showLoadingElement: boolean,
+    markAsDoneFunction: (not: Notification) => void
 }
 
 type NotificationFilterChooserProps = {
@@ -35,7 +36,8 @@ type NotificationFilterChooserProps = {
 
 export type NotificationViewProps = {
     notification: Notification,
-    sender: App
+    sender: App,
+    markAsDoneFunction: (not: Notification) => void
 }
 
 const notificationTypes: { [index: string] : React.ClassType<NotificationViewProps, any, any>} = {
@@ -73,11 +75,15 @@ export class NotificationContainer extends React.Component<NotificationContainer
     private resizeListener = this.callCheckScrollState.bind(this);
 
     async componentDidMount() {
+        this.props.loadingController.onUpdateListener = () => {
+            this.forceUpdate();
+        };
         window.addEventListener("resize", this.resizeListener);
         await this.callCheckScrollState();
     }
 
     componentWillUnmount(): void {
+        this.props.loadingController.onUpdateListener = () => { };
         window.removeEventListener("resize", this.resizeListener);
     }
 
@@ -93,7 +99,10 @@ export class NotificationContainer extends React.Component<NotificationContainer
     render(): React.ReactNode {
         return <div id="notificationContainer" onScroll={ e => this.checkScrollState(e.target as HTMLElement) } >
             <NotificationFilterChooser notifications={this.props.notifications} currentApp={this.state.currentApp} includeDone={this.state.includeDone} onUpdate={this.onFilterUpdate.bind(this)} loadingController={this.props.loadingController} />
-            <NotificationList notifications={this.props.notifications} mapFunction={this.props.loadingController.getMapFunction(this.state.includeDone, this.state.currentApp)} showLoadingElement={!this.state.loadingFinished} />
+            <NotificationList notifications={this.props.notifications}
+                              mapFunction={this.props.loadingController.getMapFunction(this.state.includeDone, this.state.currentApp)}
+                              showLoadingElement={!this.state.loadingFinished}
+                              markAsDoneFunction={this.props.loadingController.markAsDone.bind(this.props.loadingController)} />
         </div>
     }
 
@@ -142,7 +151,7 @@ export class NotificationList extends React.Component<NotificationListProps> {
                     console.error("Could not render notification " + value.id + "! Invalid type " + value.type);
                     return;
                 }
-                return React.createElement(x, {key: value.id, notification: value, sender: this.props.notifications.apps[value.serviceProvider]}, null);
+                return React.createElement(x, {key: value.id, notification: value, sender: this.props.notifications.apps[value.serviceProvider], markAsDoneFunction: this.props.markAsDoneFunction}, null);
             })}
             { this.props.showLoadingElement ? <LoadingNotificationView /> : "" }
         </div>

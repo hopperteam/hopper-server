@@ -9,6 +9,7 @@ export interface IHopperApi {
     getNotifications(includeDone: boolean, app: string|undefined, offset: number, limit: number): Promise<Notification[]>
     getSubscribeRequest(data: string, appId: string): Promise<SubscribeRequest|undefined>
     postSubscribeRequest(data: string, appId: string): Promise<string|undefined>
+    markNotificationAsDone(notificationId: string): Promise<boolean>
 }
 
 export class HopperApi extends ApiBase implements IHopperApi {
@@ -80,5 +81,12 @@ export class HopperApi extends ApiBase implements IHopperApi {
         });
         if (resp.status != 200) return undefined;
         return resp.result.subscriptionId;
+    }
+
+    async markNotificationAsDone(notificationId: string): Promise<boolean> {
+        let resp = await this.post("/notifications/done", {
+            id: notificationId
+        });
+        return resp.status == 200;
     }
 }

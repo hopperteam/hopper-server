@@ -71,3 +71,7 @@
     height: 3rem;
     width: 3rem;
 }
+
+.markDoneButton {
+    margin-left: 16px;
+}
