@@ -7,7 +7,7 @@ import LoadingView from "components/loadingView";
 import LoadingController from "loadingController";
 import DummyHopperApi from "api/dummyHopperApi";
 import SerializationUtil from "./serializationUtil";
-import {IHopperApi} from "./api/hopperApi";
+import {HopperApi, IHopperApi} from "./api/hopperApi";
 
 require("css/app.css");
 require("css/notification.css");
@@ -43,20 +43,15 @@ function navigateToLogin() {
 
 async function main() {
     renderLoadingView();
-    let api: IHopperApi|undefined;
-    let user: User|undefined;
 
-    if (SerializationUtil.hasStoredSession()) {
-        api = SerializationUtil.getStoredSession();
-        user = await api.getCurrentUser();
-        if (user == undefined) {
-            navigateToLogin();
-            return;
-        }
-    } else {
+    let res = await SerializationUtil.getAndCheckStoredSession();
+    if (res == undefined) {
         navigateToLogin();
         return;
     }
+
+    let api: IHopperApi = res[0];
+    let user: User = res[1];
 
     let notifications = new NotificationSet();
 

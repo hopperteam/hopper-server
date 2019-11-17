@@ -1,4 +1,4 @@
-export class Util {
+export class HopperUtil {
     static getUrlParameter(sParam: string) {
         let sPageURL = window.location.search.substring(1);
         let sURLVariables = sPageURL.split('&');
