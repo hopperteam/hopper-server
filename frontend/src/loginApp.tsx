@@ -6,6 +6,7 @@ import LoadingView from "components/loadingView"
 import DummyHopperApi from "api/dummyHopperApi";
 import SerializationUtil from "serializationUtil";
 import {HopperApi, IHopperApi} from "./api/hopperApi";
+import {Util} from "./util";
 
 function renderLoadingView() {
     ReactDOM.render(
@@ -14,20 +15,8 @@ function renderLoadingView() {
     );
 }
 
-function getUrlParameter(sParam: string) {
-    let sPageURL = window.location.search.substring(1);
-    let sURLVariables = sPageURL.split('&');
 
-    for (let i = 0; i < sURLVariables.length; i++) {
-        let sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-        }
-    }
-}
-
-let useDummyApi = !!getUrlParameter("dummy");
+let useDummyApi = !!Util.getUrlParameter("dummy");
 let api: IHopperApi = (useDummyApi) ? new DummyHopperApi(): new HopperApi();
 if (useDummyApi) {
     console.log("Using dummy api!");
@@ -43,7 +32,7 @@ function render() {
 function loginComplete() {
     SerializationUtil.storeSession(api);
 
-    let redirect = getUrlParameter("redirect");
+    let redirect = Util.getUrlParameter("redirect");
     if (redirect && typeof(redirect) === 'string') {
         document.location.assign(redirect);
         return
