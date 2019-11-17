@@ -36,7 +36,7 @@ export default class NotificationHandler extends Handler {
 
     private async markNotificationsAsDone(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let notification = await Notification.findOneAndUpdate({ _id: req.query.id, userId: req.session.userId }, { isDone: true });
+            let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.userId }, { isDone: true });
             if (!notification)
                 throw new Error("Could not find notification");
             res.json({
