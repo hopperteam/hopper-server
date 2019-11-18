@@ -8,7 +8,8 @@ import LoadingController from "../loadingController";
 type MainViewProps = {
     user: User,
     notifications: NotificationSet,
-    loadingController: LoadingController
+    loadingController: LoadingController,
+    onClickLogout: () => void
 }
 
 export default class MainView extends React.Component<MainViewProps> {
@@ -19,7 +20,7 @@ export default class MainView extends React.Component<MainViewProps> {
 
     render(): React.ReactNode {
         return <div id="mainView">
-            <TopBarView user={this.props.user} />
+            <TopBarView onClickLogout={this.props.onClickLogout} user={this.props.user} />
             <NotificationContainer notifications={this.props.notifications} loadingController={this.props.loadingController} />
         </div>;
     }

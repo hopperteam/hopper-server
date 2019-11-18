@@ -23,7 +23,7 @@ function renderLoadingView() {
 
 function updateView(user: User, notifications: NotificationSet, loadingController: LoadingController) {
     ReactDOM.render(
-        <MainView user={user} notifications={notifications} loadingController={loadingController} />,
+        <MainView onClickLogout={navigateToLogin} user={user} notifications={notifications} loadingController={loadingController} />,
         document.getElementById("root")
     );
     setTimeout(() => {

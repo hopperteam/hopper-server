@@ -26,3 +26,8 @@ html, body {
     flex-grow: 1;
     width: 100%;
 }
+
+.clickableLink {
+    text-decoration: underline;
+    cursor: pointer;
+}
