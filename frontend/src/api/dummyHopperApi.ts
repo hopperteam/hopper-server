@@ -39,13 +39,13 @@ function _createNotification(id: string, heading: string, serviceProvider: strin
 
 const DEMO_NOTIFICATIONS = [
     _createNotification("1","Account created", "1", Math.floor(Date.now() / 1000) - 100, undefined, false, false, "default", "Welcome to your hopper account!", []),
-    _createNotification("2","Welcome!", "1", Math.floor(Date.now() / 1000), undefined, false, false, "default", "Notifications will appear here!", []),
-    _createNotification("3","1 new transaction", "3", Math.floor(Date.now() / 1000), undefined, false, true, "default", "+ 500€ from Marc Jacob", []),
-    _createNotification("4","2 new transactions", "3", Math.floor(Date.now() / 1000), undefined, false, false, "default", "- 200 € to Konrad Hartwig\n+ 7,50€ from DHBW Karlsruhe", []),
+    _createNotification("2","Welcome!", "1", Math.floor(Date.now() / 1000) - 500, undefined, false, false, "default", "Notifications will appear here!", []),
+    _createNotification("3","1 new transaction", "3", Math.floor(Date.now() / 1000) - 600, undefined, false, true, "default", "+ 500€ from Marc Jacob", []),
+    _createNotification("4","2 new transactions", "3", Math.floor(Date.now() / 1000) - 700, undefined, false, false, "default", "- 200 € to Konrad Hartwig\n+ 7,50€ from DHBW Karlsruhe", []),
     _createNotification("5","1 new message from your caretaker", "4", Math.floor(Date.now() / 1000) - 4000, undefined, true, false, "default", "1 new message", []),
     _createNotification("6","Max Müller", "2", Math.floor(Date.now() / 1000) - 23000, undefined, false, false, "default", "Wanna have a drink tonight?", []),
     _createNotification("7","Marie Mustermann", "2", Math.floor(Date.now() / 1000)  - 30, undefined, true, false, "default", "What are you doing later today?", []),
-    _createNotification("8","1 new message in your postbox", "3", Math.floor(Date.now() / 1000)  - 500, undefined, false, false, "default", "Tax refund", []),
+    _createNotification("8","1 new message in your postbox", "3", Math.floor(Date.now() / 1000)  - 900, undefined, false, false, "default", "Tax refund", []),
     _createNotification("9","You still have to pay your rent", "4", Math.floor(Date.now() / 1000)  - 200, undefined, false, false, "default", "2 days overdue", []),
 ];
 
@@ -104,6 +104,16 @@ export default class DummyHopperApi implements IHopperApi {
         for (let x of DEMO_NOTIFICATIONS) {
             if (x.id == notificationId) {
                 x.isDone = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async markNotificationAsUndone(notificationId: string): Promise<boolean> {
+        for (let x of DEMO_NOTIFICATIONS) {
+            if (x.id == notificationId) {
+                x.isDone = false;
                 return true;
             }
         }

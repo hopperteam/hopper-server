@@ -10,6 +10,7 @@ export interface IHopperApi {
     getSubscribeRequest(data: string, appId: string): Promise<SubscribeRequest|undefined>
     postSubscribeRequest(data: string, appId: string): Promise<string|undefined>
     markNotificationAsDone(notificationId: string): Promise<boolean>
+    markNotificationAsUndone(notificationId: string): Promise<boolean>
 }
 
 export class HopperApi extends ApiBase implements IHopperApi {
@@ -85,6 +86,13 @@ export class HopperApi extends ApiBase implements IHopperApi {
 
     async markNotificationAsDone(notificationId: string): Promise<boolean> {
         let resp = await this.post("/notifications/done", {
+            id: notificationId
+        });
+        return resp.status == 200;
+    }
+
+    async markNotificationAsUndone(notificationId: string): Promise<boolean> {
+        let resp = await this.post("/notifications/undone", {
             id: notificationId
         });
         return resp.status == 200;

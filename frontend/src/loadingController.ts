@@ -117,4 +117,16 @@ export default class LoadingController {
         }
         this.onUpdateListener()
     }
+
+    public async markAsUndone(notification: Notification) {
+        if (!notification.isDone) return;
+        notification.isDone = false;
+        this.notificationSet.updateNotification(notification);
+        if (!await this.api.markNotificationAsUndone(notification.id)) {
+            // Error
+            notification.isDone = true;
+            this.notificationSet.updateNotification(notification);
+        }
+        this.onUpdateListener()
+    }
 }

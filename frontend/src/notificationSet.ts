@@ -21,6 +21,7 @@ export class TimestampOrderedList {
 
     public removeTimestamp(id: string, timestamp: number) {
         let ind = this.searchTimestamp(timestamp);
+        if (ind == -1) return;
         let indD: number;
         for (indD = ind; this.data[indD].id != id && indD != 0 && this.data[indD - 1].timestamp == timestamp; indD--) { }
         if (this.data[indD].id == id) {
