@@ -12,6 +12,7 @@ export default class NotificationHandler extends Handler {
         super();
         this.router.get("/notifications", this.getNotifications.bind(this));
         this.router.post("/notifications/done", this.markNotificationsAsDone.bind(this));
+        this.router.post("/notifications/undone", this.markNotificationsAsUndone.bind(this));
         this.router.delete("/notifications", this.deleteNotifications.bind(this));
     }
 
@@ -37,6 +38,19 @@ export default class NotificationHandler extends Handler {
     private async markNotificationsAsDone(req: express.Request, res: express.Response): Promise<void> {
         try {
             let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.userId }, { isDone: true });
+            if (!notification)
+                throw new Error("Could not find notification");
+            res.json({
+                "status": "success"
+            });
+        } catch (e) {
+            utils.handleError(e, log, res);
+        }
+    }
+
+    private async markNotificationsAsUndone(req: express.Request, res: express.Response): Promise<void> {
+        try {
+            let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.userId }, { isDone: false });
             if (!notification)
                 throw new Error("Could not find notification");
             res.json({
