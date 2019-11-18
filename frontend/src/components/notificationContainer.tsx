@@ -5,6 +5,7 @@ import LoadingController from "../loadingController";
 import {ChangeEvent} from "react";
 import loadingController from "../loadingController";
 import {DefaultNotificationView} from "./notificationViews";
+import "style/notification.scss";
 
 type NotificationContainerProps = {
     notifications: NotificationSet,

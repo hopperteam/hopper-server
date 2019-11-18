@@ -9,8 +9,7 @@ import DummyHopperApi from "api/dummyHopperApi";
 import SerializationUtil from "./serializationUtil";
 import {HopperApi, IHopperApi} from "./api/hopperApi";
 
-require("css/app.css");
-require("css/notification.css");
+import "./style/app.scss";
 
 const UPDATE_INTERVAL = 30000;
 

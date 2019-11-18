@@ -1,3 +1,5 @@
+@import "res";
+
 .notification {
     margin: 16px;
     box-shadow: 0 2px 4px 2px rgba(0,0,0,0.75);
@@ -24,7 +26,7 @@
 
 .notificationMeta {
     font-size: 0.8rem;
-    color: #00bd84;
+    color: $hopperGreen;
     margin-left: 8px;
     display: inline-block;
 }
@@ -42,7 +44,7 @@
     height: 0.2rem;
     width: 0.2rem;
     border-radius: 0.1rem;
-    background-color: #00bd84;
+    background-color: $hopperGreen;
     margin: .3rem;
     float: left;
 }
@@ -63,7 +65,7 @@
 }
 
 .appFilterSelected {
-    border: 2px solid #00bd84;
+    border: 2px solid $hopperGreen;
 }
 
 #includeDoneSelector {

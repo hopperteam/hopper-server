@@ -43,7 +43,8 @@ module.exports = {
         rules: [
             { test: /\.tsx?$/, loader: 'ts-loader' },
             { test: /\.(png|jpe?g|gif|svg)$/i, loader: 'file-loader'},
-            { test: /\.css/, loaders: ['style-loader', 'css-loader'] }
+            { test: /\.css/, loaders: ['style-loader', 'css-loader'] },
+            { test: /\.scss/, loaders: ['style-loader', 'css-loader', 'sass-loader'] }
         ]
     },
     optimization: {
