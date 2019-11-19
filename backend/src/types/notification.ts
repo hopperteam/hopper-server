@@ -4,7 +4,7 @@ import Action from './action';
 interface INotification extends mongoose.Document {
     userId: string;
     heading: string;
-    serviceProvider: string;
+    subscription: string;
     timestamp: number;
     imageUrl: string;
     isDone: false;
@@ -18,7 +18,7 @@ interface INotification extends mongoose.Document {
 const NotificationSchema = new mongoose.Schema({
     userId: { type: String, required: true },
     heading: { type: String, required: true },
-    serviceProvider: { type: String, required: true },
+    subscription: { type: String, required: true },
     timestamp: { type: Number, required: true },
     imageUrl: { type: String },
     isDone: { type: Boolean, default: false },

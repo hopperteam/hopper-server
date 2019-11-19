@@ -9,7 +9,7 @@ import * as mongoose from 'mongoose';
 const log = new Log("HopperApp");
 
 import GeneralHandler from './handler/generalHandler';
-import AppHandler from './handler/appHandler';
+import SubscriptionHandler from './handler/subscriptionHandler';
 import UserHandler from './handler/userHandler';
 import SPHandler from './handler/spHandler';
 import NotificationHandler from './handler/notificationHandler';
@@ -65,7 +65,7 @@ class HopperApp {
             this.server.use('/api/v1', new SPHandler().getRouter());
 
             this.server.use(AuthMiddleware.auth());
-            this.server.use('/api/v1', new AppHandler().getRouter());
+            this.server.use('/api/v1', new SubscriptionHandler().getRouter());
             this.server.use('/api/v1', new UserHandler().getRouter());
             this.server.use('/api/v1', new NotificationHandler().getRouter());
         }

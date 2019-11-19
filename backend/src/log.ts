@@ -29,7 +29,7 @@ function log(logLevel: LogLevel, module: string, message: string) {
 
 export default class Log {
     private module: string;
-    private maxModuleLength: number = 16;
+    private maxModuleLength: number = 20;
 
     constructor(module: string) {
         if (module.length <= this.maxModuleLength) {

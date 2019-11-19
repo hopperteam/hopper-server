@@ -6,30 +6,40 @@ import SubscribeRequest from '../types/subscribeRequest';
 import Log from '../log';
 import * as utils from '../utils';
 
-const log: Log = new Log("AppHandler");
+const log: Log = new Log("SubscriptionHandler");
 
-export default class AppHandler extends Handler {
+export default class SubscriptionHandler extends Handler {
     
     constructor() {
         super();
-        this.router.get("/apps", this.getApps.bind(this));
-        this.router.delete("/apps", this.deleteApp.bind(this));
+        this.router.get("/apps", this.getApp.bind(this));
+        this.router.get("/subscriptions", this.getSubscriptions.bind(this));
+        this.router.delete("/subscriptions", this.deleteSubscription.bind(this));
         this.router.get("/subscribeRequest", this.getSubscribeRequest.bind(this));
         this.router.post("/subscribeRequest", this.postSubscribeRequest.bind(this));
     }
-    
-    private async getApps(req: express.Request, res: express.Response): Promise<void> {
+
+    private async getApp(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let apps: any[] = [];
-            let query = await Subscription.find({ userId: req.session.userId }).populate('app', { cert: 0 });
-            query.forEach((subscription) => apps.push(subscription.app));
-            res.json(apps);
+            let app = await App.findById(req.query.id, { cert: 0 });
+            if (!app)
+                throw new Error("Could not find app");
+            res.json(app);
+        } catch (e) {
+            utils.handleError(e, log, res);
+        }
+    }
+    
+    private async getSubscriptions(req: express.Request, res: express.Response): Promise<void> {
+        try {
+            let subs = await Subscription.find({ userId: req.session.userId }, { userId: 0 }).populate('app', { cert: 0 });
+            res.json(subs);
         } catch (e) {
             utils.handleError(e, log, res);
         }
     }
 
-    private async deleteApp(req: express.Request, res: express.Response): Promise<void> {
+    private async deleteSubscription(req: express.Request, res: express.Response): Promise<void> {
         try {
             await Subscription.findOneAndDelete({ userId: req.session.userId, app: req.query.id });
             res.json({

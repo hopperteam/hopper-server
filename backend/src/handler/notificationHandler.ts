@@ -21,8 +21,8 @@ export default class NotificationHandler extends Handler {
             let limit: number = (req.query.limit) ? Number(req.query.limit) : 100; // TODO set default limit in config
             let skip: number = (req.query.skip) ? Number(req.query.skip) : 0;
             let criteria: any = { userId: req.session.userId, isArchived: false }
-            if (req.query.app)
-                criteria.serviceProvider = req.query.app
+            if (req.query.subscription)
+                criteria.subscription = req.query.subscription;
             if (!req.query.includeDone)
                 criteria.isDone = false;
             // the resulting behaviour is that if includeDone is set in some way, "done" notifications will be returned
