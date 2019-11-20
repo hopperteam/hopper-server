@@ -81,6 +81,17 @@ testStandalone ( ) {
   kill $!
 }
 
+testBackend ( ) {
+  install
+  pushd out
+    node main.js &
+  popd
+  pushd backend
+    npm test
+  popd
+  kill $!
+}
+
 help ( ) {
   echo "~~~~~~ Hopper build system ~~~~~~"
   echo "---- Core commands ----"

@@ -25,15 +25,15 @@ class HopperApp {
         this.server.use(cookieParser());
     }
 
-    private loadConfig(): boolean {
-        if (process.argv.length <= 2) {
-            log.error("Specify config to load!");
-            return false;
-        }
-
-        log.info("Loading config from " + process.argv[2]);
+    private async loadConfig(): Promise<boolean> {
         try {
-            Config.initConfig(process.argv[2]);
+            if (!process.argv[2]) {
+                log.info("Starting with local in memory DB");
+                await Config.generateConfig();
+            } else {
+                log.info("Loading config from " + process.argv[2]);
+                Config.parseConfig(process.argv[2]);
+            }
         } catch (e) {
             log.error("Could not start: " + e.toString());
             return false;
@@ -46,7 +46,7 @@ class HopperApp {
         if (Config.instance.startBackend) {
             log.info("Starting backend");
             try {
-                await mongoose.connect(`mongodb://${Config.instance.dbHost}/${Config.instance.dbName}`, {
+                await mongoose.connect(`mongodb://${Config.instance.dbHost}:${Config.instance.dbPort}/${Config.instance.dbName}`, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
                     useCreateIndex: true,
@@ -74,7 +74,7 @@ class HopperApp {
     }
 
     public async start(): Promise<void> {
-        if (!(this.loadConfig() && await this.init())) {
+        if (!(await this.loadConfig() && await this.init())) {
             log.error("Could not initalize app");
             return;
         }

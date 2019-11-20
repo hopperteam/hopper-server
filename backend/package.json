@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest && newman run --environment ./test/hopper-env-local.postman_environment.json ./test/hopper.postman_collection.json --reporters teamcity,cli",
     "coverage": "jest --coverage",
     "build": "tsc"
   },
@@ -32,6 +32,8 @@
     "@types/jest": "^24.0.22",
     "@types/mongoose": "^5.5.23",
     "jest": "^24.9.0",
+    "newman": "^4.5.6",
+    "newman-reporter-teamcity": "^0.1.12",
     "ts-jest": "^24.1.0",
     "typescript": "^3.6.3"
   },
@@ -39,6 +41,7 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "mongodb": "^3.3.3",
+    "mongodb-memory-server": "^6.0.1",
     "mongoose": "^5.7.7"
   }
 }
