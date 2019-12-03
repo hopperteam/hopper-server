@@ -14,6 +14,14 @@ export class TimestampOrderedList {
         return -1;
     }
 
+    public getIndex(id: string, timestamp: number): number {
+        let fId = this.searchTimestamp(timestamp);
+        for (; fId < this.data.length && this.data[fId].timestamp == timestamp; fId++) {
+            if (this.data[fId].id == id) return fId;
+        }
+        return -1;
+    }
+
     public insertTimestamp(id: string, timestamp: number) {
         let ind = this.searchTimestamp(timestamp);
         this.data.splice(ind + 1, 0, {id: id, timestamp: timestamp});
@@ -79,8 +87,6 @@ export class NotificationSet {
     private insertNotification(not: Notification) {
         this.notifications[not.id] = not;
         this.rootCategory.insertTimestamp(not.id, not.timestamp, not.isDone);
-        console.log(not);
-        console.log(this.subscriptionCategories);
         this.subscriptionCategories[not.subscription].insertTimestamp(not.id, not.timestamp, not.isDone);
     }
 

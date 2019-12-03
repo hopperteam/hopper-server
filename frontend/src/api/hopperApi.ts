@@ -13,6 +13,7 @@ export interface IHopperApi {
     markNotificationAsDone(notificationId: string): Promise<boolean>
     markNotificationAsUndone(notificationId: string): Promise<boolean>
     getApp(appId: string): Promise<App|undefined>
+    deleteNotification(notificationId: string): Promise<boolean>
 }
 
 export class HopperApi extends ApiBase implements IHopperApi {
@@ -106,5 +107,12 @@ export class HopperApi extends ApiBase implements IHopperApi {
         });
         if (resp.status != 200) return undefined;
         return resp.result;
+    }
+
+    async deleteNotification(notificationId: string): Promise<boolean> {
+        let resp = await this.delete("/notifications", {
+            id: notificationId
+        });
+        return resp.status == 200;
     }
 }

@@ -145,4 +145,14 @@ export default class DummyHopperApi implements IHopperApi {
         return DEMO_SUBSCRIPTIONS[0].app;
     }
 
+    async deleteNotification(notificationId: string): Promise<boolean> {
+        for (let x in DEMO_NOTIFICATIONS) {
+            if (DEMO_NOTIFICATIONS[x].id == notificationId) {
+                delete DEMO_NOTIFICATIONS[x];
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -129,4 +129,20 @@ export default class LoadingController {
         }
         this.onUpdateListener()
     }
+
+    public async deleteNotification(notification: Notification) {
+        let ind = this.notificationSet.rootCategory.all.getIndex(notification.id, notification.timestamp);
+        if (this.rootCategory.loaded != 0 && ind != -1 && ind < this.rootCategory.loaded) {
+            this.rootCategory.loaded--;
+        }
+        ind = this.notificationSet.subscriptionCategories[notification.subscription].all.getIndex(notification.id, notification.timestamp);
+        if (this.subscriptionCategories[notification.subscription].loaded != 0 && ind != -1 && ind < this.subscriptionCategories[notification.subscription].loaded) {
+            this.subscriptionCategories[notification.subscription].loaded--;
+        }
+        this.notificationSet.deleteNotification(notification.id);
+        if (!await this.api.deleteNotification(notification.id)) {
+            // Error
+        }
+        this.onUpdateListener()
+    }
 }
