@@ -29,14 +29,14 @@ export class DefaultNotificationView extends React.Component<NotificationViewPro
     render(): React.ReactNode {
         return <div id={"not-" + this.props.notification.id} className="notification">
             <div className="notificationMeta">
-                <span className="notificationSender">{this.props.sender.name}</span>
+                <span className="notificationSender">{this.props.subscription.app.name}</span>
                 <div className="notificationSenderSeparator" />
                 <span className="notificationTime">{getTimeText(this.props.notification.timestamp)}</span>
                 <button className="markDoneButton" onClick={ () => this.props.toggleDoneFunction(this.props.notification) }>Mark as {!this.props.notification.isDone ? "done" : "undone"}</button>
             </div>
             <div className="notificationContent">
                 <img className="notificationImage" alt="notificationImage" src={
-                    this.props.notification.imageUrl != undefined ? this.props.notification.imageUrl : this.props.sender.imageUrl}
+                    this.props.notification.imageUrl != undefined ? this.props.notification.imageUrl : this.props.subscription.app.imageUrl}
                 />
                 <p className="notificationTitle">{this.props.notification.heading}</p>
                 <div className="notificationBody">

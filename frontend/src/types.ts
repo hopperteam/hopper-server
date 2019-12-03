@@ -7,7 +7,7 @@ export type User = {
 export type Notification = {
     readonly id: string;
     readonly heading: string;
-    readonly serviceProvider: string;
+    readonly subscription: string;
     readonly timestamp: number;
     readonly imageUrl: string | undefined;
     isDone: boolean;
@@ -37,6 +37,12 @@ export type App = {
 export type SubscribeRequest = {
     readonly id: string;
     readonly callback: string;
-    readonly name: string;
+    readonly accountName: string;
     readonly requestedInfos: string[];
+}
+
+export type Subscription = {
+    readonly id: string;
+    readonly accountName?: string;
+    readonly app: App;
 }

@@ -1,16 +1,18 @@
-import {App, Notification, SubscribeRequest, User} from "types";
+import {App, Notification, SubscribeRequest, Subscription, User} from "types";
 import ApiBase from "api/restfulApi";
 
 export interface IHopperApi {
     login(email: string, password: string): Promise<boolean>
     register(email: string, password: string, firstName: string, lastName: string): Promise<[boolean, string]>
     getCurrentUser(): Promise<User|undefined>
-    getApps(): Promise<App[]>
-    getNotifications(includeDone: boolean, app: string|undefined, offset: number, limit: number): Promise<Notification[]>
+
+    getSubscriptions(): Promise<Subscription[]>
+    getNotifications(includeDone: boolean, subscription: string|undefined, offset: number, limit: number): Promise<Notification[]>
     getSubscribeRequest(data: string, appId: string): Promise<SubscribeRequest|undefined>
     postSubscribeRequest(data: string, appId: string): Promise<string|undefined>
     markNotificationAsDone(notificationId: string): Promise<boolean>
     markNotificationAsUndone(notificationId: string): Promise<boolean>
+    getApp(appId: string): Promise<App|undefined>
 }
 
 export class HopperApi extends ApiBase implements IHopperApi {
@@ -49,16 +51,16 @@ export class HopperApi extends ApiBase implements IHopperApi {
         return resp.result;
     }
 
-    async getApps(): Promise<App[]> {
-        let resp = await this.get("/apps");
+    async getSubscriptions(): Promise<Subscription[]> {
+        let resp = await this.get("/subscriptions");
         if (resp.status != 200) return [];
         return resp.result;
     }
 
-    async getNotifications(includeDone: boolean, app: string | undefined, offset: number, limit: number): Promise<Notification[]> {
+    async getNotifications(includeDone: boolean, subscription: string | undefined, offset: number, limit: number): Promise<Notification[]> {
         let resp = await this.get("/notifications", {
             includeDone: includeDone,
-            app: app,
+            subscription: subscription,
             skip: offset,
             limit: limit
         });
@@ -96,5 +98,13 @@ export class HopperApi extends ApiBase implements IHopperApi {
             id: notificationId
         });
         return resp.status == 200;
+    }
+
+    async getApp(appId: string): Promise<App|undefined> {
+        let resp = await this.get("/apps", {
+            id: appId
+        });
+        if (resp.status != 200) return undefined;
+        return resp.result;
     }
 }

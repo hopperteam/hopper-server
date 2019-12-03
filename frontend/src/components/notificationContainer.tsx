@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {NotificationSet} from 'notificationSet';
-import {App, Notification} from "../types";
+import {App, Notification, Subscription} from "../types";
 import LoadingController from "../loadingController";
 import {ChangeEvent} from "react";
 import loadingController from "../loadingController";
@@ -29,7 +29,7 @@ type NotificationListProps = {
 type NotificationFilterChooserProps = {
     includeDone: boolean,
     notifications: NotificationSet,
-    currentApp: string | undefined,
+    currentSubscription: string | undefined,
     loadingController: loadingController,
     onUpdate: (includeDone: boolean, currentApp: string | undefined) => void
 }
@@ -37,7 +37,7 @@ type NotificationFilterChooserProps = {
 
 export type NotificationViewProps = {
     notification: Notification,
-    sender: App,
+    subscription: Subscription,
     toggleDoneFunction: (not: Notification) => void
 }
 
@@ -107,7 +107,7 @@ export class NotificationContainer extends React.Component<NotificationContainer
 
     render(): React.ReactNode {
         return <div id="notificationContainer" onScroll={ e => this.checkScrollState(e.target as HTMLElement) } >
-            <NotificationFilterChooser notifications={this.props.notifications} currentApp={this.state.currentApp} includeDone={this.state.includeDone} onUpdate={this.onFilterUpdate.bind(this)} loadingController={this.props.loadingController} />
+            <NotificationFilterChooser notifications={this.props.notifications} currentSubscription={this.state.currentApp} includeDone={this.state.includeDone} onUpdate={this.onFilterUpdate.bind(this)} loadingController={this.props.loadingController} />
             <NotificationList notifications={this.props.notifications}
                               mapFunction={this.props.loadingController.getMapFunction(this.state.includeDone, this.state.currentApp)}
                               showLoadingElement={!this.state.loadingFinished}
@@ -123,11 +123,11 @@ export class NotificationContainer extends React.Component<NotificationContainer
 export class NotificationFilterChooser extends React.Component<NotificationFilterChooserProps> {
 
     private onIncludeDoneChange(evt: ChangeEvent<HTMLInputElement>) {
-        this.props.onUpdate(evt.target.checked, this.props.currentApp);
+        this.props.onUpdate(evt.target.checked, this.props.currentSubscription);
     }
 
     private onAppClick(appId: string) {
-        if (appId == this.props.currentApp) {
+        if (appId == this.props.currentSubscription) {
             this.props.onUpdate(this.props.includeDone, undefined);
         } else {
             this.props.onUpdate(this.props.includeDone, appId);
@@ -138,13 +138,17 @@ export class NotificationFilterChooser extends React.Component<NotificationFilte
         return <div id="notificationFilterChooser" >
             <input type="checkbox" onChange={this.onIncludeDoneChange.bind(this)} checked={this.props.includeDone} id="includeDoneSelector"/>
             {
-                Object.keys(this.props.notifications.appCategories)
-                    .map(appId => {
-                        return {app: this.props.notifications.apps[appId], notifications: this.props.loadingController.getLoaded(false, appId)};
+                Object.keys(this.props.notifications.subscriptionCategories)
+                    .map(subscriptionId => {
+                        return {subscription: this.props.notifications.subscriptions[subscriptionId], notifications: this.props.loadingController.getLoaded(false, subscriptionId)};
                     })
                     .sort((x, y) => y.notifications - x.notifications)
                     .map(x => {
-                        return <img src={x.app.imageUrl} alt={x.app.name + " (" + x.notifications + ")"} onClick={() => this.onAppClick(x.app.id)} id={"app-" + x.app.id} className={x.app.id == this.props.currentApp ? "appFilter appFilterSelected" : "appFilter"} />;
+                        return <img src={x.subscription.app.imageUrl}
+                                    alt={x.subscription.app.name + " (" + x.notifications + ")"}
+                                    onClick={() => this.onAppClick(x.subscription.app.id)}
+                                    id={"app-" + x.subscription.app.id}
+                                    className={x.subscription.app.id == this.props.currentSubscription ? "appFilter appFilterSelected" : "appFilter"} />;
                     })
             }
         </div>
@@ -160,7 +164,7 @@ export class NotificationList extends React.Component<NotificationListProps> {
                     console.error("Could not render notification " + value.id + "! Invalid type " + value.type);
                     return;
                 }
-                return React.createElement(x, {key: value.id, notification: value, sender: this.props.notifications.apps[value.serviceProvider], toggleDoneFunction: this.props.toggleDoneFunction}, null);
+                return React.createElement(x, {key: value.id, notification: value, subscription: this.props.notifications.subscriptions[value.subscription], toggleDoneFunction: this.props.toggleDoneFunction}, null);
             })}
             { this.props.showLoadingElement ? <LoadingNotificationView /> : "" }
         </div>

@@ -1,4 +1,4 @@
-import {App, Notification} from "types";
+import {App, Notification, Subscription} from "types";
 
 export class TimestampOrderedList {
     public data: {id: string, timestamp: number}[];
@@ -60,26 +60,28 @@ class NotificationCategory {
 
 export class NotificationSet {
     public notifications: { [index: string] : Notification};
-    public apps: { [index: string] : App};
-    public appCategories: { [index: string] : (NotificationCategory)};
+    public subscriptions: { [index: string] : Subscription};
+    public subscriptionCategories: { [index: string] : (NotificationCategory)};
     public rootCategory: NotificationCategory;
 
     constructor() {
         this.notifications = {};
-        this.apps = {};
-        this.appCategories = {};
+        this.subscriptions = {};
+        this.subscriptionCategories = {};
         this.rootCategory = new NotificationCategory()
     }
 
-    public insertApp(app: App) {
-        this.apps[app.id] = app;
-        this.appCategories[app.id] = new NotificationCategory();
+    public insertSubscription(subscription: Subscription) {
+        this.subscriptions[subscription.id] = subscription;
+        this.subscriptionCategories[subscription.id] = new NotificationCategory();
     }
 
     private insertNotification(not: Notification) {
         this.notifications[not.id] = not;
         this.rootCategory.insertTimestamp(not.id, not.timestamp, not.isDone);
-        this.appCategories[not.serviceProvider].insertTimestamp(not.id, not.timestamp, not.isDone);
+        console.log(not);
+        console.log(this.subscriptionCategories);
+        this.subscriptionCategories[not.subscription].insertTimestamp(not.id, not.timestamp, not.isDone);
     }
 
     public hasNotification(id: string): boolean {
@@ -100,7 +102,7 @@ export class NotificationSet {
         if (not == undefined) return;
         delete this.notifications[id];
 
-        this.appCategories[not.serviceProvider].removeTimestamp(id, not.timestamp);
+        this.subscriptionCategories[not.subscription].removeTimestamp(id, not.timestamp);
         this.rootCategory.removeTimestamp(id, not.timestamp);
     }
 

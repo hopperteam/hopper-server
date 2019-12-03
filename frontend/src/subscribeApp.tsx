@@ -1,9 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import LoadingView from "components/loadingView"
-import { IHopperApi} from "api/hopperApi";
+import {IHopperApi} from "api/hopperApi";
 import {HopperUtil} from "hopperUtil";
-import {SubscribeRequest, User} from "types";
+import {App, SubscribeRequest, User} from "types";
 import SerializationUtil from "serializationUtil";
 import SubscribeView from "./components/subscribeView";
 
@@ -27,9 +27,9 @@ function renderError(error: string) {
     );
 }
 
-function render(req: SubscribeRequest, user: User, onAccept: () => void, onDecline: () => void) {
+function render(req: SubscribeRequest, user: User, app: App, onAccept: () => void, onDecline: () => void) {
     ReactDOM.render(
-        <SubscribeView request={req} user={user} onAccept={onAccept} onDecline={onDecline} />,
+        <SubscribeView request={req} user={user} onAccept={onAccept} onDecline={onDecline} app={app}/>,
         document.getElementById("root")
     );
 }
@@ -38,7 +38,7 @@ function submitCallback(callback: string, subId: string|undefined, error: string
     let cb = callback;
     cb += ((cb.indexOf("?") != -1) ? "&status=" : "?status=") + ((subId != undefined) ? "success" : "failed");
     if (subId != undefined) {
-        cb += "&subscriptionId=" + encodeURIComponent(subId);
+        cb += "&id=" + encodeURIComponent(subId);
     } else if (error != undefined) {
         cb += "&error=" + encodeURIComponent(error);
     }
@@ -63,18 +63,23 @@ async function main() {
     }
 
     let reqData = data;
-    let appId = sp;
 
-    let subscribeRequestUndef = await api.getSubscribeRequest(reqData, appId);
+    let subscribeRequestUndef = await api.getSubscribeRequest(reqData, sp);
     if (subscribeRequestUndef == undefined) {
         renderError("Could not parse request");
         return;
     }
-
     let subscribeRequest = subscribeRequestUndef;
 
-    render(subscribeRequest, user, async () => {
-        let subId = await api.postSubscribeRequest(reqData, appId);
+    let appUndef = await api.getApp(subscribeRequest.id);
+    if (appUndef == undefined) {
+        renderError("Could not parse request");
+        return;
+    }
+    let app = appUndef;
+
+    render(subscribeRequest, user, app,async () => {
+        let subId = await api.postSubscribeRequest(reqData, app.id);
         if (subId == undefined) {
             submitCallback(subscribeRequest.callback, undefined, "Server error");
             return;

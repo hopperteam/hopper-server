@@ -15,54 +15,54 @@ export default class LoadingController {
     readonly notificationSet: NotificationSet;
 
     private readonly rootCategory: LoadedCategory;
-    private readonly appCategories: { [index: string]: (LoadedCategory) };
+    private readonly subscriptionCategories: { [index: string]: (LoadedCategory) };
 
     onUpdateListener: () => void = () => {};
 
     constructor(api: IHopperApi, notificationSet: NotificationSet) {
         this.api = api;
         this.notificationSet = notificationSet;
-        this.appCategories = {};
+        this.subscriptionCategories = {};
         this.rootCategory = new LoadedCategory();
     }
 
     public async loadApps() {
-        let apps = await this.api.getApps();
+        let subscriptions = await this.api.getSubscriptions();
 
-        apps.map(app => {
-            this.appCategories[app.id] = new LoadedCategory();
-            this.notificationSet.insertApp(app);
+        subscriptions.map(subscription => {
+            this.subscriptionCategories[subscription.id] = new LoadedCategory();
+            this.notificationSet.insertSubscription(subscription);
         });
     }
 
-    public getLoaded(includeDone: boolean, app: string | undefined = undefined): number {
+    public getLoaded(includeDone: boolean, subscription: string | undefined = undefined): number {
         if (!includeDone) {
-            if (app == undefined)
+            if (subscription == undefined)
                 return this.notificationSet.rootCategory.open.data.length;
-            return this.notificationSet.appCategories[app].open.data.length;
+            return this.notificationSet.subscriptionCategories[subscription].open.data.length;
         } else {
-            if (app == undefined)
+            if (subscription == undefined)
                 return this.rootCategory.loaded;
-            return this.appCategories[app].loaded;
+            return this.subscriptionCategories[subscription].loaded;
         }
     }
 
-    private getTol(includeDone: boolean, app: string | undefined): TimestampOrderedList {
+    private getTol(includeDone: boolean, subscription: string | undefined): TimestampOrderedList {
         if (!includeDone) {
-            if (app == undefined)
+            if (subscription == undefined)
                 return this.notificationSet.rootCategory.open;
-            return this.notificationSet.appCategories[app].open;
+            return this.notificationSet.subscriptionCategories[subscription].open;
         } else {
-            if (app == undefined)
+            if (subscription == undefined)
                 return this.notificationSet.rootCategory.all;
-            return this.notificationSet.appCategories[app].all;
+            return this.notificationSet.subscriptionCategories[subscription].all;
         }
     }
 
-    public getMapFunction(includeDone: boolean, app: string | undefined): (fnc: (x: Notification) => any) => any[] {
+    public getMapFunction(includeDone: boolean, subscription: string | undefined): (fnc: (x: Notification) => any) => any[] {
         return (fnc: (x: Notification) => any) => {
-            let n = this.getLoaded(includeDone, app);
-            let d = this.getTol(includeDone, app);
+            let n = this.getLoaded(includeDone, subscription);
+            let d = this.getTol(includeDone, subscription);
 
             let el = [];
 
@@ -74,30 +74,30 @@ export default class LoadingController {
         }
     }
 
-    public isFullyLoaded(includeDone: boolean, app: string | undefined = undefined): boolean {
+    public isFullyLoaded(includeDone: boolean, subscription: string | undefined = undefined): boolean {
         //if (!this.rootCategory.moreDoneAvailable) return true;
         if (!includeDone && !this.rootCategory.moreUndoneAvailable) return true;
 
-        let cat = (app != undefined) ? this.appCategories[app] : this.rootCategory;
+        let cat = (subscription != undefined) ? this.subscriptionCategories[subscription] : this.rootCategory;
         return includeDone ? !cat.moreDoneAvailable : !cat.moreUndoneAvailable;
     }
 
-    public async loadNotifications(includeDone: boolean, app: string | undefined = undefined): Promise<boolean> {
-        let cat = (app != undefined) ? this.appCategories[app] : this.rootCategory;
+    public async loadNotifications(includeDone: boolean, subscription: string | undefined = undefined): Promise<boolean> {
+        let cat = (subscription != undefined) ? this.subscriptionCategories[subscription] : this.rootCategory;
 
-        if (this.isFullyLoaded(includeDone, app)) {
+        if (this.isFullyLoaded(includeDone, subscription)) {
             return false;
         }
 
-        let loaded = this.getLoaded(includeDone, app);
+        let loaded = this.getLoaded(includeDone, subscription);
 
-        let notifications = await this.api.getNotifications(includeDone, app, loaded, LOAD_BATCH_SIZE);
+        let notifications = await this.api.getNotifications(includeDone, subscription, loaded, LOAD_BATCH_SIZE);
 
         this.notificationSet.integrateNotifications(notifications);
 
         if (includeDone) {
             cat.loaded = loaded + notifications.length;
-            // Could also add the notifications to the app category, pay attention not to double add them (in case of multiple loading at the same time)
+            // Could also add the notifications to the subscription category, pay attention not to double add them (in case of multiple loading at the same time)
             cat.moreDoneAvailable = (notifications.length == LOAD_BATCH_SIZE);
         } else {
             cat.moreUndoneAvailable = (notifications.length == LOAD_BATCH_SIZE);

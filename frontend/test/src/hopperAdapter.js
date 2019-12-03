@@ -23,7 +23,7 @@ export default class HopperAdapter {
         await driver.executeScript(function() {
             let controller = document._loadingController;
 
-            controller.notificationSet.insertApp(
+            controller.notificationSet.insertSubscription(
                 {
                     id: arguments[0],
                     baseUrl: "",
@@ -47,7 +47,7 @@ export default class HopperAdapter {
                     id: arguments[0],
                     heading: arguments[1],
                     content: arguments[1],
-                    serviceProvider: arguments[2],
+                    subscription: arguments[2],
                     type: "default",
                     isSilent: false,
                     isDone: false,

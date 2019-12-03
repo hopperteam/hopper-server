@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {ChangeEvent, FormEvent} from "react";
 import {IHopperApi} from "../api/hopperApi";
-import {SubscribeRequest, User} from "../types";
+import {App, SubscribeRequest, User} from "../types";
 
 type SubscribeViewProps = {
     onAccept: () => void,
     onDecline: () => void,
     user: User,
-    request: SubscribeRequest
+    request: SubscribeRequest,
+    app: App
 }
 
 type SubscribeViewState = {
@@ -42,8 +43,8 @@ export default class SubscribeView extends React.Component<SubscribeViewProps, S
 
     render(): React.ReactNode {
         return <div id="subscriptionView">
-            <p>Subscribe to {this.props.request.id}</p>
-            <p>Account: {this.props.request.name}</p>
+            <p>Subscribe to <span>{this.props.app.name}</span> <span>({this.props.app.baseUrl})</span></p>
+            <p>Account: {this.props.request.accountName}</p>
             <button onClick={this.onAccept.bind(this)} disabled={this.state.working}>Accept</button>
             <button onClick={this.onDecline.bind(this)} disabled={this.state.working}>Decline</button>
         </div>;
