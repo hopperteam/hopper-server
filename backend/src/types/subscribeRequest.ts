@@ -2,24 +2,24 @@
 export default class SubscribeRequest {
     readonly id: string;
     readonly callback: string;
-    readonly name: string;
+    readonly accountName: string | undefined;
     readonly requestedInfos: string[];
 
-    constructor(id: string, callback: string, name: string, requestedInfos: string[]) {
+    constructor(id: string, callback: string, accountName: string, requestedInfos: string[]) {
         this.id = id;
         this.callback = callback;
-        this.name = name;
+        this.accountName = accountName;
         this.requestedInfos = requestedInfos;
     }
 
     public static fromRequestBody(json: any): SubscribeRequest {
-        if (json.id == null || json.callback == null || json.name == null || json.requestedInfos == null) {
+        if (json.id == null || json.callback == null || json.requestedInfos == null) {
             throw new Error("Required attributes for SubscribeRequest missing")
         }
         return new SubscribeRequest(
             json.id,
             json.callback,
-            json.name,
+            json.accountName,
             json.requestedInfos
         );
     }
