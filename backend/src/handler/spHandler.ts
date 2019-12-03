@@ -52,7 +52,7 @@ export default class SPHandler extends Handler {
     private async postNotification(req: express.Request, res: express.Response): Promise<void> {
         try {
             let subscription = await Subscription.findById(req.body.subscriptionId);
-            if (!subscription || subscription.app != req.body.notification.serviceProvider)
+            if (!subscription)
                 throw new Error("No valid subscription");
             req.body.notification.userId = subscription.userId;
             let notification = await Notification.create(req.body.notification);

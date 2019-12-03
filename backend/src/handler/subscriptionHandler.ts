@@ -76,7 +76,7 @@ export default class SubscriptionHandler extends Handler {
             let data = utils.decryptContent(app.cert, req.body.data);
             if (data.id != app._id)
                 throw new Error("Could not verify data");
-            let subscription = await Subscription.create({ userId: req.session.userId, app: app._id });
+            let subscription = await Subscription.create({ userId: req.session.userId, accountName: data.accountName, app: app._id });
             res.json({
                 "status": "success",
                 "subscriptionId": subscription._id
