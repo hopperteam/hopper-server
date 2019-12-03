@@ -71,9 +71,8 @@ export default class SPHandler extends Handler {
 
     private async putNotification(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let not = await Notification.findByIdAndUpdate(req.body.id, req.body.notification);
-
-            this.webSocketManager.loadAndUpdateNotificationInBackground(req.body.id, req.session.userId, req.session.id);
+            await Notification.findByIdAndUpdate(req.body.id, req.body.notification);
+            this.webSocketManager.loadAndUpdateNotificationInBackground(req.body.id);
 
             res.json({
                 "status": "success"

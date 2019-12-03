@@ -36,8 +36,8 @@ export class WebSocketManager {
         this.broadcastEvent(usrId, "createNotification", not, excludeSession);
     }
 
-    public loadAndUpdateNotificationInBackground(notId: string, usrId: string, excludeSession?: string) {
-        if (this.canNotify(usrId)) {
+    public loadAndUpdateNotificationInBackground(notId: string, usrId?: string, excludeSession?: string) {
+        if (usrId == undefined || this.canNotify(usrId)) {
             let mgr = this;
             setTimeout(async function () {
                 let not = await Notification.findById(notId);

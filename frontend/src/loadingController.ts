@@ -159,10 +159,10 @@ export default class LoadingController {
 
     public insertNotification(notification: Notification) {
         this.notificationSet.integrateNotifications([notification]);
-        if (this.rootCategory.loaded != 0 && this.notificationSet.rootCategory.all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded) {
+        if (this.rootCategory.loaded != 0 && this.notificationSet.rootCategory.all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded || !this.rootCategory.moreDoneAvailable) {
             this.rootCategory.loaded++;
         }
-        if (this.subscriptionCategories[notification.subscription].loaded != 0 && this.notificationSet.subscriptionCategories[notification.subscription].all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded) {
+        if (this.subscriptionCategories[notification.subscription].loaded != 0 && this.notificationSet.subscriptionCategories[notification.subscription].all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded || !this.subscriptionCategories[notification.subscription].moreDoneAvailable) {
             this.subscriptionCategories[notification.subscription].loaded++;
         }
 
