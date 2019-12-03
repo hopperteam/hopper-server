@@ -14,5 +14,10 @@ const SubscriptionSchema = new mongoose.Schema({
     versionKey: false // set to true to keep track of version of document
 });
 
+SubscriptionSchema.set('toJSON', {
+    virtuals: true,
+    transform: function (doc, ret) { delete ret._id }
+});
+
 const Subscription = mongoose.model<ISubscription>("Subscription", SubscriptionSchema);
 export default Subscription;
