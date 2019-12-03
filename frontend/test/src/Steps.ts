@@ -14,7 +14,7 @@ capabilities.set('chromeOptions',
     }
 );
 const driver = new Builder().withCapabilities(capabilities).build();
-const adapter = new HopperAdapter();
+let adapter = new HopperAdapter();
 
 async function sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -29,6 +29,8 @@ Given(/^User is on hopper$/, async function () {
 Given(/^User is logged in$/, async function () {
     await (await driver.findElement(By.id("loginButton"))).click();
     await driver.wait(until.elementLocated(By.id('notificationContainer')), 2 * 1000);
+    adapter = new HopperAdapter();
+    await adapter.setup(driver);
 });
 
 Given(/^User has open Notification "([^"]*)" by "([^"]*)"$/, async function (name, sender) {
@@ -84,6 +86,7 @@ When(/^User clicks on button "([^"]*)" in Notification "([^"]*)"$/, async functi
     expect(buttonEl).not.to.be.undefined;
 
     await buttonEl!.click();
+    await sleep(100);
 });
 
 When(/^User clicks on AppFilter "([^"]*)"$/, async function (filter) {

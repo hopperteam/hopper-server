@@ -1,6 +1,6 @@
 export default class HopperAdapter {
     apps = {};
-    nextId = 0;
+    nextId = 1000000;
 
     notifications= {};
 
@@ -19,19 +19,28 @@ export default class HopperAdapter {
         return this.notifications[name];
     }
 
+    async setup(driver) {
+        await driver.executeScript(function () {
+            document._dummyApiIgnoreErrors = true;
+        });
+    }
+
     async insertApp(driver, id, name) {
         await driver.executeScript(function() {
             let controller = document._loadingController;
 
-            controller.notificationSet.insertSubscription(
+            controller.insertSubscription(
                 {
                     id: arguments[0],
-                    baseUrl: "",
-                    imageUrl: "",
-                    isActive: true,
-                    isHidden: false,
-                    manageUrl: "",
-                    name: arguments[1]
+                    app: {
+                        id: arguments[0]+ "-app",
+                        baseUrl: "",
+                        imageUrl: "",
+                        isActive: true,
+                        isHidden: false,
+                        manageUrl: "",
+                        name: arguments[1]
+                    }
                 }
             );
             document._updateHopperUi();
@@ -56,7 +65,7 @@ export default class HopperAdapter {
                 }
             ]);
             controller.rootCategory.loaded += 1;
-            controller.appCategories[arguments[2]].loaded += 1;
+            controller.subscriptionCategories[arguments[2]].loaded += 1;
             document._updateHopperUi();
         }, this.getNotificationId(name), name, await this.getAppId(sender, driver));
     }

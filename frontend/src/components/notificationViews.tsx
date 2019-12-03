@@ -33,7 +33,7 @@ export class DefaultNotificationView extends React.Component<NotificationViewPro
                 <div className="notificationSenderSeparator" />
                 <span className="notificationTime">{getTimeText(this.props.notification.timestamp)}</span>
                 <button className="markDoneButton" onClick={ () => this.props.toggleDoneFunction(this.props.notification) }>Mark as {!this.props.notification.isDone ? "done" : "undone"}</button>
-                <button className="markDoneButton" onClick={ () => this.props.deleteFunction(this.props.notification) }>Delete</button>
+                <button className="deleteButton" onClick={ () => this.props.deleteFunction(this.props.notification) }>Delete</button>
             </div>
             <div className="notificationContent">
                 <img className="notificationImage" alt="notificationImage" src={

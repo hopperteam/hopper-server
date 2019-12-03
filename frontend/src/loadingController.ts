@@ -1,5 +1,5 @@
 import {NotificationSet, TimestampOrderedList} from "notificationSet";
-import {Notification} from "types";
+import {Notification, Subscription} from "types";
 import {IHopperApi} from "api/hopperApi";
 
 const LOAD_BATCH_SIZE = 5;
@@ -29,10 +29,12 @@ export default class LoadingController {
     public async loadApps() {
         let subscriptions = await this.api.getSubscriptions();
 
-        subscriptions.map(subscription => {
-            this.subscriptionCategories[subscription.id] = new LoadedCategory();
-            this.notificationSet.insertSubscription(subscription);
-        });
+        subscriptions.map(this.insertSubscription.bind(this));
+    }
+
+    public insertSubscription(s: Subscription) {
+        this.subscriptionCategories[s.id] = new LoadedCategory();
+        this.notificationSet.insertSubscription(s);
     }
 
     public getLoaded(includeDone: boolean, subscription: string | undefined = undefined): number {

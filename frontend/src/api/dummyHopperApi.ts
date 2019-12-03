@@ -128,7 +128,7 @@ export default class DummyHopperApi implements IHopperApi {
                 return true;
             }
         }
-        return false;
+        return "_dummyApiIgnoreErrors" in document;
     }
 
     async markNotificationAsUndone(notificationId: string): Promise<boolean> {
@@ -138,7 +138,8 @@ export default class DummyHopperApi implements IHopperApi {
                 return true;
             }
         }
-        return false;
+        return "_dummyApiIgnoreErrors" in document;
+
     }
 
     async getApp(appId: string): Promise<App | undefined> {
@@ -152,7 +153,7 @@ export default class DummyHopperApi implements IHopperApi {
                 return true;
             }
         }
-        return false;
+        return "_dummyApiIgnoreErrors" in document;
     }
 
 }
