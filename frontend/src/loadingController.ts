@@ -133,6 +133,14 @@ export default class LoadingController {
     }
 
     public async deleteNotification(notification: Notification) {
+        this.deleteNotificationFromData(notification);
+        this.onUpdateListener();
+        if (!await this.api.deleteNotification(notification.id)) {
+            // Error
+        }
+    }
+
+    private deleteNotificationFromData(notification: Notification) {
         let ind = this.notificationSet.rootCategory.all.getIndex(notification.id, notification.timestamp);
         if (this.rootCategory.loaded != 0 && ind != -1 && ind < this.rootCategory.loaded) {
             this.rootCategory.loaded--;
@@ -142,9 +150,28 @@ export default class LoadingController {
             this.subscriptionCategories[notification.subscription].loaded--;
         }
         this.notificationSet.deleteNotification(notification.id);
-        if (!await this.api.deleteNotification(notification.id)) {
-            // Error
+    }
+
+    public deleteNotificationById(id: string) {
+        this.deleteNotificationFromData(this.notificationSet.getNotification(id));
+        this.onUpdateListener();
+    }
+
+    public insertNotification(notification: Notification) {
+        this.notificationSet.integrateNotifications([notification]);
+        if (this.rootCategory.loaded != 0 && this.notificationSet.rootCategory.all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded) {
+            this.rootCategory.loaded++;
         }
+        if (this.subscriptionCategories[notification.subscription].loaded != 0 && this.notificationSet.subscriptionCategories[notification.subscription].all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded) {
+            this.subscriptionCategories[notification.subscription].loaded++;
+        }
+
+        this.onUpdateListener();
+    }
+
+    public updateNotification(notification: Notification) {
+        this.deleteNotificationFromData(notification);
+        this.insertNotification(notification);
         this.onUpdateListener()
     }
 }

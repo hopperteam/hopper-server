@@ -3,13 +3,16 @@ import Handler from './handler';
 import Notification from '../types/notification'
 import Log from '../log';
 import * as utils from '../utils';
+import {WebSocketManager} from "../webSocketManager";
 
 const log: Log = new Log("NotificationHandler");
 
 export default class NotificationHandler extends Handler {
+    private webSocketManager: WebSocketManager;
 
-    constructor() {
+    constructor(webSocketManager: WebSocketManager) {
         super();
+        this.webSocketManager = webSocketManager;
         this.router.get("/notifications", this.getNotifications.bind(this));
         this.router.post("/notifications/done", this.markNotificationsAsDone.bind(this));
         this.router.post("/notifications/undone", this.markNotificationsAsUndone.bind(this));
@@ -40,6 +43,8 @@ export default class NotificationHandler extends Handler {
             let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.userId }, { isDone: true });
             if (!notification)
                 throw new Error("Could not find notification");
+
+            this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.userId, req.session.id);
             res.json({
                 "status": "success"
             });
@@ -53,6 +58,9 @@ export default class NotificationHandler extends Handler {
             let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.userId }, { isDone: false });
             if (!notification)
                 throw new Error("Could not find notification");
+
+            this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.userId, req.session.id);
+
             res.json({
                 "status": "success"
             });
@@ -66,12 +74,13 @@ export default class NotificationHandler extends Handler {
             let notification = await Notification.findOneAndUpdate({ _id: req.query.id, userId: req.session.userId }, { isArchived: true });
             if (!notification)
                 throw new Error("Could not find notification");
+            this.webSocketManager.deleteNotification(notification._id, req.session.userId, req.session.id);
             res.json({
                 "status": "success"
             });
         } catch (e) {
             utils.handleError(e, log, res);
         }
-        
+
     }
 }

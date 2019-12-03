@@ -10,6 +10,7 @@ import SerializationUtil from "./serializationUtil";
 import {HopperApi, IHopperApi} from "./api/hopperApi";
 
 import "./style/app.scss";
+import {WebSocketAdapter} from "./api/webSocketAdapter";
 
 const UPDATE_INTERVAL = 30000;
 
@@ -67,6 +68,13 @@ async function main() {
         document._updateHopperUi = () => {
 
             updateView(_user, _notifications, _lC);
+        }
+    } else {
+        try {
+            let adapter = await WebSocketAdapter.openWebSocket(loadingController)
+        } catch (e) {
+            console.log("Could not connect WebSocket");
+            return;
         }
     }
     await loadingController.loadApps();

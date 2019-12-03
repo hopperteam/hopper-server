@@ -1,7 +1,7 @@
 ﻿import * as mongoose from 'mongoose';
 import Action from './action';
 
-interface INotification extends mongoose.Document {
+export interface INotification extends mongoose.Document {
     userId: string;
     heading: string;
     subscription: string;

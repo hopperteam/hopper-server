@@ -8,15 +8,15 @@ export class TimestampOrderedList {
     }
 
     private searchTimestamp(timestamp: number): number {
-        for (let i = this.data.length - 1; i >= 0; i--) {
-            if (this.data[i].timestamp >= timestamp) return i;
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i].timestamp <= timestamp) return i;
         }
         return -1;
     }
 
     public getIndex(id: string, timestamp: number): number {
         let fId = this.searchTimestamp(timestamp);
-        for (; fId < this.data.length && this.data[fId].timestamp == timestamp; fId++) {
+        for (; fId < this.data.length && this.data[fId].timestamp >= timestamp; fId++) {
             if (this.data[fId].id == id) return fId;
         }
         return -1;
@@ -24,22 +24,17 @@ export class TimestampOrderedList {
 
     public insertTimestamp(id: string, timestamp: number) {
         let ind = this.searchTimestamp(timestamp);
-        this.data.splice(ind + 1, 0, {id: id, timestamp: timestamp});
+        this.data.splice(ind, 0, {id: id, timestamp: timestamp});
     }
 
     public removeTimestamp(id: string, timestamp: number) {
         let ind = this.searchTimestamp(timestamp);
         if (ind == -1) return;
-        let indD: number;
-        for (indD = ind; this.data[indD].id != id && indD != 0 && this.data[indD - 1].timestamp == timestamp; indD--) { }
-        if (this.data[indD].id == id) {
-            this.data.splice(indD, 1);
-            return;
-        }
-        for (indD = ind; this.data[indD].id != id && indD != this.data.length - 1 && this.data[indD].timestamp == timestamp; indD++) { }
-        if (this.data[indD].id == id) {
-            this.data.splice(indD, 1);
-            return;
+        for (; ind < this.data.length && this.data[ind].timestamp >= timestamp; ind++) {
+            if (this.data[ind].id == id) {
+                this.data.splice(ind, 1);
+                return;
+            }
         }
     }
 }

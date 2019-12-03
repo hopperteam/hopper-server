@@ -5,13 +5,16 @@ import Notification from '../types/notification';
 import Subscription from '../types/subscription';
 import Log from '../log';
 import * as utils from '../utils';
+import {WebSocketManager} from "../webSocketManager";
 
 const log: Log = new Log("SPHandler");
 
 export default class SPHandler extends Handler {
+    private webSocketManager: WebSocketManager;
 
-    constructor() {
+    constructor(webSocketManager: WebSocketManager) {
         super();
+        this.webSocketManager = webSocketManager;
         this.router.post("/app", this.postApp.bind(this));
         this.router.put("/app", this.putApp.bind(this));
         this.router.post("/notification", this.postNotification.bind(this));
@@ -56,6 +59,7 @@ export default class SPHandler extends Handler {
                 throw new Error("No valid subscription");
             req.body.notification.userId = subscription.userId;
             let notification = await Notification.create(req.body.notification);
+            this.webSocketManager.createNotification(notification, subscription.userId);
             res.json({
                 "status": "success",
                 "id": notification._id
@@ -67,7 +71,10 @@ export default class SPHandler extends Handler {
 
     private async putNotification(req: express.Request, res: express.Response): Promise<void> {
         try {
-            await Notification.findByIdAndUpdate(req.body.id, req.body.notification);
+            let not = await Notification.findByIdAndUpdate(req.body.id, req.body.notification);
+
+            this.webSocketManager.loadAndUpdateNotificationInBackground(req.body.id, req.session.userId, req.session.id);
+
             res.json({
                 "status": "success"
             });
@@ -78,7 +85,10 @@ export default class SPHandler extends Handler {
 
     private async deleteNotification(req: express.Request, res: express.Response): Promise<void> {
         try {
-            await Notification.findByIdAndDelete(req.query.id);
+            let not = await Notification.findByIdAndDelete(req.query.id);
+            if (not != null) {
+                this.webSocketManager.deleteNotification(not._id, not.userId);
+            }
             res.json({
                 "status": "success"
             });

@@ -5,6 +5,8 @@ import bodyParser = require('body-parser');
 import AuthMiddleware from './handler/authMiddleware';
 import {Config} from "./config";
 import * as mongoose from 'mongoose';
+import * as WebSocket from 'ws';
+import * as expressWs from 'express-ws'
 
 const log = new Log("HopperApp");
 
@@ -13,10 +15,12 @@ import SubscriptionHandler from './handler/subscriptionHandler';
 import UserHandler from './handler/userHandler';
 import SPHandler from './handler/spHandler';
 import NotificationHandler from './handler/notificationHandler';
+import {WebSocketManager} from "./webSocketManager";
 
 class HopperApp {
 
     private server: express.Application;
+    private webSocketManager = new WebSocketManager();
 
     constructor() {
         this.server = express();
@@ -62,12 +66,15 @@ class HopperApp {
             setInterval(AuthMiddleware.daemon, 60000);
 
             this.server.use('/api/v1', new GeneralHandler().getRouter());
-            this.server.use('/api/v1', new SPHandler().getRouter());
+            this.server.use('/api/v1', new SPHandler(this.webSocketManager).getRouter());
 
             this.server.use(AuthMiddleware.auth());
             this.server.use('/api/v1', new SubscriptionHandler().getRouter());
             this.server.use('/api/v1', new UserHandler().getRouter());
-            this.server.use('/api/v1', new NotificationHandler().getRouter());
+            this.server.use('/api/v1', new NotificationHandler(this.webSocketManager).getRouter());
+
+            let inst = expressWs(this.server);
+            inst.app.ws("/api/v1/ws", this.webSocketManager.listener.bind(this.webSocketManager));
         }
 
         return true;
