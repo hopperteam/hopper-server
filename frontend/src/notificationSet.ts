@@ -1,5 +1,18 @@
 import {App, Notification, Subscription} from "types";
 
+const UNKNOWN_SUBSCRIPTION: Subscription = {
+    id: "UNKNOWN",
+    app: {
+        id: "UNKNOWN",
+        name: "Unknown App",
+        imageUrl: require("img/unknown_app.svg"),
+        isActive: false,
+        isHidden: true,
+        baseUrl: document.location.protocol + "//"  + document.location.host,
+        manageUrl: document.location.protocol + "//"  + document.location.host
+    }
+}
+
 export class TimestampOrderedList {
     public data: {id: string, timestamp: number}[];
 
@@ -81,13 +94,15 @@ export class NotificationSet {
 
     public deleteSubscription(subscriptionId: string) {
         delete this.subscriptions[subscriptionId];
-        delete this.subscriptionCategories[subscriptionId];
+        if (subscriptionId in this.subscriptionCategories)
+            delete this.subscriptionCategories[subscriptionId];
     }
 
     private insertNotification(not: Notification) {
         this.notifications[not.id] = not;
         this.rootCategory.insertTimestamp(not.id, not.timestamp, not.isDone);
-        this.subscriptionCategories[not.subscription].insertTimestamp(not.id, not.timestamp, not.isDone);
+        if (not.subscription in this.subscriptionCategories)
+            this.subscriptionCategories[not.subscription].insertTimestamp(not.id, not.timestamp, not.isDone);
     }
 
     public hasNotification(id: string): boolean {
@@ -108,12 +123,19 @@ export class NotificationSet {
         if (not == undefined) return;
         delete this.notifications[id];
 
-        this.subscriptionCategories[not.subscription].removeTimestamp(id, not.timestamp);
         this.rootCategory.removeTimestamp(id, not.timestamp);
+        if (not.subscription in this.subscriptionCategories)
+            this.subscriptionCategories[not.subscription].removeTimestamp(id, not.timestamp);
     }
 
     public getNotification(id: string): Notification {
         return this.notifications[id];
+    }
+
+    public getSubscriptionOrDefault(id: string): Subscription {
+        if (id in this.subscriptions)
+            return this.subscriptions[id];
+        return UNKNOWN_SUBSCRIPTION;
     }
 }
 

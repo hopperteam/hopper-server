@@ -145,9 +145,11 @@ export default class LoadingController {
         if (this.rootCategory.loaded != 0 && ind != -1 && ind < this.rootCategory.loaded) {
             this.rootCategory.loaded--;
         }
-        ind = this.notificationSet.subscriptionCategories[notification.subscription].all.getIndex(notification.id, notification.timestamp);
-        if (this.subscriptionCategories[notification.subscription].loaded != 0 && ind != -1 && ind < this.subscriptionCategories[notification.subscription].loaded) {
-            this.subscriptionCategories[notification.subscription].loaded--;
+        if (notification.subscription in this.subscriptionCategories) {
+            ind = this.notificationSet.subscriptionCategories[notification.subscription].all.getIndex(notification.id, notification.timestamp);
+            if (this.subscriptionCategories[notification.subscription].loaded != 0 && ind != -1 && ind < this.subscriptionCategories[notification.subscription].loaded) {
+                this.subscriptionCategories[notification.subscription].loaded--;
+            }
         }
         this.notificationSet.deleteNotification(notification.id);
     }
@@ -162,7 +164,9 @@ export default class LoadingController {
         if (this.rootCategory.loaded != 0 && this.notificationSet.rootCategory.all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded || !this.rootCategory.moreDoneAvailable) {
             this.rootCategory.loaded++;
         }
-        if (this.subscriptionCategories[notification.subscription].loaded != 0 && this.notificationSet.subscriptionCategories[notification.subscription].all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded || !this.subscriptionCategories[notification.subscription].moreDoneAvailable) {
+        if (notification.subscription in this.subscriptionCategories
+            && this.subscriptionCategories[notification.subscription].loaded != 0
+            && this.notificationSet.subscriptionCategories[notification.subscription].all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded || !this.subscriptionCategories[notification.subscription].moreDoneAvailable) {
             this.subscriptionCategories[notification.subscription].loaded++;
         }
 

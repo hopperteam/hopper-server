@@ -171,7 +171,7 @@ export class NotificationList extends React.Component<NotificationListProps> {
                     console.error("Could not render notification " + value.id + "! Invalid type " + value.type);
                     return;
                 }
-                return React.createElement(x, {key: value.id, notification: value, subscription: this.props.notifications.subscriptions[value.subscription], toggleDoneFunction: this.props.toggleDoneFunction, deleteFunction: this.props.deleteFunction}, null);
+                return React.createElement(x, {key: value.id, notification: value, subscription: this.props.notifications.getSubscriptionOrDefault(value.subscription), toggleDoneFunction: this.props.toggleDoneFunction, deleteFunction: this.props.deleteFunction}, null);
             })}
             { this.props.showLoadingElement ? <LoadingNotificationView /> : "" }
         </div>
