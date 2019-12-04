@@ -1,6 +1,7 @@
 import {NotificationSet, TimestampOrderedList} from "notificationSet";
 import {Notification, Subscription} from "types";
 import {IHopperApi} from "api/hopperApi";
+import {DesktopNotificationManager} from "./desktopNotificationManager";
 
 const LOAD_BATCH_SIZE = 5;
 
@@ -159,7 +160,7 @@ export default class LoadingController {
         this.onUpdateListener();
     }
 
-    public insertNotification(notification: Notification) {
+    public insertNotification(notification: Notification, notify: boolean = false) {
         this.notificationSet.integrateNotifications([notification]);
         if (this.rootCategory.loaded != 0 && this.notificationSet.rootCategory.all.getIndex(notification.id, notification.timestamp) < this.rootCategory.loaded || !this.rootCategory.moreDoneAvailable) {
             this.rootCategory.loaded++;
@@ -171,6 +172,10 @@ export default class LoadingController {
         }
 
         this.onUpdateListener();
+
+        if (notify) {
+            DesktopNotificationManager.notify(notification, this.notificationSet.getSubscriptionOrDefault(notification.subscription));
+        }
     }
 
     public updateNotification(notification: Notification) {

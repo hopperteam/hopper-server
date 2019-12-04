@@ -1,5 +1,6 @@
 import LoadingController from "../loadingController";
 import {Notification, Subscription} from "../types";
+import {DesktopNotificationManager} from "../desktopNotificationManager";
 
 export class WebSocketAdapter {
     static async openWebSocket(loadingController: LoadingController): Promise<WebSocketAdapter> {
@@ -27,7 +28,7 @@ export class WebSocketAdapter {
     };
 
     private static onCreateNotificationEvent(adapter: WebSocketAdapter, data: Notification) {
-        adapter.loadingController.insertNotification(data);
+        adapter.loadingController.insertNotification(data, true);
     }
 
     private static onDeleteNotificationEvent(adapter: WebSocketAdapter, data: string) {
