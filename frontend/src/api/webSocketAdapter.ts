@@ -1,8 +1,5 @@
 import LoadingController from "../loadingController";
-import {Notification} from "../types";
-import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
-import loadingController from "../loadingController";
+import {Notification, Subscription} from "../types";
 
 export class WebSocketAdapter {
     static async openWebSocket(loadingController: LoadingController): Promise<WebSocketAdapter> {
@@ -23,7 +20,10 @@ export class WebSocketAdapter {
     private static eventHandlers: {[index: string]: (adapter: WebSocketAdapter, data: any) => void} = {
         "createNotification": WebSocketAdapter.onCreateNotificationEvent,
         "deleteNotification": WebSocketAdapter.onDeleteNotificationEvent,
-        "updateNotification": WebSocketAdapter.onUpdateNotificationEvent
+        "updateNotification": WebSocketAdapter.onUpdateNotificationEvent,
+        "createSubscription": WebSocketAdapter.onCreateSubscriptionEvent,
+        "deleteSubscription": WebSocketAdapter.onDeleteSubscriptionEvent,
+        "updateSubscription": WebSocketAdapter.onUpdateSubscriptionEvent
     };
 
     private static onCreateNotificationEvent(adapter: WebSocketAdapter, data: Notification) {
@@ -38,6 +38,18 @@ export class WebSocketAdapter {
         adapter.loadingController.updateNotification(data);
     }
 
+    private static onCreateSubscriptionEvent(adapter: WebSocketAdapter, data: Subscription) {
+        adapter.loadingController.insertSubscription(data);
+    }
+
+    private static onDeleteSubscriptionEvent(adapter: WebSocketAdapter, data: string) {
+        adapter.loadingController.deleteSubscription(data);
+    }
+
+    private static onUpdateSubscriptionEvent(adapter: WebSocketAdapter, data: Subscription) {
+        adapter.loadingController.updateSubscription(data);
+    }
+
     private ws: WebSocket;
     private loadingController: LoadingController;
 
@@ -45,12 +57,13 @@ export class WebSocketAdapter {
         this.ws = ws;
         this.loadingController = loadingController;
         ws.onmessage = this.onMessage.bind(this);
+        ws.onclose = () => console.log("WS: Disconnected!");
         ws.onerror = () => console.log("WS: ERROR");
     }
 
     private onMessage(evt: MessageEvent) {
-        console.log(evt);
         let hopperEvent = JSON.parse(evt.data);
+        console.log("HopperEvent{type=\"" + hopperEvent.type + "\", data=\"" + JSON.stringify(hopperEvent.data) + "\"}");
         WebSocketAdapter.eventHandlers[hopperEvent.type](this, hopperEvent.data);
     }
 

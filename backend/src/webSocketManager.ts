@@ -1,5 +1,6 @@
 import * as WebSocket from "ws";
 import Notification, {INotification} from "./types/notification";
+import Subscription, {ISubscription} from "./types/subscription";
 
 export class WebSocketManager {
     private sessions: {[index: string]: WebSocketSession[]} = {};
@@ -30,6 +31,30 @@ export class WebSocketManager {
         if (!(usrId in this.sessions)) return;
 
         this.sessions[usrId].filter(x => x.session !== excludeSession).forEach(x => x.sendEvent(evtType, evtData));
+    }
+
+    public loadAndCreateSubscriptionInBackground(subId: string, usrId: string, excludeSession?: string) {
+        let mgr = this;
+        setTimeout(async function () {
+            let sub = await Subscription.findById(subId).populate('app', { cert: 0 });
+            mgr.broadcastEvent(usrId, "createSubscription", sub, excludeSession);
+        }, 0);
+    }
+
+    public loadAndUpdateSubscriptionsForAppInBackground(appId: string) {
+        let mgr = this;
+        setTimeout(async function () {
+            let subs = await Subscription.find({app: appId}).populate('app', { cert: 0 });
+            subs.filter(x => mgr.canNotify(x.userId)).forEach(x => mgr.updateSubscription(x, x.userId));
+        }, 0);
+    }
+
+    public updateSubscription(sub: ISubscription, usrId: string, excludeSession?: string) {
+        this.broadcastEvent(usrId, "updateSubscription", sub, excludeSession);
+    }
+
+    public deleteSubscription(subId: string, usrId: string, excludeSession?: string) {
+        this.broadcastEvent(usrId, "deleteSubscription", subId, excludeSession);
     }
 
     public createNotification(not: INotification, usrId: string, excludeSession?: string) {

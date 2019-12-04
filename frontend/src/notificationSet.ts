@@ -79,6 +79,11 @@ export class NotificationSet {
         this.subscriptionCategories[subscription.id] = new NotificationCategory();
     }
 
+    public deleteSubscription(subscriptionId: string) {
+        delete this.subscriptions[subscriptionId];
+        delete this.subscriptionCategories[subscriptionId];
+    }
+
     private insertNotification(not: Notification) {
         this.notifications[not.id] = not;
         this.rootCategory.insertTimestamp(not.id, not.timestamp, not.isDone);

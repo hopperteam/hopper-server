@@ -69,7 +69,7 @@ class HopperApp {
             this.server.use('/api/v1', new SPHandler(this.webSocketManager).getRouter());
 
             this.server.use(AuthMiddleware.auth());
-            this.server.use('/api/v1', new SubscriptionHandler().getRouter());
+            this.server.use('/api/v1', new SubscriptionHandler(this.webSocketManager).getRouter());
             this.server.use('/api/v1', new UserHandler().getRouter());
             this.server.use('/api/v1', new NotificationHandler(this.webSocketManager).getRouter());
 

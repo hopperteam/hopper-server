@@ -44,6 +44,7 @@ export default class SPHandler extends Handler {
                 throw new Error("Could not verify data");
             delete data.baseUrl;
             await app.updateOne(data);
+            this.webSocketManager.loadAndUpdateSubscriptionsForAppInBackground(app._id);
             res.json({
                 "status": "success"
             });

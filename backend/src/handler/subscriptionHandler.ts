@@ -5,13 +5,16 @@ import Subscription from '../types/subscription';
 import SubscribeRequest from '../types/subscribeRequest';
 import Log from '../log';
 import * as utils from '../utils';
+import {WebSocketManager} from "../webSocketManager";
 
 const log: Log = new Log("SubscriptionHandler");
 
 export default class SubscriptionHandler extends Handler {
-    
-    constructor() {
+    private webSocketManager: WebSocketManager;
+
+    constructor(webSocketManager: WebSocketManager) {
         super();
+        this.webSocketManager = webSocketManager;
         this.router.get("/apps", this.getApp.bind(this));
         this.router.get("/subscriptions", this.getSubscriptions.bind(this));
         this.router.delete("/subscriptions", this.deleteSubscription.bind(this));
@@ -29,7 +32,7 @@ export default class SubscriptionHandler extends Handler {
             utils.handleError(e, log, res);
         }
     }
-    
+
     private async getSubscriptions(req: express.Request, res: express.Response): Promise<void> {
         try {
             let subs = await Subscription.find({ userId: req.session.userId }, { userId: 0 }).populate('app', { cert: 0 });
@@ -41,7 +44,9 @@ export default class SubscriptionHandler extends Handler {
 
     private async deleteSubscription(req: express.Request, res: express.Response): Promise<void> {
         try {
-            await Subscription.findOneAndDelete({ userId: req.session.userId, app: req.query.id });
+            await Subscription.findByIdAndDelete(req.query.id);
+
+            this.webSocketManager.deleteSubscription(req.query.id, req.session.userId, req.session.id);
             res.json({
                 "status": "success"
             });
@@ -77,6 +82,8 @@ export default class SubscriptionHandler extends Handler {
             if (data.id != app._id)
                 throw new Error("Could not verify data");
             let subscription = await Subscription.create({ userId: req.session.userId, accountName: data.accountName, app: app._id });
+
+            this.webSocketManager.loadAndCreateSubscriptionInBackground(subscription._id, req.session.userId);
             res.json({
                 "status": "success",
                 "subscriptionId": subscription._id

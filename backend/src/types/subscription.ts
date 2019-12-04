@@ -1,6 +1,6 @@
 ﻿import * as mongoose from 'mongoose';
 
-interface ISubscription extends mongoose.Document {
+export interface ISubscription extends mongoose.Document {
     userId: any;
     accountName: string | undefined;
     app: any;

@@ -174,4 +174,14 @@ export default class LoadingController {
         this.insertNotification(notification);
         this.onUpdateListener()
     }
+
+    public updateSubscription(subscription: Subscription) {
+        this.notificationSet.subscriptions[subscription.id] = subscription;
+        this.onUpdateListener()
+    }
+
+    public deleteSubscription(subscriptionId: string) {
+        delete this.subscriptionCategories[subscriptionId];
+        this.notificationSet.deleteSubscription(subscriptionId);
+    }
 }
