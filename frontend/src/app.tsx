@@ -7,9 +7,9 @@ import LoadingView from "components/loadingView";
 import LoadingController from "loadingController";
 import DummyHopperApi from "api/dummyHopperApi";
 import SerializationUtil from "./serializationUtil";
-import {HopperApi, IHopperApi} from "./api/hopperApi";
+import {IHopperApi} from "./api/hopperApi";
 
-import "./style/app.scss";
+import "style/app.scss";
 import {WebSocketAdapter} from "./api/webSocketAdapter";
 
 const UPDATE_INTERVAL = 30000;

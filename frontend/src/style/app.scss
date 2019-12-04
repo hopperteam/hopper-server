@@ -23,6 +23,11 @@ html, body {
     flex-shrink: 0;
 }
 
+.topMessage {
+    width: 100%;
+    background: $hopperGreen;
+}
+
 #notificationContainer {
     overflow-y: scroll;
     flex-grow: 1;
