@@ -39,9 +39,7 @@ export default class SPHandler extends Handler {
             let app = await App.findById(req.body.id);
             if (!app)
                 throw new Error("Could not find app");
-            let data = utils.decryptContent(app.cert, req.body.data);
-            if (data.id != app._id)
-                throw new Error("Could not verify data");
+            let data = utils.decryptContent(app.cert, req.body.content);
             delete data.baseUrl;
             await app.updateOne(data);
             this.webSocketManager.loadAndUpdateSubscriptionsForAppInBackground(app._id);

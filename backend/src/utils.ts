@@ -27,7 +27,15 @@ export function generateId(): string {
     return hash.digest('hex');
 }
 
-export function decryptContent(key: string, content: string): any {
-    let resBuffer: Buffer = crypto.publicDecrypt(Buffer.from(key, "base64"), Buffer.from(content, "base64"));
-    return JSON.parse(resBuffer.toString("utf-8"));
+export function decryptContent(key: string, content: any): any {
+    content = JSON.parse(Buffer.from(content, "base64").toString());
+
+    let decryptedHash = crypto.publicDecrypt(Buffer.from(key, "base64"), Buffer.from(content.verify, "base64")).toString();
+    const sha256 = crypto.createHash("sha256");
+    sha256.update(JSON.stringify(content.data));
+    let createdHash = sha256.digest("hex");
+    if (decryptedHash != createdHash)
+        throw new Error("Verification failed");
+
+    return content.data;
 }
