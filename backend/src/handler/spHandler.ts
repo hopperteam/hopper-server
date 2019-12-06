@@ -57,6 +57,7 @@ export default class SPHandler extends Handler {
             if (!subscription)
                 throw new Error("No valid subscription");
             req.body.notification.userId = subscription.userId;
+            req.body.notification.subscription = subscription._id;
             let notification = await Notification.create(req.body.notification);
             this.webSocketManager.createNotification(notification, subscription.userId);
             res.json({

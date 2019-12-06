@@ -6,6 +6,7 @@ interface IApp extends mongoose.Document {
     isHidden: boolean;
     baseUrl: string;
     manageUrl: string | undefined;
+    contactEmail: string;
     cert: string;
 }
 
@@ -15,6 +16,7 @@ const AppSchema = new mongoose.Schema({
     isHidden: { type: Boolean, default: false },
     baseUrl: { type: String, required: true },
     manageUrl: { type: String },
+    contactEmail: { type: String, required: true },
     cert: { type: String, required: true }
 }, {
     versionKey: false // set to true to keep track of version of document
