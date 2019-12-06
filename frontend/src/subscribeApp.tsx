@@ -55,7 +55,7 @@ async function main() {
     let user: User = res[1];
 
     let sp = HopperUtil.getUrlParameter("id");
-    let data = HopperUtil.getUrlParameter("data");
+    let data = HopperUtil.getUrlParameter("content");
 
     if (sp == undefined || data == undefined || typeof(sp) != 'string' || typeof(data) != 'string') {
         renderError("Invalid request");

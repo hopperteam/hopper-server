@@ -69,18 +69,18 @@ export class HopperApi extends ApiBase implements IHopperApi {
         return resp.result;
     }
 
-    async getSubscribeRequest(data: string, appId: string): Promise<SubscribeRequest|undefined> {
+    async getSubscribeRequest(content: string, appId: string): Promise<SubscribeRequest|undefined> {
         let resp = await this.get("/subscribeRequest", {
-            data: data,
+            content: content,
             id: appId
         });
         if (resp.status != 200) return undefined;
         return resp.result.subscribeRequest;
     }
 
-    async postSubscribeRequest(data: string, appId: string): Promise<string|undefined> {
+    async postSubscribeRequest(content: string, appId: string): Promise<string|undefined> {
         let resp = await this.post("/subscribeRequest", {
-            data: data,
+            content: content,
             id: appId
         });
         if (resp.status != 200) return undefined;
