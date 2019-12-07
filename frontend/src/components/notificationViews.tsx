@@ -2,20 +2,20 @@ import * as React from "react";
 import {NotificationViewProps} from "./notificationContainer";
 
 function getTimeText(date: number): string {
-    let diff = Math.floor(Date.now() / 1000) - date;
+    let diff = Date.now() - date;
     let future = diff < 0;
     diff = Math.abs(diff);
 
-    if (diff < 60) {
+    if (diff < 60000) {
         return "now";
     }
 
-    diff = Math.floor(diff / 60);
+    diff = Math.floor(diff / 60000);
     if (diff < 60) {
         return (future) ? "In " + diff + " min" : diff + " min ago";
     }
 
-    let d = new Date(date*1000);
+    let d = new Date(date);
     let dNow = new Date();
 
     if (d.toDateString() == dNow.toDateString()) {
