@@ -3,8 +3,8 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 
 export namespace Config {
 
-    export const HOPPER_VERSION = "0.2";
-    export const HOPPER_VERSION_TYPE = "dev";
+    export const HOPPER_VERSION = "0.5";
+    export const HOPPER_VERSION_TYPE = "rel";
 
     export function parseConfig(file: string) {
         instance = new ConfigHolder(JSON.parse(fs.readFileSync(file).toString()));
