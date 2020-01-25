@@ -2,8 +2,14 @@
 enum LogLevel {
     INFO = "INFO ",
     WARN = "WARN ",
-    ERROR = "ERROR"
+    ERROR = "ERROR",
 }
+
+export function setMonitoringLogger(func: (logLevel: number, module: string, message: string, timestamp: number) => void) {
+    monitoringLogger = func;
+}
+
+let monitoringLogger: (logLevel: number, module: string, message: string, timestamp: number) => void = function() {};
 
 function persist(entry: string) {
     // persist log entry in database or log files
@@ -21,7 +27,8 @@ function getTimestamp() {
     return `${year}/${(month < 10) ? '0' + month : month}/${(day < 10) ? '0' + day : day}|${(hour < 10) ? '0' + hour : hour}:${(min < 10) ? '0' + min : min}:${(sec < 10) ? '0' + sec : sec}UTC`;
 }
 
-function log(logLevel: LogLevel, module: string, message: string) {
+function log(logLevel: LogLevel, levelNo: number, module: string, message: string) {
+    monitoringLogger(levelNo, module.trim(), message, Date.now());
     let entry = `(${getTimestamp()}) [${logLevel}] ${module}: ${message}`;
     persist(entry);
     console.log(entry);
@@ -40,14 +47,14 @@ export default class Log {
     }
 
     public info(message: string) {
-        log(LogLevel.INFO, this.module, message);
+        log(LogLevel.INFO, 0, this.module, message);
     }
 
     public warn(message: string) {
-        log(LogLevel.WARN, this.module, message);
+        log(LogLevel.WARN, 1, this.module, message);
     }
 
     public error(message: string) {
-        log(LogLevel.ERROR, this.module, message);
+        log(LogLevel.ERROR, 2, this.module, message);
     }
 }
