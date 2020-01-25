@@ -22,8 +22,9 @@ export namespace Config {
             dbUser: "",
             dbName: info.dbName,
             dbPort: info.port,
-            startBackend: true
-        }
+            startBackend: true,
+            startMonitoring: true
+        };
         instance = new ConfigHolder(data)
     }
 
@@ -35,6 +36,7 @@ export namespace Config {
         readonly dbPort: number;
         readonly startBackend: boolean;
         readonly port: number;
+        readonly startMonitoring: boolean;
 
         constructor(data: any) {
             this.dbHost = data.dbHost;
@@ -44,6 +46,7 @@ export namespace Config {
             this.dbPort = data.dbPort || 27017;
             this.startBackend = data.startBackend;
             this.port = data.port || 80;
+            this.startMonitoring = data.startMonitoring || false;
 
             if (this.dbHost == undefined || this.dbUser == undefined || this.dbPassword == undefined || this.dbName == undefined) {
                 throw new Error("Config incomplete!");

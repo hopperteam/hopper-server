@@ -16,10 +16,11 @@ import UserHandler from './handler/userHandler';
 import SPHandler from './handler/spHandler';
 import NotificationHandler from './handler/notificationHandler';
 import {WebSocketManager} from "./webSocketManager";
+import {MonitoringServer} from "./monitoring/monitoringServer";
 
 class HopperApp {
 
-    private server: express.Application;
+    private readonly server: express.Application;
     private webSocketManager = new WebSocketManager();
 
     constructor() {
@@ -89,6 +90,11 @@ class HopperApp {
         this.server.listen(Config.instance.port, () => {
             log.info("Server listening on port: " + Config.instance.port);
         });
+
+        if (Config.instance.startMonitoring) {
+            const monitorSrv = new MonitoringServer();
+            monitorSrv.startServer();
+        }
     }
 }
 
