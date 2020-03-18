@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import { MongoMemoryServer } from 'mongodb-memory-server';
 
 export namespace Config {
 
@@ -11,6 +10,7 @@ export namespace Config {
     }
 
     export async function generateConfig() {
+        const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer
         const mongod = new MongoMemoryServer({ instance: { auth: false } });
         await mongod.getConnectionString(); // necessary to await start of db
         const info = mongod.getInstanceInfo();

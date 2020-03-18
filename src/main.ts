@@ -65,16 +65,16 @@ class HopperApp {
 
             setInterval(AuthMiddleware.daemon, 60000);
 
-            this.server.use('/api/v1', new GeneralHandler().getRouter());
-            this.server.use('/api/v1', new SPHandler(this.webSocketManager).getRouter());
+            this.server.use('/', new GeneralHandler().getRouter());
+            this.server.use('/', new SPHandler(this.webSocketManager).getRouter());
 
             this.server.use(AuthMiddleware.auth());
-            this.server.use('/api/v1', new SubscriptionHandler(this.webSocketManager).getRouter());
-            this.server.use('/api/v1', new UserHandler().getRouter());
-            this.server.use('/api/v1', new NotificationHandler(this.webSocketManager).getRouter());
+            this.server.use('/', new SubscriptionHandler(this.webSocketManager).getRouter());
+            this.server.use('/', new UserHandler().getRouter());
+            this.server.use('/', new NotificationHandler(this.webSocketManager).getRouter());
 
             let inst = expressWs(this.server);
-            inst.app.ws("/api/v1/ws", this.webSocketManager.listener.bind(this.webSocketManager));
+            inst.app.ws("/", this.webSocketManager.listener.bind(this.webSocketManager));
         }
 
         return true;

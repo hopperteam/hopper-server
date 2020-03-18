@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest && newman run --environment ./test/hopper-env-local.postman_environment.json ./test/hopper.postman_collection.json --reporters teamcity,cli",
     "coverage": "jest --coverage",
-    "build": "tsc && rm -r .build/dependencies ; cp -r dependencies .build/dependencies",
-    "start": "tsc && rm -r .build/dependencies ; cp -r dependencies .build/dependencies && node . localFiles/debugConfig.json"
+    "build": "rm -rf .build ; tsc && cp -r dependencies .build/dependencies",
+    "start": "rm -rf .build ; tsc && cp -r dependencies .build/dependencies && node . localFiles/debugConfig.json"
   },
   "jest": {
     "transform": {
@@ -41,7 +41,8 @@
     "newman": "^4.5.6",
     "newman-reporter-teamcity": "^0.1.12",
     "ts-jest": "^24.1.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "mongodb-memory-server": "^6.0.1"
   },
   "dependencies": {
     "@grpc/proto-loader": "^0.5.3",
@@ -51,7 +52,6 @@
     "google-protobuf": "^3.11.2",
     "grpc": "^1.24.2",
     "mongodb": "^3.3.3",
-    "mongodb-memory-server": "^6.0.1",
     "mongoose": "^5.7.7",
     "ws": "^7.2.0"
   }

@@ -1,8 +1,20 @@
-FROM node
+FROM node AS builder
 
 EXPOSE 80
-COPY out/ /app
+COPY src /app/src
+COPY dependencies /app/dependencies
+COPY package.json /app/package.json
+COPY package-lock.json /app/package-lock.json
+COPY tsconfig.json /app/tsconfig.json
+WORKDIR /app
+RUN npm install . 
+RUN npm run-script build
+
+FROM node:alpine AS runner
+
+COPY --from=builder /app/.build /app/.build
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/package-lock.json /app/package-lock.json
 WORKDIR /app
 RUN npm install . --production
-
 ENTRYPOINT ["node", ".", "/var/hopper/config.json"]
