@@ -10,21 +10,6 @@ cleanUp ( ) {
 }
 
 buildBackend ( ) {
-  echo "Building backend"
-  pushd backend
-    npm install .
-    npm run build
-    cp package.json ../.build/backend/package.json
-    cp package-lock.json ../.build/backend/package-lock.json
-  popd
-}
-
-buildFrontend ( ) {
-  echo "Building frontend"
-  pushd frontend
-    npm install .
-    npm run build
-  popd
 }
 
 buildTest ( ) {
@@ -48,8 +33,13 @@ dist ( ) {
 
 build ( ) {
   cleanUp
-  buildBackend
-  buildFrontend
+  echo "Building backend"
+  pushd backend
+    npm install .
+    npm run build
+    cp package.json ../.build/backend/package.json
+    cp package-lock.json ../.build/backend/package-lock.json
+  popd
   dist
 }
 

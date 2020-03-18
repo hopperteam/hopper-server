@@ -2,11 +2,12 @@
   "name": "hopper-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": ".build/main.js",
   "scripts": {
     "test": "jest && newman run --environment ./test/hopper-env-local.postman_environment.json ./test/hopper.postman_collection.json --reporters teamcity,cli",
     "coverage": "jest --coverage",
-    "build": "tsc && cp -r dependencies ../.build/backend/dependencies"
+    "build": "tsc && rm -r .build/dependencies ; cp -r dependencies .build/dependencies",
+    "start": "tsc && rm -r .build/dependencies ; cp -r dependencies .build/dependencies && node . localFiles/debugConfig.json"
   },
   "jest": {
     "transform": {

@@ -1,8 +1,0 @@
-{
-  "dbHost": "",
-  "dbUser": "",
-  "dbPassword": "",
-  "dbName": "",
-  "port": "80",
-  "startBackend": false
-}

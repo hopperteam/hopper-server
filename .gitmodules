@@ -1,3 +1,0 @@
-[submodule "backend/dependencies/hopper-monitoring-protocol"]
-	path = backend/dependencies/hopper-monitoring-protocol
-	url = https://github.com/hopperteam/hopper-monitoring-protocol

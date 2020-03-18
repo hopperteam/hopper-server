@@ -25,7 +25,6 @@ class HopperApp {
 
     constructor() {
         this.server = express();
-        this.server.use(express.static("web", {'extensions': ['html']}));
         this.server.use(bodyParser.json());
         this.server.use(cookieParser());
     }
