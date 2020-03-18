@@ -1,0 +1,3 @@
+[submodule "dependencies/hopper-monitoring-protocol"]
+	path = dependencies/hopper-monitoring-protocol
+	url = git@github.com:hopperteam/hopper-monitoring-protocol.git
