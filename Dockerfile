@@ -11,7 +11,7 @@ RUN npm install .
 RUN npm run-script build
 
 FROM node:alpine AS runner
-
+EXPOSE 80
 COPY --from=builder /app/.build /app/.build
 COPY --from=builder /app/package.json /app/package.json
 COPY --from=builder /app/package-lock.json /app/package-lock.json

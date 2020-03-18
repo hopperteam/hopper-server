@@ -7,6 +7,7 @@ import {Config} from "./config";
 import * as mongoose from 'mongoose';
 import * as WebSocket from 'ws';
 import * as expressWs from 'express-ws'
+import * as cors from 'cors'
 
 const log = new Log("HopperApp");
 
@@ -25,6 +26,7 @@ class HopperApp {
 
     constructor() {
         this.server = express();
+        this.server.use(cors());
         this.server.use(bodyParser.json());
         this.server.use(cookieParser());
     }
