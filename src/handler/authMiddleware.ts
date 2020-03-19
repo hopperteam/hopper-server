@@ -18,9 +18,18 @@ export default class AuthMiddleware {
 
     public static auth(): express.Handler {
         return async function (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
-            let sid = req.cookies.sid;
+            let sid = req.query.token || req.headers.authorization;
             try {
-                const session = Session.findById(sid);
+                if (sid == undefined) {
+                    throw new Error("No session found");
+                } 
+                let session: Session | undefined;
+                if (sid.startsWith("Bearer ")) {
+                    session = Session.findById(sid.substr(7));
+                } else {
+                    session = Session.findById(sid);
+                }
+                
                 if (!session)
                     throw new Error("No session found");
                 req.session = session;

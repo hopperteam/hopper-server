@@ -32,9 +32,9 @@ export default class GeneralHandler extends Handler {
             if (!user)
                 throw new Error("Invalid login data");
             const session = Session.create(user._id);
-            res.cookie("sid", session.id, { maxAge: Session.MAX_AGE });
             res.json({
-                "status": "success"
+                "status": "success",
+                "token": session.id
             });
         } catch (e) {
             utils.handleError(e, log, res);
@@ -48,9 +48,9 @@ export default class GeneralHandler extends Handler {
             req.body.password = utils.hashPassword(req.body.password);
             const user = await User.create(req.body);
             const session = await Session.create(user._id);
-            res.cookie("sid", session.id.toString(), { maxAge: Session.MAX_AGE });
             res.json({
-                "status": "success"
+                "status": "success",
+                "token": session.id
             });
         } catch (e) {
             utils.handleError(e, log, res);
