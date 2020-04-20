@@ -33,12 +33,11 @@ class HopperApp {
 
     private async loadConfig(): Promise<boolean> {
         try {
-            if (!process.argv[2]) {
-                log.info("Starting with local in memory DB");
-                await Config.generateConfig();
-            } else {
+            if (process.argv[2]) {
                 log.info("Loading config from " + process.argv[2]);
-                Config.parseConfig(process.argv[2]);
+                await Config.parseConfig(process.argv[2]);
+            } else {
+                throw new Error("No config file specified");
             }
         } catch (e) {
             log.error("Could not start: " + e.toString());

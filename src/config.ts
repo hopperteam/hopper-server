@@ -5,27 +5,22 @@ export namespace Config {
     export const HOPPER_VERSION = "0.2";
     export const HOPPER_VERSION_TYPE = "dev";
 
-    export function parseConfig(file: string) {
-        instance = new ConfigHolder(JSON.parse(fs.readFileSync(file).toString()));
-    }
-
-    export async function generateConfig() {
-        const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer
-        const mongod = new MongoMemoryServer({ instance: { auth: false } });
-        await mongod.getConnectionString(); // necessary to await start of db
-        const info = mongod.getInstanceInfo();
-        if (!info)
-            throw new Error("Could not initalize mongodb memory server");
-        const data = {
-            dbHost: info.ip,
-            dbPassword: "",
-            dbUser: "",
-            dbName: info.dbName,
-            dbPort: info.port,
-            startBackend: true,
-            startMonitoring: true
-        };
-        instance = new ConfigHolder(data)
+    export async function parseConfig(file: string) {
+        var data: any = JSON.parse(fs.readFileSync(file).toString());
+        if (data.useMemoryDb) {
+            const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer
+            const mongod = new MongoMemoryServer({ instance: { auth: false } });
+            await mongod.getConnectionString(); // necessary to await start of db
+            const info = mongod.getInstanceInfo();
+            if (!info)
+                throw new Error("Could not initalize mongodb memory server");
+            data.dbHost = info.ip;
+            data.dbPassword = "";
+            data.dbUser = "";
+            data.dbName = info.dbName;
+            data.dbPort = info.port;
+        }
+        instance = new ConfigHolder(data);
     }
 
     class ConfigHolder {
@@ -37,6 +32,7 @@ export namespace Config {
         readonly startBackend: boolean;
         readonly port: number;
         readonly startMonitoring: boolean;
+        readonly useMemoryDb: boolean;
 
         constructor(data: any) {
             this.dbHost = data.dbHost;
@@ -47,10 +43,13 @@ export namespace Config {
             this.startBackend = data.startBackend;
             this.port = data.port || 80;
             this.startMonitoring = data.startMonitoring || false;
+            this.useMemoryDb = data.useMemoryDb || false;
 
             if (this.dbHost == undefined || this.dbUser == undefined || this.dbPassword == undefined || this.dbName == undefined) {
                 throw new Error("Config incomplete!");
             }
+
+
         }
     }
 
