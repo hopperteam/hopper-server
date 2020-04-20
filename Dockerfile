@@ -1,4 +1,4 @@
-FROM node AS builder
+FROM node:12-alpine AS builder
 
 EXPOSE 80
 COPY src /app/src
@@ -10,7 +10,7 @@ WORKDIR /app
 RUN npm install . 
 RUN npm run-script build
 
-FROM node:alpine AS runner
+FROM node:12-alpine AS runner
 EXPOSE 80
 COPY --from=builder /app/.build /app/.build
 COPY --from=builder /app/package.json /app/package.json
