@@ -1,4 +1,4 @@
-FROM node:12-alpine AS builder
+FROM node:12 AS builder
 
 EXPOSE 80
 COPY src /app/src
@@ -9,6 +9,12 @@ COPY tsconfig.json /app/tsconfig.json
 WORKDIR /app
 RUN npm install . 
 RUN npm run-script build
+
+FROM node:12 AS tester
+COPY --from=builder /app /app
+COPY test /app/test
+WORKDIR /app
+RUN node . test/testConfig.json & npm test && kill $!
 
 FROM node:12-alpine AS runner
 EXPOSE 80

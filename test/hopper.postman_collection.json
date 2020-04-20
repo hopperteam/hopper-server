@@ -46,7 +46,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base-url}}/api/v1/",
+									"raw": "{{base-url}}/v1/",
 									"host": [
 										"{{base-url}}"
 									],
@@ -97,7 +97,7 @@
 		{
 			"id": "16ff4593-55f9-4774-a686-08d631735d87",
 			"key": "api-entry",
-			"value": "/api/v1",
+			"value": "/v1",
 			"type": "string"
 		}
 	],
