@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "973eeddc-ad85-4f63-a7de-304c9e5a1e5d",
-		"name": "hopper",
+		"_postman_id": "2dc67040-6b2b-42d1-9e34-26c8f5925ad2",
+		"name": "hopper runner collection",
 		"description": "This is the API documentation for the hopper project.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -15,11 +15,25 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "abb4bf00-3c47-40d1-995a-8b1616ff5f1c",
+								"id": "de362b41-8751-4492-a30f-1afc87819f18",
 								"exec": [
-									"pm.test(\"Response time is less than 200ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(200);",
-									"});"
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.collectionVariables.unset(\"token\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1ffe4e29-d066-4e05-9045-816528b31b4d",
+								"exec": [
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -46,7 +60,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base-url}}/v1/",
+									"raw": "{{base-url}}/api/v1/",
 									"host": [
 										"{{base-url}}"
 									],
@@ -60,22 +74,838 @@
 							"status": "OK",
 							"code": 200,
 							"_postman_previewlanguage": "json",
-							"header": null,
+							"header": [],
 							"cookie": [],
 							"body": "{\n    \"version\": \"1.0\",\n    \"type\": \"mock\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2385947d-222c-4a47-84db-8512e572b810",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"testuser@hoppercloud.net\",\n    \"password\": \"strongPassword\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\"\n}"
+						},
+						"url": {
+							"raw": "{{api-url}}/register",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"register"
+							]
+						},
+						"description": "- register a new user"
+					},
+					"response": [
+						{
+							"name": "/register v1",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"test@email.com\",\n\t\"password\": \"password\",\n\t\"firstName\": \"first\",\n\t\"lastName\": \"last\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/v1/register",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"register"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\r\n    \"status\": \"success\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "/forgetPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5c08c733-6636-4665-8167-476850e1af43",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"test@email.com\"\n}"
+						},
+						"url": {
+							"raw": "{{api-url}}/forgetPassword",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"forgetPassword"
+							]
+						},
+						"description": "- reset password of the user"
+					},
+					"response": [
+						{
+							"name": "/forgetPassword v1",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"test@email.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/v1/forgetPassword",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"forgetPassword"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\r\n    \"status\": \"success\"\r\n}"
+						}
+					]
+				},
+				{
+					"name": "/login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3831e8fd-233e-4220-a345-858e755cbb08",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Body has token\", function() {",
+									"    pm.response.to.have.jsonBody(\"token\");",
+									"})",
+									"pm.collectionVariables.set(\"token\", pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"testuser@hoppercloud.net\",\n    \"password\": \"strongPassword\"\n}"
+						},
+						"url": {
+							"raw": "{{api-url}}/login",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "- allows a user to login to hopper"
+					},
+					"response": [
+						{
+							"name": "/login v1",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"test@email.com\",\n\t\"password\": \"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base-url}}/api/v1/login",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Oct 2019 09:40:43 GMT"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"b3-RrUruFDD3o1fszrBPE3YI7WNLac\""
+								},
+								{
+									"key": "Server",
+									"value": "nginx"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "x-srv-span",
+									"value": "v=1;s=98437e3673173a46"
+								},
+								{
+									"key": "x-srv-trace",
+									"value": "v=1;t=2bacf895a198eda5"
+								},
+								{
+									"key": "Content-Length",
+									"value": "161"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\r\n    \"status\": \"success\"\r\n}"
 						}
 					]
 				}
 			],
 			"description": "These routes can be done without a valid session.",
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "/user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "88722d49-e3a2-4b6e-b90b-466fdb43911a",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/user",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "- get the current user based on the current session"
+					},
+					"response": [
+						{
+							"name": "/user v1",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base-url}}/api/v1/user",
+									"host": [
+										"{{base-url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n\t\"email\": \"test@email.com\",\n\t\"firstName\": \"first\",\n\t\"lastName\": \"last\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8646d36b-4036-4d94-b016-a43951396aae",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\": \"strongerPassword\"\n}"
+						},
+						"url": {
+							"raw": "{{api-url}}/user",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "- edit details of the user"
+					},
+					"response": []
+				}
+			],
+			"description": "The management of specific users requires a valid session.",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6fcbb37b-6e7b-43e3-a049-078d02cfe7e2",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "c1ee1b71-035f-435b-af8f-a4e72f22bbcb",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Service Provider Communication",
+			"item": [
+				{
+					"name": "/app",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f97f1123-98aa-4be6-b67f-e92e1a4b8b8d",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Body has id\", function() {",
+									"    pm.response.to.have.jsonBody(\"id\");",
+									"})",
+									"pm.collectionVariables.set(\"appId\", pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"TestApp\",\n\t\"baseUrl\": \"www.baseurl.com\",\n\t\"imageUrl\": \"https://www.baseurl.com/path/to/image.png\",\n\t\"manageUrl\": \"https://www.baseurl.com/manage\",\n\t\"contactEmail\": \"support@TestApp.com\",\n\t\"cert\": \"LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF2ZmhORmJoQ2dldTNxNFB4d2pYRApOa29rY0ZiTmtYTUc0MGc3TUpRMVYwM2h4MDVqQmdUV0U1YjJSVUZGZUNiM3JlV3pDQVpUNmx6OE1FejJZSWlsCmhtZTJnUFYyd3BvVUpyK2tmU0EvMGk0b1R4Yk1mdnd6NGtqZkdrbG1hN3dPQzliTGZEYUUxeHdycHMyWWZrWnQKalc5ei9LalpCYXJ3a2UxdGZiUDUvclAwZGVwL1lSUUlrcExqTmplanQ5VjU2ekp6L2tuSDNHS1dDc1V0bFB2eApVRjNSRkJmOUJYYzIvSUthR0lPV1ZxdHVib1V5RFRMMk5ickFkd0pNeWV5bEIzWWxKRDJkN2kwcE1acXZBWWx3CjVsVWVnOW5UTmJtYWg0TEdFeHBTWExqY01jbVNnU0JSWjhiL3V5YlNHcE90S3FGdlBPVXQweEtsNDlqU0xuQmYKV3dJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==\"\n}"
+						},
+						"url": {
+							"raw": "{{api-url}}/app",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"app"
+							]
+						},
+						"description": "- register new service provider to hopper"
+					},
+					"response": []
+				},
+				{
+					"name": "/app",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c8c0e6d1-96ef-4fbb-a5ae-117ee312ee4b",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"{{appId}}\",\n\t\"content\": \"eyJ2ZXJpZnkiOiJyQ0wyeTFQSVM5WkpqZDEvYXJVZjBVRVNUMVlOY1NmRWEvYjYwUzkwZDFOTXRPWWVXc0hnaWxjZ2JSeUFFVGdVREtJam52Y3NFT1EybGZSV1QrMkt4UVZoQ3lINlJwUE5yT1RlQ2ZGT2U4R1JwTEl0YkE4VS9YOW01K3QvMUxJOGJtenpmaVZrLzhFTjk4cHBTbjRRS1BQSndCSmNvcVo4dTNHbFBlbFhSclA4bk13UXBDeWZad0dXSWlvN2RKOWgyZ3hXeHQzR2ZQMmQ2cjNMV1JvWGdDMkpFejN5ZW50RGpERit1T3hrN1pKQ1Y3TWxhd3lzNjZncGliSllLVWVwMXNsOGNSaTZkZDI5dHUyRm8vUmRYR2FtWkM5TXhRS2NDdEljUHRBQzQ3amxNWjF0WEZxT1NtdVlJNDB3MnZvVGZoMGh4dU9Pdnp1a1NMRDF1bjB4NlE9PSIsImRhdGEiOnsibmFtZSI6Ik1vZGVybkFwcCIsImJhc2VVcmwiOiJ3d3cuYmFzZXVybC5jb20iLCJpbWFnZVVybCI6Imh0dHBzOi8vd3d3LmJhc2V1cmwuY29tL3BhdGgvdG8vYmlsZC5wbmciLCJtYW5hZ2VFbWFpbCI6InN1cHBvcnRATW9kZXJuQXBwLmNvbSJ9fQ==\"\n}"
+						},
+						"url": {
+							"raw": "{{api-url}}/app",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"app"
+							]
+						},
+						"description": "- update details of a service provider"
+					},
+					"response": []
+				}
+			],
+			"description": "The following request can be used by a service provider to communicate with the backend.",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Subscription Management",
+			"item": [
+				{
+					"name": "/apps",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f053d7d-64f6-4e05-87b1-94256f16e741",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/apps?id={{appId}}",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"apps"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{appId}}"
+								}
+							]
+						},
+						"description": "- get all apps associated with the current user"
+					},
+					"response": []
+				},
+				{
+					"name": "/subscriptions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c3dfae61-1ca5-485f-8383-547ca409f49a",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/subscriptions",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"subscriptions"
+							]
+						},
+						"description": "- get all subscriptions of the user\n- contains the apps"
+					},
+					"response": []
+				}
+			],
+			"description": "The management of the service providers for one user requires a valid session.",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e83613fb-927e-4b10-bd8e-ad6b2191fbe4",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b4690ecf-c869-4445-861c-64a3807875ec",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Notification Management",
+			"item": [
+				{
+					"name": "/notifications",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2066b7df-b174-43f6-a6ac-7d689a637b73",
+								"exec": [
+									"pm.test(\"Response time is less than 100ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(100);",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-url}}/notifications?limit=10&skip=0&includeDone=true&subscription=5dc301f5485f720ff41bfd4d",
+							"host": [
+								"{{api-url}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "includeDone",
+									"value": "true"
+								},
+								{
+									"key": "subscription",
+									"value": "5dc301f5485f720ff41bfd4d"
+								}
+							]
+						},
+						"description": "- get notifications of user with\n- limit?\n- offset?\n- app?: id of specific app"
+					},
+					"response": []
+				}
+			],
+			"description": "The management of the notification of one user requires a valid session.",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "88454e2d-a89f-4f0e-87dc-5072d49e00c0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "63cd6904-4bb3-4432-ab66-6fbb1bcd9089",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "/user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "057e4ddc-48d1-4f30-ac76-df4a17526b10",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/user",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"user"
+					]
+				},
+				"description": "- delete users account "
+			},
+			"response": []
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "88feb752-0fe8-4297-9447-4c0c00492afa",
+				"id": "a8063101-1d0d-49d9-9e8c-733e536052f2",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -85,7 +915,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "e7138670-2e8d-49f1-9f15-9aff389fc988",
+				"id": "35b98aaa-8c3c-45d4-b1bd-f3854895e4fe",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -95,9 +925,27 @@
 	],
 	"variable": [
 		{
-			"id": "16ff4593-55f9-4774-a686-08d631735d87",
+			"id": "6b4df163-0715-45dc-8c02-c23eace1d8d0",
 			"key": "api-entry",
 			"value": "/v1",
+			"type": "string"
+		},
+		{
+			"id": "d93d3555-bb47-496e-9e36-25e1348fd94a",
+			"key": "appId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "0fd2100b-605d-420e-96c3-eb4527417a4a",
+			"key": "subscriptionId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "c9046da5-1245-4a52-bf84-39a7fcba0150",
+			"key": "notificationId",
+			"value": "",
 			"type": "string"
 		}
 	],
