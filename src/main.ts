@@ -48,41 +48,39 @@ class HopperApp {
     }
 
     private async init(): Promise<boolean> {
-        if (Config.instance.startBackend) {
-            log.info("Starting backend");
-            try {
-                await mongoose.connect(`mongodb://${Config.instance.dbHost}:${Config.instance.dbPort}/${Config.instance.dbName}`, {
-                    useNewUrlParser: true,
-                    useUnifiedTopology: true,
-                    useCreateIndex: true,
-                    useFindAndModify: false,
-                    user: Config.instance.dbUser,
-                    pass: Config.instance.dbPassword
-                });
-            } catch (e) {
-                log.error("Could not connect to DB (" + e.message + ")");
-                return false;
-            }
-
-            setInterval(AuthMiddleware.daemon, 60000);
-
-            this.server.use('/v1', new GeneralHandler().getRouter());
-            this.server.use('/v1', new SPHandler(this.webSocketManager).getRouter());
-
-            this.server.use(AuthMiddleware.auth());
-            this.server.use('/v1', new SubscriptionHandler(this.webSocketManager).getRouter());
-            this.server.use('/v1', new UserHandler().getRouter());
-            this.server.use('/v1', new NotificationHandler(this.webSocketManager).getRouter());
-
-            let inst = expressWs(this.server);
-            inst.app.ws("/v1/ws", this.webSocketManager.listener.bind(this.webSocketManager));
+        log.info("Starting backend");
+        try {
+            await mongoose.connect(`mongodb://${Config.instance.dbHost}:${Config.instance.dbPort}/${Config.instance.dbName}`, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                useCreateIndex: true,
+                useFindAndModify: false,
+                user: Config.instance.dbUser,
+                pass: Config.instance.dbPassword
+            });
+        } catch (e) {
+            log.error("Could not connect to DB (" + e.message + ")");
+            return false;
         }
+
+        setInterval(AuthMiddleware.daemon, 60000);
+
+        this.server.use('/v1', new GeneralHandler().getRouter());
+        this.server.use('/v1', new SPHandler(this.webSocketManager).getRouter());
+
+        this.server.use(AuthMiddleware.auth());
+        this.server.use('/v1', new SubscriptionHandler(this.webSocketManager).getRouter());
+        this.server.use('/v1', new UserHandler().getRouter());
+        this.server.use('/v1', new NotificationHandler(this.webSocketManager).getRouter());
+
+        let inst = expressWs(this.server);
+        inst.app.ws("/v1/ws", this.webSocketManager.listener.bind(this.webSocketManager));
 
         return true;
     }
 
     public async start(): Promise<void> {
-        if (!(await this.loadConfig() && await this.init())) {
+        if (!(await (this.loadConfig()) && await (this.init()))) {
             log.error("Could not initalize app");
             return;
         }
