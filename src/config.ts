@@ -29,7 +29,6 @@ export namespace Config {
         readonly dbPassword: string;
         readonly dbName: string;
         readonly dbPort: number;
-        readonly startBackend: boolean;
         readonly port: number;
         readonly startMonitoring: boolean;
         readonly useMemoryDb: boolean;
@@ -40,7 +39,6 @@ export namespace Config {
             this.dbUser = data.dbUser;
             this.dbName = data.dbName;
             this.dbPort = data.dbPort || 27017;
-            this.startBackend = data.startBackend;
             this.port = data.port || 80;
             this.startMonitoring = data.startMonitoring || false;
             this.useMemoryDb = data.useMemoryDb || false;
