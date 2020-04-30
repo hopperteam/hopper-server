@@ -35,7 +35,7 @@ export default class SubscriptionHandler extends Handler {
 
     private async getSubscriptions(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let subs = await Subscription.find({ userId: req.session.userId }, { userId: 0 }).populate('app', { contactEmail: 0, cert: 0 });
+            let subs = await Subscription.find({ userId: req.session.user.id }, { userId: 0 }).populate('app', { contactEmail: 0, cert: 0 });
             res.json(subs);
         } catch (e) {
             utils.handleError(e, log, res);
@@ -46,7 +46,7 @@ export default class SubscriptionHandler extends Handler {
         try {
             await Subscription.findByIdAndDelete(req.query.id);
 
-            this.webSocketManager.deleteSubscription(req.query.id, req.session.userId, req.session.id);
+            this.webSocketManager.deleteSubscription(req.query.id, req.session.user.id, req.session.id);
             res.json({
                 "status": "success"
             });
@@ -77,9 +77,9 @@ export default class SubscriptionHandler extends Handler {
             if (!app)
                 throw new Error("Could not find app");
             let data = utils.decryptContent(app.cert, req.body.content);
-            let subscription = await Subscription.create({ userId: req.session.userId, accountName: data.accountName, app: app._id });
+            let subscription = await Subscription.create({ userId: req.session.user.id, accountName: data.accountName, app: app._id });
 
-            this.webSocketManager.loadAndCreateSubscriptionInBackground(subscription._id, req.session.userId);
+            this.webSocketManager.loadAndCreateSubscriptionInBackground(subscription._id, req.session.user.id);
             res.json({
                 "status": "success",
                 "subscriptionId": subscription._id

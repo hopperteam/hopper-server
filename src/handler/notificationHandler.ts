@@ -23,7 +23,7 @@ export default class NotificationHandler extends Handler {
         try {
             let limit: number = (req.query.limit) ? Number(req.query.limit) : 100; // TODO set default limit in config
             let skip: number = (req.query.skip) ? Number(req.query.skip) : 0;
-            let criteria: any = { userId: req.session.userId, isArchived: false }
+            let criteria: any = { userId: req.session.user.id, isArchived: false }
             if (req.query.subscription)
                 criteria.subscription = req.query.subscription;
             if (!req.query.includeDone)
@@ -40,11 +40,11 @@ export default class NotificationHandler extends Handler {
 
     private async markNotificationsAsDone(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.userId }, { isDone: true });
+            let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.user.id }, { isDone: true });
             if (!notification)
                 throw new Error("Could not find notification");
 
-            this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.userId, req.session.id);
+            this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.user.id, req.session.id);
             res.json({
                 "status": "success"
             });
@@ -55,11 +55,11 @@ export default class NotificationHandler extends Handler {
 
     private async markNotificationsAsUndone(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.userId }, { isDone: false });
+            let notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.user.id }, { isDone: false });
             if (!notification)
                 throw new Error("Could not find notification");
 
-            this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.userId, req.session.id);
+            this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.user.id, req.session.id);
 
             res.json({
                 "status": "success"
@@ -71,10 +71,10 @@ export default class NotificationHandler extends Handler {
 
     private async deleteNotifications(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let notification = await Notification.findOneAndUpdate({ _id: req.query.id, userId: req.session.userId }, { isArchived: true });
+            let notification = await Notification.findOneAndUpdate({ _id: req.query.id, userId: req.session.user.id }, { isArchived: true });
             if (!notification)
                 throw new Error("Could not find notification");
-            this.webSocketManager.deleteNotification(notification._id, req.session.userId, req.session.id);
+            this.webSocketManager.deleteNotification(notification._id, req.session.user.id, req.session.id);
             res.json({
                 "status": "success"
             });

@@ -1,41 +1,40 @@
-﻿import * as utils from '../utils';
-
-var sessions: Map<string, Session> = new Map<string, Session>();
+﻿import * as jwt from 'jsonwebtoken';
+import { Config } from '../config';
 
 export default class Session {
     readonly id: string;
-    readonly userId: string;
-    private readonly expTs: number;
-    static MAX_AGE: number = 86400000; // 24h in ms
+    readonly user: SessionUser;
 
-    constructor(userId: string) {
-        this.id = utils.generateId();
-        this.userId = userId;
-        this.expTs = Date.now() + Session.MAX_AGE;
+    constructor(id: string, user: SessionUser) {
+        this.id = id;
+        this.user = user;
     }
 
-    public static create(userId: string) {
-        let session = new Session(userId);
-        sessions.set(session.id, session);
-        return session;
+    public async asJWT(): Promise<string> {
+        return "";
     }
 
-    public static findById(id: string): Session | undefined {
-        return sessions.get(id);
-    }
-
-    public static deleteExpired(): void {
-        let ts: number = Date.now();
-        sessions.forEach((session: Session) => {
-            if (session.expTs < ts)
-                sessions.delete(session.id);
+    public static async decode(session: string): Promise<Session | undefined> {
+        console.log(session)
+        return new Promise((res) => {
+            jwt.verify(session, Config.instance.jwtCert, (err, decoded) => {
+                if (err) res(undefined);
+                let sessObj = decoded as SessionObject
+                res(new Session(session, sessObj.user))
+            });
         });
-    }
 
-    public static deleteAssociated(userId: string): void {
-        sessions.forEach((session: Session) => {
-            if (session.userId == userId)
-                sessions.delete(session.id);
-        });
     }
+}
+
+type SessionObject = {
+    user: SessionUser
+}
+
+export type SessionUser = {
+    id: string
+    firstName: string,
+    lastName: string,
+    email: string,
+    roles: string[]
 }
