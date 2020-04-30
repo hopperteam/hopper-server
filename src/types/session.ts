@@ -15,7 +15,6 @@ export default class Session {
     }
 
     public static async decode(session: string): Promise<Session | undefined> {
-        console.log(session)
         return new Promise((res) => {
             jwt.verify(session, Config.instance.jwtCert, (err, decoded) => {
                 if (err) res(undefined);
