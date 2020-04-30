@@ -7,7 +7,7 @@ export interface ISubscription extends mongoose.Document {
 }
 
 const SubscriptionSchema = new mongoose.Schema({
-    userId: { type: mongoose.Types.ObjectId, ref: 'User', required: true, index: true },
+    userId: { type: String, required: true, index: true },
     accountName: { type: String },
     app: { type: mongoose.Types.ObjectId, ref: 'App', required: true }
 }, {

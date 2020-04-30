@@ -63,12 +63,10 @@ class HopperApp {
             return false;
         }
 
-        setInterval(AuthMiddleware.daemon, 60000);
-
         this.server.use('/v1', new GeneralHandler().getRouter());
         this.server.use('/v1', new SPHandler(this.webSocketManager).getRouter());
 
-        this.server.use(AuthMiddleware.auth());
+        this.server.use(AuthMiddleware.auth("User"));
         this.server.use('/v1', new SubscriptionHandler(this.webSocketManager).getRouter());
         this.server.use('/v1', new UserHandler().getRouter());
         this.server.use('/v1', new NotificationHandler(this.webSocketManager).getRouter());

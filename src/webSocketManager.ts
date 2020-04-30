@@ -17,7 +17,7 @@ export class WebSocketManager {
     }
 
     public listener(ws: WebSocket, req: Express.Request): void {
-        this.insertSession(req.session.userId, req.session.id, ws);
+        this.insertSession(req.session.user.id, req.session.id, ws);
     }
 
     private onDisconnect(wss: WebSocketSession, usrId: string) {

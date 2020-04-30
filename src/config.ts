@@ -32,6 +32,8 @@ export namespace Config {
         readonly port: number;
         readonly startMonitoring: boolean;
         readonly useMemoryDb: boolean;
+        readonly jwtCert: Buffer;
+        readonly permissionNamespace: string;
 
         constructor(data: any) {
             this.dbHost = data.dbHost;
@@ -42,10 +44,15 @@ export namespace Config {
             this.port = data.port || 80;
             this.startMonitoring = data.startMonitoring || false;
             this.useMemoryDb = data.useMemoryDb || false;
+            this.permissionNamespace = data.permissionNamespace || "Hopper";
+            let  jwtCertPath = data.jwtCertPath;
 
-            if (this.dbHost == undefined || this.dbUser == undefined || this.dbPassword == undefined || this.dbName == undefined) {
+
+            if (this.dbHost == undefined || this.dbUser == undefined || this.dbPassword == undefined || this.dbName == undefined || jwtCertPath == undefined) {
                 throw new Error("Config incomplete!");
             }
+
+            this.jwtCert = fs.readFileSync(jwtCertPath);
 
 
         }
