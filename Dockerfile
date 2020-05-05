@@ -1,4 +1,4 @@
-FROM node:12 AS builder
+FROM node:12.16.2 AS builder
 
 EXPOSE 80
 COPY src /app/src
@@ -10,13 +10,13 @@ WORKDIR /app
 RUN npm install . 
 RUN npm run-script build
 
-FROM node:12 AS tester
+FROM node:12.16.2 AS tester
 COPY --from=builder /app /app
 COPY test /app/test
 WORKDIR /app
 RUN node . test/testConfig.json & npm test && kill $!
 
-FROM node:12-alpine AS runner
+FROM node:12.16.2-alpine AS runner
 EXPOSE 80
 COPY --from=builder /app/.build /app/.build
 COPY --from=builder /app/package.json /app/package.json
