@@ -3,6 +3,7 @@ import * as cookieParser from 'cookie-parser';
 import Log from './log';
 import bodyParser = require('body-parser');
 import AuthMiddleware from './handler/authMiddleware';
+import LogMiddleware from './handler/logMiddleware';
 import {Config} from "./config";
 import * as mongoose from 'mongoose';
 import * as WebSocket from 'ws';
@@ -63,6 +64,7 @@ class HopperApp {
             return false;
         }
 
+        this.server.use(LogMiddleware.log());
         this.server.use('/v1', new GeneralHandler().getRouter());
         this.server.use('/v1', new SPHandler(this.webSocketManager).getRouter());
 
