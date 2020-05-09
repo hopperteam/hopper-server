@@ -314,7 +314,7 @@
 							"    pm.response.to.have.jsonBody(\"id\");",
 							"});",
 							"pm.collectionVariables.set(\"notificationId\", pm.response.json().id);",
-							"if (pm.collectionVariables.get(\"deleteInstantly\") === true) {",
+							"if (pm.collectionVariables.get(\"deleteInstantly\") == 'true') {",
 							"    postman.setNextRequest(\"/notification (App)\");",
 							"}"
 						],
@@ -403,8 +403,8 @@
 					"script": {
 						"id": "d2c20acb-0fc5-4b51-b485-f7765ee3c2c7",
 						"exec": [
-							"if (pm.collectionVariables.get(\"deleteInstantly\") === true) {",
-							"    pm.collectionVariables.set(\"deleteInstantly\", false);",
+							"if (pm.collectionVariables.get(\"deleteInstantly\") == 'true') {",
+							"    pm.collectionVariables.set(\"deleteInstantly\", 'false');",
 							"    postman.setNextRequest(\"/notification (Create)\");",
 							"}"
 						],
@@ -730,33 +730,33 @@
 	],
 	"variable": [
 		{
-			"id": "b70481cb-6448-4eba-be4c-56ad1d67641b",
+			"id": "b05a5368-f699-4087-b1ea-dde09e8efe60",
 			"key": "api-entry",
 			"value": "/v1",
 			"type": "string"
 		},
 		{
-			"id": "04eabd45-ae00-41c6-b03a-89cff31aa0d5",
+			"id": "6226e4c6-f356-4ba3-b82e-421cf57f6efe",
 			"key": "appId",
 			"value": "5eb6cafd4e05a32868462625",
 			"type": "string"
 		},
 		{
-			"id": "f2353387-693b-42d4-a3c9-515410b8647a",
+			"id": "4e12dbb0-a354-47f8-b28c-f365975deb80",
+			"key": "deleteInstantly",
+			"value": "true",
+			"type": "string"
+		},
+		{
+			"id": "bf68adfb-eb29-4d9d-954a-cae15a32a05d",
 			"key": "subscriptionId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "87d443ff-9d7b-4740-a00d-d51b2e33535e",
+			"id": "59a6c58a-f1d7-4cb6-ab07-6dec194c532b",
 			"key": "notificationId",
 			"value": "",
-			"type": "string"
-		},
-		{
-			"id": "ab728d13-1dd8-4601-bfb6-7d4e911271e1",
-			"key": "deleteInstantly",
-			"value": "true",
 			"type": "string"
 		}
 	],
