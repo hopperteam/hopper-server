@@ -44,7 +44,7 @@ AppSchema.path('baseUrl').validate(function(baseUrl: string){
 AppSchema.path('manageUrl').validate(function(manageUrl: string){
     return validator.isURL(manageUrl, {
         require_protocol: true,
-        protocols: ['https']
+        protocols: ['https', 'http']
     });
 });
 AppSchema.path('contactEmail').validate(function(contactEmail: string){
