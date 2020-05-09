@@ -4,7 +4,7 @@
   "description": "",
   "main": ".build/main.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest && newman run --environment ./test/hopper-env-local.postman_environment.json ./test/hopper.postman_collection.json --reporters teamcity,cli",
     "coverage": "jest --coverage",
     "build": "rm -rf .build ; tsc && cp -r dependencies .build/dependencies",
     "start": "rm -rf .build ; tsc && cp -r dependencies .build/dependencies && node . localFiles/debugConfig.json"
