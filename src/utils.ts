@@ -1,5 +1,6 @@
 ﻿import * as express from 'express';
 import * as crypto from 'crypto';
+import validator from 'validator';
 
 import Log from './log';
 
@@ -38,4 +39,15 @@ export function decryptContent(key: string, content: any): any {
         throw new Error("Verification failed");
 
     return content.data;
+}
+
+// Validators
+export function isUrl(url: string): boolean {
+    return validator.isURL(url, {
+        require_protocol: true,
+        protocols: ['https', 'http']
+    });
+}
+export function isEmail(email: string): boolean {
+    return validator.isEmail(email);
 }

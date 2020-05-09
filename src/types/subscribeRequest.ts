@@ -1,4 +1,5 @@
-﻿
+﻿import { isUrl } from "../utils";
+
 export default class SubscribeRequest {
     readonly id: string;
     readonly callback: string;
@@ -14,8 +15,11 @@ export default class SubscribeRequest {
 
     public static fromRequestBody(json: any): SubscribeRequest {
         if (json.id == null || json.callback == null || json.requestedInfos == null) {
-            throw new Error("Required attributes for SubscribeRequest missing")
+            throw new Error("Required attributes for SubscribeRequest missing");
         }
+        if (!isUrl(json.callback))
+            throw new Error("Callback is not a valid URL");
+
         return new SubscribeRequest(
             json.id,
             json.callback,
