@@ -11,11 +11,7 @@ export function setMonitoringLogger(func: (logLevel: number, module: string, mes
 
 let monitoringLogger: (logLevel: number, module: string, message: string, timestamp: number) => void = function() {};
 
-function persist(entry: string) {
-    // persist log entry in database or log files
-}
-
-function getTimestamp() {
+function getTimestamp(): string {
     let date = new Date();
     let year: number = date.getUTCFullYear();
     let month: number = date.getUTCMonth() + 1;
@@ -30,7 +26,6 @@ function getTimestamp() {
 function log(logLevel: LogLevel, levelNo: number, module: string, message: string) {
     monitoringLogger(levelNo, module.trim(), message, Date.now());
     let entry = `(${getTimestamp()}) [${logLevel}] ${module}: ${message}`;
-    persist(entry);
     console.log(entry);
 }
 

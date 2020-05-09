@@ -718,8 +718,8 @@
 				"id": "39fd88cf-c3cf-48a6-b2a5-c917f7861a7b",
 				"type": "text/javascript",
 				"exec": [
-					"pm.test(\"Response time is less than 150ms\", function () {",
-					"    pm.expect(pm.response.responseTime).to.be.below(150);",
+					"pm.test(\"Response time is less than 200ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(200);",
 					"});",
 					"pm.test(\"Status code is 200\", function () {",
 					"    pm.response.to.have.status(200);",
@@ -730,31 +730,31 @@
 	],
 	"variable": [
 		{
-			"id": "2d18aafd-e2da-41b0-a56f-5f13e05211c4",
+			"id": "b70481cb-6448-4eba-be4c-56ad1d67641b",
 			"key": "api-entry",
 			"value": "/v1",
 			"type": "string"
 		},
 		{
-			"id": "d7c39f14-8ecb-4e28-a197-7872b6fe2436",
+			"id": "04eabd45-ae00-41c6-b03a-89cff31aa0d5",
 			"key": "appId",
 			"value": "5eb6cafd4e05a32868462625",
 			"type": "string"
 		},
 		{
-			"id": "14c9d8b4-9671-4c35-aa8a-5d9f67862b7d",
+			"id": "f2353387-693b-42d4-a3c9-515410b8647a",
 			"key": "subscriptionId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "fe71c7e7-ed30-42c1-aa52-3476c9eea767",
+			"id": "87d443ff-9d7b-4740-a00d-d51b2e33535e",
 			"key": "notificationId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "f19723a1-ca4d-4e15-99e0-be8f54322349",
+			"id": "ab728d13-1dd8-4601-bfb6-7d4e911271e1",
 			"key": "deleteInstantly",
 			"value": "true",
 			"type": "string"
