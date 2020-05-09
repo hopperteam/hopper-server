@@ -1,5 +1,5 @@
 ﻿import * as express from 'express';
-import Session from '../types/session';
+import Session, { SessionUser } from '../types/session';
 import * as utils from '../utils';
 
 import Log from '../log';
@@ -41,6 +41,25 @@ export default class AuthMiddleware {
                 }
                 
                 req.session = session;
+                next();
+            } catch (e) {
+                utils.handleError(e, log, res, 401);
+            }
+        }
+    }
+
+    public static authMock(): express.Handler {
+        return async function (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+            try {
+                let sessionUser: SessionUser = {
+                    id: "testUser",
+                    email: "testuser@hoppercloud.net",
+                    firstName: "Test",
+                    lastName: "User",
+                    roles: ["User"]
+                };
+
+                req.session = new Session("test", sessionUser);
                 next();
             } catch (e) {
                 utils.handleError(e, log, res, 401);
