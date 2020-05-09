@@ -1,4 +1,5 @@
 ﻿import * as mongoose from 'mongoose';
+import validator from 'validator';
 
 interface IApp extends mongoose.Document {
     name: string;
@@ -25,6 +26,29 @@ const AppSchema = new mongoose.Schema({
 AppSchema.set('toJSON', {
     virtuals: true,
     transform: function (doc, ret) { delete ret._id }
+});
+
+// Validators
+AppSchema.path('imageUrl').validate(function(imageUrl: string){
+    return validator.isURL(imageUrl, {
+        require_protocol: true,
+        protocols: ['https']
+    });
+});
+AppSchema.path('baseUrl').validate(function(baseUrl: string){
+    return validator.isURL(baseUrl, {
+        require_protocol: true,
+        protocols: ['https']
+    });
+});
+AppSchema.path('manageUrl').validate(function(manageUrl: string){
+    return validator.isURL(manageUrl, {
+        require_protocol: true,
+        protocols: ['https']
+    });
+});
+AppSchema.path('contactEmail').validate(function(contactEmail: string){
+    return validator.isEmail(contactEmail);
 });
 
 const App = mongoose.model<IApp>("App", AppSchema);
