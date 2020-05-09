@@ -14,12 +14,6 @@
 					"script": {
 						"id": "64ae1213-d153-4cb5-9bd7-795bcb69178f",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							"pm.collectionVariables.unset(\"subscriptionId\");",
 							"pm.collectionVariables.unset(\"notificationId\");",
 							""
@@ -87,12 +81,7 @@
 					"script": {
 						"id": "47daa950-bd70-491e-b813-0240fc374dfe",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -145,12 +134,6 @@
 					"script": {
 						"id": "dae91d41-e6b6-46bc-8c86-7ef8d6ad0937",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							"pm.test(\"Has correct Id\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"appId\"));",
@@ -197,12 +180,6 @@
 					"script": {
 						"id": "7bdc1eef-ee93-4fdf-8dfc-d7705abb7bdd",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -244,12 +221,6 @@
 					"script": {
 						"id": "8ab1c3b9-85d6-43a4-b35e-ec935ca3ec1f",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -290,13 +261,7 @@
 					"script": {
 						"id": "ab802836-f16e-488f-90dd-6e9592012924",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"pm.test(\"Body has subscriptionId\", function() {",
+							"pm.test(\"Body has subscriptionId\", function () {",
 							"    pm.response.to.have.jsonBody(\"subscriptionId\");",
 							"})",
 							"pm.collectionVariables.set(\"subscriptionId\", pm.response.json().subscriptionId);"
@@ -345,12 +310,6 @@
 					"script": {
 						"id": "745a2ae9-7d0d-4b10-81a4-13eaa7ea8ffe",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							"pm.test(\"Body has id\", function () {",
 							"    pm.response.to.have.jsonBody(\"id\");",
 							"});",
@@ -398,12 +357,6 @@
 					"script": {
 						"id": "c10c96de-5327-44f7-98e2-5bb0743f4bb7",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							"postman.setNextRequest(\"/apps\");"
 						],
 						"type": "text/javascript"
@@ -450,12 +403,6 @@
 					"script": {
 						"id": "d2c20acb-0fc5-4b51-b485-f7765ee3c2c7",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							"if (pm.collectionVariables.get(\"deleteInstantly\") === true) {",
 							"    pm.collectionVariables.set(\"deleteInstantly\", false);",
 							"    postman.setNextRequest(\"/notification (Create)\");",
@@ -495,12 +442,6 @@
 					"script": {
 						"id": "c0710587-c52f-4649-a637-1ee24d5e364f",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -537,12 +478,6 @@
 					"script": {
 						"id": "b01703a1-af2b-4dc8-9dc9-685209f75dd0",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -573,12 +508,6 @@
 					"script": {
 						"id": "fbd4dc68-e75c-403a-95c8-26d76506ad3e",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -623,12 +552,6 @@
 					"script": {
 						"id": "481c48b2-6231-44df-afd3-82db6aec706b",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -671,12 +594,6 @@
 					"script": {
 						"id": "f3e578b4-68ea-4efb-b173-86983c1dbfac",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -719,12 +636,6 @@
 					"script": {
 						"id": "2948a2bc-1a3c-4436-9556-f4d5d15449d3",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -761,12 +672,6 @@
 					"script": {
 						"id": "ecc7f8ff-17d8-4b30-92c0-ede7a40f6e3e",
 						"exec": [
-							"pm.test(\"Response time is less than 100ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(100);",
-							"});",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
 							""
 						],
 						"type": "text/javascript"
@@ -813,38 +718,43 @@
 				"id": "39fd88cf-c3cf-48a6-b2a5-c917f7861a7b",
 				"type": "text/javascript",
 				"exec": [
-					""
+					"pm.test(\"Response time is less than 150ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(150);",
+					"});",
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
 				]
 			}
 		}
 	],
 	"variable": [
 		{
-			"id": "321773c7-7e75-473f-9bbd-bddee19d4ac7",
+			"id": "2d18aafd-e2da-41b0-a56f-5f13e05211c4",
 			"key": "api-entry",
 			"value": "/v1",
 			"type": "string"
 		},
 		{
-			"id": "3095c8bb-5ef6-47ca-8aff-a45be0681ec4",
+			"id": "d7c39f14-8ecb-4e28-a197-7872b6fe2436",
 			"key": "appId",
 			"value": "5eb6cafd4e05a32868462625",
 			"type": "string"
 		},
 		{
-			"id": "30f4f58e-2deb-4d9a-83b8-ae225a54e7b4",
+			"id": "14c9d8b4-9671-4c35-aa8a-5d9f67862b7d",
 			"key": "subscriptionId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "bcadcfb3-859f-4e4e-b76d-488349700ef7",
+			"id": "fe71c7e7-ed30-42c1-aa52-3476c9eea767",
 			"key": "notificationId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "67e08185-9baa-4e81-a3d0-c4a13618f3d5",
+			"id": "f19723a1-ca4d-4e15-99e0-be8f54322349",
 			"key": "deleteInstantly",
 			"value": "true",
 			"type": "string"
