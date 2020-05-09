@@ -32,6 +32,7 @@ export default class NotificationHandler extends Handler {
             // it does not depend on the actual value of the query parameter
             // possible fix: include express query boolean parser as middleware and rework this logic
             let arr = await Notification.find(criteria, { isArchived: 0, userId: 0 }).skip(skip).limit(limit);
+            log.info("Got all");
             res.json(arr);
         } catch (e) {
             utils.handleError(e, log, res);
@@ -45,6 +46,7 @@ export default class NotificationHandler extends Handler {
                 throw new Error("Could not find notification");
 
             this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.user.id, req.session.id);
+            log.info("Marked as done: " + JSON.stringify(notification));
             res.json({
                 "status": "success"
             });
@@ -60,7 +62,7 @@ export default class NotificationHandler extends Handler {
                 throw new Error("Could not find notification");
 
             this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.user.id, req.session.id);
-
+            log.info("Marked as undone: " + JSON.stringify(notification));
             res.json({
                 "status": "success"
             });
@@ -75,6 +77,7 @@ export default class NotificationHandler extends Handler {
             if (!notification)
                 throw new Error("Could not find notification");
             this.webSocketManager.deleteNotification(notification._id, req.session.user.id, req.session.id);
+            log.info("Deleted notification: " + JSON.stringify(notification));
             res.json({
                 "status": "success"
             });

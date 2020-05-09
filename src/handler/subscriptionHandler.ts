@@ -27,6 +27,7 @@ export default class SubscriptionHandler extends Handler {
             let app = await App.findById(req.query.id, { contactEmail: 0, cert: 0 });
             if (!app)
                 throw new Error("Could not find app");
+            log.info("Got app: " + JSON.stringify(app));
             res.json(app);
         } catch (e) {
             utils.handleError(e, log, res);
@@ -36,6 +37,7 @@ export default class SubscriptionHandler extends Handler {
     private async getSubscriptions(req: express.Request, res: express.Response): Promise<void> {
         try {
             let subs = await Subscription.find({ userId: req.session.user.id }, { userId: 0 }).populate('app', { contactEmail: 0, cert: 0 });
+            log.info("Got all");
             res.json(subs);
         } catch (e) {
             utils.handleError(e, log, res);
@@ -44,9 +46,10 @@ export default class SubscriptionHandler extends Handler {
 
     private async deleteSubscription(req: express.Request, res: express.Response): Promise<void> {
         try {
-            await Subscription.findByIdAndDelete(req.query.id);
+            let subscription = await Subscription.findByIdAndDelete(req.query.id);
 
             this.webSocketManager.deleteSubscription(req.query.id, req.session.user.id, req.session.id);
+            log.info("Deleted subscription: " + JSON.stringify(subscription));
             res.json({
                 "status": "success"
             });
@@ -62,6 +65,7 @@ export default class SubscriptionHandler extends Handler {
                 throw new Error("Could not find app");
             let data = utils.decryptContent(app.cert, req.query.content);
             let request: SubscribeRequest = SubscribeRequest.fromRequestBody(data);
+            log.info("Parsed subscription request: " + JSON.stringify(request));
             res.json({
                 "status": "success",
                 "subscribeRequest": request
@@ -80,6 +84,7 @@ export default class SubscriptionHandler extends Handler {
             let subscription = await Subscription.create({ userId: req.session.user.id, accountName: data.accountName, app: app._id });
 
             this.webSocketManager.loadAndCreateSubscriptionInBackground(subscription._id, req.session.user.id);
+            log.info("Created subscription: " + JSON.stringify(subscription));
             res.json({
                 "status": "success",
                 "subscriptionId": subscription._id

@@ -22,6 +22,7 @@ export default class UserHandler extends Handler {
                 "lastName": req.session.user.lastName,
                 "email": req.session.user.email
             });
+            log.info("Got user information");
         } catch (e) {
             utils.handleError(e, log, res);
         }
