@@ -1,858 +1,83 @@
 {
 	"info": {
-		"_postman_id": "2dc67040-6b2b-42d1-9e34-26c8f5925ad2",
-		"name": "hopper runner collection",
+		"_postman_id": "3cefe2c6-39b0-43dd-a2d3-d60d2dcec813",
+		"name": "hopper-test",
 		"description": "This is the API documentation for the hopper project.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "General",
-			"item": [
+			"name": "/",
+			"event": [
 				{
-					"name": "/",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "de362b41-8751-4492-a30f-1afc87819f18",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"pm.collectionVariables.unset(\"token\");"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "1ffe4e29-d066-4e05-9045-816528b31b4d",
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
+					"listen": "test",
+					"script": {
+						"id": "64ae1213-d153-4cb5-9bd7-795bcb69178f",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.collectionVariables.unset(\"subscriptionId\");",
+							"pm.collectionVariables.unset(\"notificationId\");",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "947c6c92-64a6-4e97-94f2-47bd01ce0559",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/",
+					"host": [
+						"{{api-url}}"
 					],
-					"request": {
+					"path": [
+						""
+					]
+				},
+				"description": "- ping the hopper backend"
+			},
+			"response": [
+				{
+					"name": "/ v1",
+					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{api-url}}/",
+							"raw": "{{base-url}}/api/v1/",
 							"host": [
-								"{{api-url}}"
+								"{{base-url}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								""
 							]
-						},
-						"description": "- ping the hopper backend"
+						}
 					},
-					"response": [
-						{
-							"name": "/ v1",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base-url}}/api/v1/",
-									"host": [
-										"{{base-url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										""
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\n    \"version\": \"1.0\",\n    \"type\": \"mock\"\n}"
-						}
-					]
-				},
-				{
-					"name": "/register",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "2385947d-222c-4a47-84db-8512e572b810",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"testuser@hoppercloud.net\",\n    \"password\": \"strongPassword\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\"\n}"
-						},
-						"url": {
-							"raw": "{{api-url}}/register",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"register"
-							]
-						},
-						"description": "- register a new user"
-					},
-					"response": [
-						{
-							"name": "/register v1",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@email.com\",\n\t\"password\": \"password\",\n\t\"firstName\": \"first\",\n\t\"lastName\": \"last\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base-url}}/api/v1/register",
-									"host": [
-										"{{base-url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"register"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\r\n    \"status\": \"success\"\r\n}"
-						}
-					]
-				},
-				{
-					"name": "/forgetPassword",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "5c08c733-6636-4665-8167-476850e1af43",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"email\": \"test@email.com\"\n}"
-						},
-						"url": {
-							"raw": "{{api-url}}/forgetPassword",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"forgetPassword"
-							]
-						},
-						"description": "- reset password of the user"
-					},
-					"response": [
-						{
-							"name": "/forgetPassword v1",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@email.com\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base-url}}/api/v1/forgetPassword",
-									"host": [
-										"{{base-url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"forgetPassword"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\r\n    \"status\": \"success\"\r\n}"
-						}
-					]
-				},
-				{
-					"name": "/login",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "3831e8fd-233e-4220-a345-858e755cbb08",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"pm.test(\"Body has token\", function() {",
-									"    pm.response.to.have.jsonBody(\"token\");",
-									"})",
-									"pm.collectionVariables.set(\"token\", pm.response.json().token);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"testuser@hoppercloud.net\",\n    \"password\": \"strongPassword\"\n}"
-						},
-						"url": {
-							"raw": "{{api-url}}/login",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"login"
-							]
-						},
-						"description": "- allows a user to login to hopper"
-					},
-					"response": [
-						{
-							"name": "/login v1",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@email.com\",\n\t\"password\": \"password\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base-url}}/api/v1/login",
-									"host": [
-										"{{base-url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"login"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Access-Control-Allow-Origin",
-									"value": "*"
-								},
-								{
-									"key": "Content-Encoding",
-									"value": "gzip"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 27 Oct 2019 09:40:43 GMT"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"b3-RrUruFDD3o1fszrBPE3YI7WNLac\""
-								},
-								{
-									"key": "Server",
-									"value": "nginx"
-								},
-								{
-									"key": "Vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "x-srv-span",
-									"value": "v=1;s=98437e3673173a46"
-								},
-								{
-									"key": "x-srv-trace",
-									"value": "v=1;t=2bacf895a198eda5"
-								},
-								{
-									"key": "Content-Length",
-									"value": "161"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\r\n    \"status\": \"success\"\r\n}"
-						}
-					]
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"version\": \"1.0\",\n    \"type\": \"mock\"\n}"
 				}
-			],
-			"description": "These routes can be done without a valid session.",
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "User Management",
-			"item": [
-				{
-					"name": "/user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "88722d49-e3a2-4b6e-b90b-466fdb43911a",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api-url}}/user",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"user"
-							]
-						},
-						"description": "- get the current user based on the current session"
-					},
-					"response": [
-						{
-							"name": "/user v1",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base-url}}/api/v1/user",
-									"host": [
-										"{{base-url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"user"
-									]
-								}
-							},
-							"_postman_previewlanguage": "json",
-							"header": [],
-							"cookie": [],
-							"body": "{\n\t\"email\": \"test@email.com\",\n\t\"firstName\": \"first\",\n\t\"lastName\": \"last\"\n}"
-						}
-					]
-				},
-				{
-					"name": "/user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "8646d36b-4036-4d94-b016-a43951396aae",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"password\": \"strongerPassword\"\n}"
-						},
-						"url": {
-							"raw": "{{api-url}}/user",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"user"
-							]
-						},
-						"description": "- edit details of the user"
-					},
-					"response": []
-				}
-			],
-			"description": "The management of specific users requires a valid session.",
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{token}}",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "6fcbb37b-6e7b-43e3-a049-078d02cfe7e2",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "c1ee1b71-035f-435b-af8f-a4e72f22bbcb",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Service Provider Communication",
-			"item": [
-				{
-					"name": "/app",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "f97f1123-98aa-4be6-b67f-e92e1a4b8b8d",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"pm.test(\"Body has id\", function() {",
-									"    pm.response.to.have.jsonBody(\"id\");",
-									"})",
-									"pm.collectionVariables.set(\"appId\", pm.response.json().id);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"name\": \"TestApp\",\n\t\"baseUrl\": \"www.baseurl.com\",\n\t\"imageUrl\": \"https://www.baseurl.com/path/to/image.png\",\n\t\"manageUrl\": \"https://www.baseurl.com/manage\",\n\t\"contactEmail\": \"support@TestApp.com\",\n\t\"cert\": \"LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF2ZmhORmJoQ2dldTNxNFB4d2pYRApOa29rY0ZiTmtYTUc0MGc3TUpRMVYwM2h4MDVqQmdUV0U1YjJSVUZGZUNiM3JlV3pDQVpUNmx6OE1FejJZSWlsCmhtZTJnUFYyd3BvVUpyK2tmU0EvMGk0b1R4Yk1mdnd6NGtqZkdrbG1hN3dPQzliTGZEYUUxeHdycHMyWWZrWnQKalc5ei9LalpCYXJ3a2UxdGZiUDUvclAwZGVwL1lSUUlrcExqTmplanQ5VjU2ekp6L2tuSDNHS1dDc1V0bFB2eApVRjNSRkJmOUJYYzIvSUthR0lPV1ZxdHVib1V5RFRMMk5ickFkd0pNeWV5bEIzWWxKRDJkN2kwcE1acXZBWWx3CjVsVWVnOW5UTmJtYWg0TEdFeHBTWExqY01jbVNnU0JSWjhiL3V5YlNHcE90S3FGdlBPVXQweEtsNDlqU0xuQmYKV3dJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==\"\n}"
-						},
-						"url": {
-							"raw": "{{api-url}}/app",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"app"
-							]
-						},
-						"description": "- register new service provider to hopper"
-					},
-					"response": []
-				},
-				{
-					"name": "/app",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "c8c0e6d1-96ef-4fbb-a5ae-117ee312ee4b",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"id\": \"{{appId}}\",\n\t\"content\": \"eyJ2ZXJpZnkiOiJyQ0wyeTFQSVM5WkpqZDEvYXJVZjBVRVNUMVlOY1NmRWEvYjYwUzkwZDFOTXRPWWVXc0hnaWxjZ2JSeUFFVGdVREtJam52Y3NFT1EybGZSV1QrMkt4UVZoQ3lINlJwUE5yT1RlQ2ZGT2U4R1JwTEl0YkE4VS9YOW01K3QvMUxJOGJtenpmaVZrLzhFTjk4cHBTbjRRS1BQSndCSmNvcVo4dTNHbFBlbFhSclA4bk13UXBDeWZad0dXSWlvN2RKOWgyZ3hXeHQzR2ZQMmQ2cjNMV1JvWGdDMkpFejN5ZW50RGpERit1T3hrN1pKQ1Y3TWxhd3lzNjZncGliSllLVWVwMXNsOGNSaTZkZDI5dHUyRm8vUmRYR2FtWkM5TXhRS2NDdEljUHRBQzQ3amxNWjF0WEZxT1NtdVlJNDB3MnZvVGZoMGh4dU9Pdnp1a1NMRDF1bjB4NlE9PSIsImRhdGEiOnsibmFtZSI6Ik1vZGVybkFwcCIsImJhc2VVcmwiOiJ3d3cuYmFzZXVybC5jb20iLCJpbWFnZVVybCI6Imh0dHBzOi8vd3d3LmJhc2V1cmwuY29tL3BhdGgvdG8vYmlsZC5wbmciLCJtYW5hZ2VFbWFpbCI6InN1cHBvcnRATW9kZXJuQXBwLmNvbSJ9fQ==\"\n}"
-						},
-						"url": {
-							"raw": "{{api-url}}/app",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"app"
-							]
-						},
-						"description": "- update details of a service provider"
-					},
-					"response": []
-				}
-			],
-			"description": "The following request can be used by a service provider to communicate with the backend.",
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Subscription Management",
-			"item": [
-				{
-					"name": "/apps",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "0f053d7d-64f6-4e05-87b1-94256f16e741",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api-url}}/apps?id={{appId}}",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"apps"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "{{appId}}"
-								}
-							]
-						},
-						"description": "- get all apps associated with the current user"
-					},
-					"response": []
-				},
-				{
-					"name": "/subscriptions",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "c3dfae61-1ca5-485f-8383-547ca409f49a",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api-url}}/subscriptions",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"subscriptions"
-							]
-						},
-						"description": "- get all subscriptions of the user\n- contains the apps"
-					},
-					"response": []
-				}
-			],
-			"description": "The management of the service providers for one user requires a valid session.",
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{token}}",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "e83613fb-927e-4b10-bd8e-ad6b2191fbe4",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "b4690ecf-c869-4445-861c-64a3807875ec",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Notification Management",
-			"item": [
-				{
-					"name": "/notifications",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "2066b7df-b174-43f6-a6ac-7d689a637b73",
-								"exec": [
-									"pm.test(\"Response time is less than 100ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(100);",
-									"});",
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api-url}}/notifications?limit=10&skip=0&includeDone=true&subscription=5dc301f5485f720ff41bfd4d",
-							"host": [
-								"{{api-url}}"
-							],
-							"path": [
-								"notifications"
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "10"
-								},
-								{
-									"key": "skip",
-									"value": "0"
-								},
-								{
-									"key": "includeDone",
-									"value": "true"
-								},
-								{
-									"key": "subscription",
-									"value": "5dc301f5485f720ff41bfd4d"
-								}
-							]
-						},
-						"description": "- get notifications of user with\n- limit?\n- offset?\n- app?: id of specific app"
-					},
-					"response": []
-				}
-			],
-			"description": "The management of the notification of one user requires a valid session.",
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{token}}",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "88454e2d-a89f-4f0e-87dc-5072d49e00c0",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "63cd6904-4bb3-4432-ab66-6fbb1bcd9089",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "/user",
@@ -860,7 +85,117 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "057e4ddc-48d1-4f30-ac76-df4a17526b10",
+						"id": "47daa950-bd70-491e-b813-0240fc374dfe",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/user",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"user"
+					]
+				},
+				"description": "- get the current user based on the current session"
+			},
+			"response": [
+				{
+					"name": "/user v1",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/api/v1/user",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n\t\"email\": \"test@email.com\",\n\t\"firstName\": \"first\",\n\t\"lastName\": \"last\"\n}"
+				}
+			]
+		},
+		{
+			"name": "/app",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dae91d41-e6b6-46bc-8c86-7ef8d6ad0937",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Has correct Id\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"appId\"));",
+							"    pm.collectionVariables.set(\"appId\", jsonData.id);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"_id\": \"5eb6cafd4e05a32868462625\",\n\t\"name\": \"TestApp\",\n\t\"baseUrl\": \"https://www.baseurl.com\",\n\t\"imageUrl\": \"https://www.baseurl.com/path/to/image.png\",\n\t\"contactEmail\": \"support@TestApp.com\",\n\t\"cert\": \"LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklUQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FRNEFNSUlCQ1FLQ0FRQjBkSlVGcEVMemptNDVyQVRKVmgzanBDVVFCRkIwN1k2Z09FOXN3YzJYSTF4ejMySFFKUVdNQzV4aVRZQlV4VjM2bEkxNUJGSlIwck9nTUpCeVZxUVNqdUhjT0pYT0hpT0tmSi9CcEJjMVJEUXMxdVBWU3MzSTVPL1plelo3bWExcllMaTh1Vko2bllWZ09zbFZpV3ErME1yWHJwRmZVaGI3TXQzdGhGcHF3djU4WDgxTC9SVk5kVEpyeU1XdldPSHJlUFBGMmVNMitHeGJwZy9VODArUTJIcVhzZlQwYnh5S0taa291dndSSzRqQ2pzWVhzMURrMGVyMWI1dkdrTnA5T09hTlRDQThtM1lPcmZOMVo2TzBZRXFLTUFBYTdnVzVheDdxbCtXZ0NlcENJdTl1R2pQZDE4clNuYVkreVFkRHIwRWlta3RyNjdnWlAwM1BJZE5QQWdNQkFBRT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0t\"\n}"
+				},
+				"url": {
+					"raw": "{{api-url}}/app",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"app"
+					]
+				},
+				"description": "- register new service provider to hopper"
+			},
+			"response": []
+		},
+		{
+			"name": "/app",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7bdc1eef-ee93-4fdf-8dfc-d7705abb7bdd",
 						"exec": [
 							"pm.test(\"Response time is less than 100ms\", function () {",
 							"    pm.expect(pm.response.responseTime).to.be.below(100);",
@@ -875,28 +210,588 @@
 				}
 			],
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"{{appId}}\",\n\t\"content\": \"eyJ2ZXJpZnkiOiJBemtiMWF0NFdBc2VVeXNxeGNQTytRcFQrVjhqQk1HazVyUHo0S3BOTThKM09ZZ2o0ajY5cFJnN0VDVytxZHB6WXVIdXJrdXpkaStCMWRsUG5zaVFxTGxVa0c3NE9XZE0zYXA1TnArMVlvcWV0NTRUdVpPVkMzZ1dXWHRUdGVpeFZpK1l4MlQ2dTVCaXBSN1lsSVlaNjZaaEE3R2F1bVBRVi9GdHg0ZjRpSnZOdjhWd1ZFY0ZUeWkrbStPMFcxOUdMS0llV0NEY0JrQlFNbHZrdWVVanpKd3ExRGVxUDE3azFsVEZ0L2ZQanBNT3NjY1Fqd1RCWEtqTG5JU3pwS2tTUlZOZkJKdG96cGY0Uks2bGV5M2FUK1hyUEVwcitPS1Q5c2RHS2tDK1JvWkk1WkJoanNsbzJxWUdVTWRNWmgrLy92L3UrNWlVdzBSQkI4SmRmVGlFamc9PSIsImRhdGEiOnsibWFuYWdlVXJsIjoiaHR0cHM6Ly90ZXN0QXBwLmNvbS9tYW5hZ2UifX0=\"\n}"
 				},
-				"method": "DELETE",
-				"header": [],
 				"url": {
-					"raw": "{{api-url}}/user",
+					"raw": "{{api-url}}/app",
 					"host": [
 						"{{api-url}}"
 					],
 					"path": [
-						"user"
+						"app"
 					]
 				},
-				"description": "- delete users account "
+				"description": "- update details of a service provider"
+			},
+			"response": []
+		},
+		{
+			"name": "/subscribeRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8ab1c3b9-85d6-43a4-b35e-ec935ca3ec1f",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/subscribeRequest?id={{appId}}&content=eyJ2ZXJpZnkiOiJQaEwrS1BvUDhSYjA5VEVQMUZMRENhT3NFU2dpYW5KZVM1amZQNjJ2YklDbmlIcFVuUnkvZ0NDQXFqc1BvSzRvVEFIWEhVVU5oTVBRSmFQYkthMmw0YURoeTVzTXpkWEdiVitNbER4YXE0d3BpSkZCY25YSVNkcEFEaHBJcVFKY0VMeHp3YTdOcnRJdjdDOWxpSzBFMkx2Y0tVcHZJSVdYWEphMG5XcmVMRTlUMGgxZjhOZ0pkVHZTWlVPb2dHamxlTlF0QU9WRFdkS1NLRHFlK3F0YlU1dnVobkkyR1g2djlOOHBnM1lwM0hJUEltazdjYzNkVk94YXJaenlkZjJKTlJNTkRVYm5XMTJHeWczWnBJYWlhZCtRNzZZZk0rS0c0TXIzRFBneGo1VjZmZTN3NHZKdWlrZVQ3ZWZvL3lnd0lQTVgzV0x0MVBrZjM4d2c3MmU3WFE9PSIsImRhdGEiOnsiaWQiOiI1ZWI2Y2FmZDRlMDVhMzI4Njg0NjI2MjUiLCJjYWxsYmFjayI6Imh0dHBzOi8vdGVzdEFwcC5jb20vY2FsbGJhY2siLCJhY2NvdW50TmFtZSI6IlRlc3RVc2VyIiwicmVxdWVzdGVkSW5mb3MiOlsibmFtZSIsImFkZHJlc3MiXX19",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"subscribeRequest"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{appId}}"
+						},
+						{
+							"key": "content",
+							"value": "eyJ2ZXJpZnkiOiJQaEwrS1BvUDhSYjA5VEVQMUZMRENhT3NFU2dpYW5KZVM1amZQNjJ2YklDbmlIcFVuUnkvZ0NDQXFqc1BvSzRvVEFIWEhVVU5oTVBRSmFQYkthMmw0YURoeTVzTXpkWEdiVitNbER4YXE0d3BpSkZCY25YSVNkcEFEaHBJcVFKY0VMeHp3YTdOcnRJdjdDOWxpSzBFMkx2Y0tVcHZJSVdYWEphMG5XcmVMRTlUMGgxZjhOZ0pkVHZTWlVPb2dHamxlTlF0QU9WRFdkS1NLRHFlK3F0YlU1dnVobkkyR1g2djlOOHBnM1lwM0hJUEltazdjYzNkVk94YXJaenlkZjJKTlJNTkRVYm5XMTJHeWczWnBJYWlhZCtRNzZZZk0rS0c0TXIzRFBneGo1VjZmZTN3NHZKdWlrZVQ3ZWZvL3lnd0lQTVgzV0x0MVBrZjM4d2c3MmU3WFE9PSIsImRhdGEiOnsiaWQiOiI1ZWI2Y2FmZDRlMDVhMzI4Njg0NjI2MjUiLCJjYWxsYmFjayI6Imh0dHBzOi8vdGVzdEFwcC5jb20vY2FsbGJhY2siLCJhY2NvdW50TmFtZSI6IlRlc3RVc2VyIiwicmVxdWVzdGVkSW5mb3MiOlsibmFtZSIsImFkZHJlc3MiXX19"
+						}
+					]
+				},
+				"description": "- decrypt data of subscribe request based on id of service provider"
+			},
+			"response": []
+		},
+		{
+			"name": "/subscribeRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab802836-f16e-488f-90dd-6e9592012924",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body has subscriptionId\", function() {",
+							"    pm.response.to.have.jsonBody(\"subscriptionId\");",
+							"})",
+							"pm.collectionVariables.set(\"subscriptionId\", pm.response.json().subscriptionId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"{{appId}}\",\n\t\"content\": \"eyJ2ZXJpZnkiOiJQaEwrS1BvUDhSYjA5VEVQMUZMRENhT3NFU2dpYW5KZVM1amZQNjJ2YklDbmlIcFVuUnkvZ0NDQXFqc1BvSzRvVEFIWEhVVU5oTVBRSmFQYkthMmw0YURoeTVzTXpkWEdiVitNbER4YXE0d3BpSkZCY25YSVNkcEFEaHBJcVFKY0VMeHp3YTdOcnRJdjdDOWxpSzBFMkx2Y0tVcHZJSVdYWEphMG5XcmVMRTlUMGgxZjhOZ0pkVHZTWlVPb2dHamxlTlF0QU9WRFdkS1NLRHFlK3F0YlU1dnVobkkyR1g2djlOOHBnM1lwM0hJUEltazdjYzNkVk94YXJaenlkZjJKTlJNTkRVYm5XMTJHeWczWnBJYWlhZCtRNzZZZk0rS0c0TXIzRFBneGo1VjZmZTN3NHZKdWlrZVQ3ZWZvL3lnd0lQTVgzV0x0MVBrZjM4d2c3MmU3WFE9PSIsImRhdGEiOnsiaWQiOiI1ZWI2Y2FmZDRlMDVhMzI4Njg0NjI2MjUiLCJjYWxsYmFjayI6Imh0dHBzOi8vdGVzdEFwcC5jb20vY2FsbGJhY2siLCJhY2NvdW50TmFtZSI6IlRlc3RVc2VyIiwicmVxdWVzdGVkSW5mb3MiOlsibmFtZSIsImFkZHJlc3MiXX19\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api-url}}/subscribeRequest",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"subscribeRequest"
+					]
+				},
+				"description": "- decrypt data of subscribe request based on id of service provider"
+			},
+			"response": []
+		},
+		{
+			"name": "/notification (Create)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "745a2ae9-7d0d-4b10-81a4-13eaa7ea8ffe",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Body has id\", function () {",
+							"    pm.response.to.have.jsonBody(\"id\");",
+							"});",
+							"pm.collectionVariables.set(\"notificationId\", pm.response.json().id);",
+							"if (pm.collectionVariables.get(\"deleteInstantly\") === true) {",
+							"    postman.setNextRequest(\"/notification (App)\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"subscriptionId\": \"{{subscriptionId}}\",\n\t\"notification\": {\n\t\t\"heading\": \"Whatsapp message\",\n\t\t\"timestamp\": 1573066333249,\n\t\t\"type\": \"default\",\n\t\t\"content\": \"Das geht ja wirklich. Unglaublich\",\n\t\t\"actions\": [\n\t\t\t{\n\t\t\t\t\"type\": \"submit\",\n\t\t\t\t\"url\": \"tbd\",\n\t\t\t\t\"markAsDone\": false,\n\t\t\t\t\"text\": \"submit nothing\"\n\t\t\t}\t\n\t\t]\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{api-url}}/notification",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"notification"
+					]
+				},
+				"description": "- push a notification to the hopper backend for the user"
+			},
+			"response": []
+		},
+		{
+			"name": "/notification",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c10c96de-5327-44f7-98e2-5bb0743f4bb7",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"postman.setNextRequest(\"/apps\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"{{notificationId}}\",\n\t\"notification\": {\n\t\t\"content\": \"Unglaublich! Sogar das put funktioniert wie Schmidt's Qualle\"\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api-url}}/notification",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"notification"
+					]
+				},
+				"description": "- edit details of notification with provided id which was already sent to the backend\n- id: id of notification to be edited"
+			},
+			"response": []
+		},
+		{
+			"name": "/notification (App)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d2c20acb-0fc5-4b51-b485-f7765ee3c2c7",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"if (pm.collectionVariables.get(\"deleteInstantly\") === true) {",
+							"    pm.collectionVariables.set(\"deleteInstantly\", false);",
+							"    postman.setNextRequest(\"/notification (Create)\");",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/notification?id={{notificationId}}",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"notification"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{notificationId}}"
+						}
+					]
+				},
+				"description": "- delete notification with the provided id\n- id: id of the notification to be deleted"
+			},
+			"response": []
+		},
+		{
+			"name": "/apps",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c0710587-c52f-4649-a637-1ee24d5e364f",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/apps?id={{appId}}",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"apps"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{appId}}"
+						}
+					]
+				},
+				"description": "- get all apps associated with the current user"
+			},
+			"response": []
+		},
+		{
+			"name": "/subscriptions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b01703a1-af2b-4dc8-9dc9-685209f75dd0",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/subscriptions",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"subscriptions"
+					]
+				},
+				"description": "- get all subscriptions of the user\n- contains the apps"
+			},
+			"response": []
+		},
+		{
+			"name": "/notifications",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fbd4dc68-e75c-403a-95c8-26d76506ad3e",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/notifications?limit=10&skip=0&includeDone=true",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"notifications"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "skip",
+							"value": "0"
+						},
+						{
+							"key": "includeDone",
+							"value": "true"
+						}
+					]
+				},
+				"description": "- get notifications of user with\n- limit?\n- offset?\n- app?: id of specific app"
+			},
+			"response": []
+		},
+		{
+			"name": "/notifications/done",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "481c48b2-6231-44df-afd3-82db6aec706b",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"{{notificationId}}\"\n}"
+				},
+				"url": {
+					"raw": "{{api-url}}/notifications/done",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"notifications",
+						"done"
+					]
+				},
+				"description": "- mark notification with specific id as done\n- id: unique id of notification"
+			},
+			"response": []
+		},
+		{
+			"name": "/notifications/undone",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f3e578b4-68ea-4efb-b173-86983c1dbfac",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"{{notificationId}}\"\n}"
+				},
+				"url": {
+					"raw": "{{api-url}}/notifications/undone",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"notifications",
+						"undone"
+					]
+				},
+				"description": "- mark notification with specific id as done\n- id: unique id of notification"
+			},
+			"response": []
+		},
+		{
+			"name": "/notifications",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2948a2bc-1a3c-4436-9556-f4d5d15449d3",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/notifications?id={{notificationId}}",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"notifications"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{notificationId}}"
+						}
+					]
+				},
+				"description": "- delete notification with id\n- id: id of notification"
+			},
+			"response": []
+		},
+		{
+			"name": "/subscriptions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ecc7f8ff-17d8-4b30-92c0-ede7a40f6e3e",
+						"exec": [
+							"pm.test(\"Response time is less than 100ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api-url}}/subscriptions?id={{subscriptionId}}",
+					"host": [
+						"{{api-url}}"
+					],
+					"path": [
+						"subscriptions"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{subscriptionId}}"
+						}
+					]
+				},
+				"description": "- unsubscribe the user\n- id: id of subscription"
 			},
 			"response": []
 		}
@@ -905,7 +800,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "a8063101-1d0d-49d9-9e8c-733e536052f2",
+				"id": "4e3ef70b-6edb-4f9e-9af9-d11e93f66397",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -915,7 +810,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "35b98aaa-8c3c-45d4-b1bd-f3854895e4fe",
+				"id": "39fd88cf-c3cf-48a6-b2a5-c917f7861a7b",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -925,27 +820,33 @@
 	],
 	"variable": [
 		{
-			"id": "6b4df163-0715-45dc-8c02-c23eace1d8d0",
+			"id": "321773c7-7e75-473f-9bbd-bddee19d4ac7",
 			"key": "api-entry",
 			"value": "/v1",
 			"type": "string"
 		},
 		{
-			"id": "d93d3555-bb47-496e-9e36-25e1348fd94a",
+			"id": "3095c8bb-5ef6-47ca-8aff-a45be0681ec4",
 			"key": "appId",
-			"value": "",
+			"value": "5eb6cafd4e05a32868462625",
 			"type": "string"
 		},
 		{
-			"id": "0fd2100b-605d-420e-96c3-eb4527417a4a",
+			"id": "30f4f58e-2deb-4d9a-83b8-ae225a54e7b4",
 			"key": "subscriptionId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "c9046da5-1245-4a52-bf84-39a7fcba0150",
+			"id": "bcadcfb3-859f-4e4e-b76d-488349700ef7",
 			"key": "notificationId",
 			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "67e08185-9baa-4e81-a3d0-c4a13618f3d5",
+			"key": "deleteInstantly",
+			"value": "true",
 			"type": "string"
 		}
 	],
