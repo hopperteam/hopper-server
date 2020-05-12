@@ -46,7 +46,7 @@ export function isUrl(url: string): boolean {
     return validator.isURL(url, {
         require_protocol: true,
         protocols: ['https', 'http'],
-        require_tld: true
+        require_tld: false
     });
 }
 export function isEmail(email: string): boolean {
