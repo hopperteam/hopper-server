@@ -45,7 +45,8 @@ export function decryptContent(key: string, content: any): any {
 export function isUrl(url: string): boolean {
     return validator.isURL(url, {
         require_protocol: true,
-        protocols: ['https', 'http']
+        protocols: ['https', 'http'],
+        require_tld: true
     });
 }
 export function isEmail(email: string): boolean {
