@@ -63,9 +63,13 @@ export default class SubscriptionHandler extends Handler {
             let app = await App.findById(req.query.id);
             if (!app)
                 throw new Error("Could not find app");
-            let data = utils.decryptContent(app.cert, req.query.content);
+            let data = await utils.decryptContent(app.cert, req.query.content);
+            if (data === undefined) {
+                throw new Error("Could not verify");
+            }
+
             let request: SubscribeRequest = SubscribeRequest.fromRequestBody(data);
-            log.info("Parsed subscription request: " + JSON.stringify(request));
+            if (request.id != app._id) throw new Error("Invalid request");
             res.json({
                 "status": "success",
                 "subscribeRequest": request
@@ -80,7 +84,14 @@ export default class SubscriptionHandler extends Handler {
             let app = await App.findById(req.body.id);
             if (!app)
                 throw new Error("Could not find app");
-            let data = utils.decryptContent(app.cert, req.body.content);
+            let data = await utils.decryptContent(app.cert, req.body.content);
+            if (data === undefined) {
+                throw new Error("Could not verify");
+            }
+
+            if (data.id != app._id) throw new Error("Invalid request");
+
+
             let subscription = await Subscription.create({ userId: req.session.user.id, accountName: data.accountName, app: app._id });
 
             this.webSocketManager.loadAndCreateSubscriptionInBackground(subscription._id, req.session.user.id);

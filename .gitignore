@@ -8,3 +8,4 @@ out
 localFiles/
 */coverage/
 node_modules
+*.swp

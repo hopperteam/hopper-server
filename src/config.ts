@@ -5,7 +5,7 @@ const log = new Log("Config");
 
 export namespace Config {
 
-    export const HOPPER_VERSION = "0.2";
+    export const HOPPER_VERSION = "0.3";
     export const HOPPER_VERSION_TYPE = "dev";
 
     export async function parseConfig(file: string) {
