@@ -1,22 +1,21 @@
 ﻿import 'jest';
 import * as crypto from 'crypto';
 import * as utils from '../src/utils';
+import * as jwt from 'jsonwebtoken';
 
 describe('utils ', () => {
 
-    it('should decrypt content', () => {
+    it('should decrypt content', async () => {
         try {
             const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
                 modulusLength: 2048,
                 publicKeyEncoding: {
-                    type: 'spki',
+                    type: 'pkcs1',
                     format: 'pem'
                 },
                 privateKeyEncoding: {
                     type: 'pkcs8',
                     format: 'pem',
-                    cipher: 'aes-256-cbc',
-                    passphrase: "password"
                 }
             });
             const json = {
@@ -25,12 +24,9 @@ describe('utils ', () => {
                 "imageUrl": "https://www.baseurl.com/path/to/bild.png",
                 "contactEmail": "support@ModernApp.com"
             };
-            let sha = crypto.createHash('sha256');
-            sha.update(JSON.stringify(json));
-            let jsonHash = sha.digest("hex");
-            let hash = crypto.privateEncrypt({ key: privateKey, passphrase: "password" }, Buffer.from(jsonHash));
-            let obj = { "verify": hash.toString("base64"), "data": json };
-            let result = utils.decryptContent(Buffer.from(publicKey).toString("base64"), Buffer.from(JSON.stringify(obj)).toString("base64"));
+            let token = jwt.sign(json, privateKey, {algorithm: 'RS256'});
+            let result = await utils.decryptContent(new Buffer(publicKey).toString('base64'), token);
+            delete result['iat']; 
             expect(result).toEqual(json);
         } catch (e) {
             expect("").toBe(e.message);
@@ -47,15 +43,6 @@ describe('utils ', () => {
         }
     });
 
-    it('should hash a password', () => {
-        let regex = /([0-9a-z]){64}/;
-        let password = "strongPassword";
-        try {
-            let hash = utils.hashPassword(password);
-            expect(hash).toMatch(regex);
-        } catch (e) {
-            expect("").toBe(e.message);
-        }
-    });
 
 });
+
