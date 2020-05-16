@@ -14,7 +14,7 @@ export default class Action {
     }
 
     public static fromRequestJson(json: any): Action {
-        if (json.type == null || json.url == null || json.markAsDine == null || json.text == null) {
+        if (json.type == null || json.url == null || json.markAsDone == null || json.text == null) {
             throw new Error("Required attributes for Action missing");
         }
         return new Action(
