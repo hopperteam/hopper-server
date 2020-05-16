@@ -68,8 +68,9 @@ export default class SubscriptionHandler extends Handler {
                 throw new Error("Could not verify");
             }
 
+            data.id = req.query.id;
             let request: SubscribeRequest = SubscribeRequest.fromRequestBody(data);
-            if (request.id != app._id) throw new Error("Invalid request");
+
             res.json({
                 "status": "success",
                 "subscribeRequest": request
@@ -88,9 +89,6 @@ export default class SubscriptionHandler extends Handler {
             if (data === undefined) {
                 throw new Error("Could not verify");
             }
-
-            if (data.id != app._id) throw new Error("Invalid request");
-
 
             let subscription = await Subscription.create({ userId: req.session.user.id, accountName: data.accountName, app: app._id });
 

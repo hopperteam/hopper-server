@@ -24,8 +24,10 @@ export function generateId(): string {
 export async function decryptContent(key: string, content: any): Promise<any> {
     return new Promise((res) => {
         jwt.verify(content, Buffer.from(key, 'base64'), (err: any, decoded: any) => {
-            if (err) res(undefined);
-            logger.error(err);
+            if (err) {
+                logger.error(err);
+                res(undefined);
+            }
             res(decoded);
         })
     });
