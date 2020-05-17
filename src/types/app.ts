@@ -31,7 +31,11 @@ const AppSchema = new mongoose.Schema({
 
 AppSchema.set('toJSON', {
     virtuals: true,
-    transform: function (doc, ret) { delete ret._id }
+    transform: function (doc, ret) {
+        delete ret._id;
+        delete ret.contactEmail;
+        delete ret.cert;
+    }
 });
 
 // Validators

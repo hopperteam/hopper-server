@@ -46,6 +46,8 @@ NotificationSchema.set('toJSON', {
     virtuals: true,
     transform: function (doc, ret) {
         delete ret._id;
+        delete ret.isArchived;
+        delete ret.userId;
         ret.actions.forEach((action: any, index: number) => {
             ret.actions[index] = Action.fromDbJson(action);
         });
