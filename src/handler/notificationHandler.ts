@@ -31,7 +31,7 @@ export default class NotificationHandler extends Handler {
             // the resulting behaviour is that if includeDone is set in some way, "done" notifications will be returned
             // it does not depend on the actual value of the query parameter
             // possible fix: include express query boolean parser as middleware and rework this logic
-            let arr = await Notification.find(criteria, { isArchived: 0, userId: 0 }).skip(skip).limit(limit);
+            let arr = await Notification.find(criteria).skip(skip).limit(limit);
             log.info("Got all");
             res.json(arr);
         } catch (e) {
