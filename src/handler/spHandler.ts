@@ -62,6 +62,7 @@ export default class SPHandler extends Handler {
             let subscription = await Subscription.findById(req.body.subscriptionId);
             if (!subscription)
                 throw new Error("No valid subscription");
+            Notification.sanitize(req.body.notification, false);
             req.body.notification.userId = subscription.userId;
             req.body.notification.subscription = subscription._id;
             let notification = await Notification.create(req.body.notification);
@@ -78,6 +79,7 @@ export default class SPHandler extends Handler {
 
     private async putNotification(req: express.Request, res: express.Response): Promise<void> {
         try {
+            Notification.sanitize(req.body.notification, false);
             let notification = await Notification.findByIdAndUpdate(req.body.id, req.body.notification);
             this.webSocketManager.loadAndUpdateNotificationInBackground(req.body.id);
             log.info("Updated notification: " + JSON.stringify(notification));

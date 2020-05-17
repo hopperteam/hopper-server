@@ -1,4 +1,5 @@
 ﻿import * as mongoose from 'mongoose';
+import ISanitizer from './sanitizer';
 import Action from './action';
 
 export interface INotification extends mongoose.Document {
@@ -13,6 +14,11 @@ export interface INotification extends mongoose.Document {
     type: string;
     content: string;
     actions: Action[];
+}
+
+// interface extending sanitizer
+interface INotificationStatic extends mongoose.Model<INotification>, ISanitizer {
+    // other static methods
 }
 
 const NotificationSchema = new mongoose.Schema({
@@ -38,8 +44,24 @@ const NotificationSchema = new mongoose.Schema({
 
 NotificationSchema.set('toJSON', {
     virtuals: true,
-    transform: function (doc, ret) { delete ret._id }
+    transform: function (doc, ret) {
+        delete ret._id;
+        ret.actions.forEach((action: any, index: number) => {
+            ret.actions[index] = Action.fromDbJson(action);
+        });
+    }
 });
 
-const Notification = mongoose.model<INotification>("Notification", NotificationSchema);
+NotificationSchema.statics.sanitize = function(json: any, extended: boolean) : void {
+    delete json._id;
+    delete json.subscription;
+    delete json.isArchived;
+    if (json.actions !== undefined) {
+        json.actions.forEach((action: any, index: number) => {
+            json.actions[index] = Action.fromRequestJson(action);
+        });
+    }
+}
+
+const Notification: INotificationStatic = mongoose.model<INotification, INotificationStatic>("Notification", NotificationSchema);
 export default Notification;
