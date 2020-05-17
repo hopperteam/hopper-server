@@ -24,6 +24,7 @@ export default class SPHandler extends Handler {
 
     private async postApp(req: express.Request, res: express.Response): Promise<void> {
         try {
+            App.sanitize(req.body, false);
             let app = await App.create(req.body);
             log.info("Created app: " + JSON.stringify(app));
             res.json({
@@ -45,7 +46,7 @@ export default class SPHandler extends Handler {
                 utils.handleError(new Error("Could not verify"), log, res);
                 return;
             }
-            delete data.baseUrl;
+            App.sanitize(data, true);
             await app.updateOne(data);
             this.webSocketManager.loadAndUpdateSubscriptionsForAppInBackground(app._id);
             log.info("Updated app: " + JSON.stringify(app));
