@@ -1,4 +1,5 @@
 ﻿import * as mongoose from 'mongoose';
+import ISanitizer from './sanitizer';
 import { isUrl, isEmail } from '../utils';
 
 interface IApp extends mongoose.Document {
@@ -9,6 +10,11 @@ interface IApp extends mongoose.Document {
     manageUrl: string | undefined;
     contactEmail: string;
     cert: string;
+}
+
+// interface extending sanitizer
+interface IAppStatic extends mongoose.Model<IApp>, ISanitizer {
+    // other static methods
 }
 
 const AppSchema = new mongoose.Schema({
@@ -25,7 +31,11 @@ const AppSchema = new mongoose.Schema({
 
 AppSchema.set('toJSON', {
     virtuals: true,
-    transform: function (doc, ret) { delete ret._id }
+    transform: function (doc, ret) {
+        delete ret._id;
+        delete ret.contactEmail;
+        delete ret.cert;
+    }
 });
 
 // Validators
@@ -34,5 +44,12 @@ AppSchema.path('baseUrl').validate(isUrl);
 AppSchema.path('manageUrl').validate(isUrl);
 AppSchema.path('contactEmail').validate(isEmail);
 
-const App = mongoose.model<IApp>("App", AppSchema);
+AppSchema.statics.sanitize = function(json: any, extended: boolean) : void {
+    delete json._id;
+    if (extended) {
+        delete json.baseUrl;
+    }
+}
+
+const App: IAppStatic = mongoose.model<IApp, IAppStatic>("App", AppSchema);
 export default App;

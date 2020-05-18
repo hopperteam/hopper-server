@@ -24,7 +24,7 @@ export default class SubscriptionHandler extends Handler {
 
     private async getApp(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let app = await App.findById(req.query.id, { contactEmail: 0, cert: 0 });
+            let app = await App.findById(req.query.id);
             if (!app)
                 throw new Error("Could not find app");
             log.info("Got app: " + JSON.stringify(app));
@@ -36,7 +36,7 @@ export default class SubscriptionHandler extends Handler {
 
     private async getSubscriptions(req: express.Request, res: express.Response): Promise<void> {
         try {
-            let subs = await Subscription.find({ userId: req.session.user.id }, { userId: 0 }).populate('app', { contactEmail: 0, cert: 0 });
+            let subs = await Subscription.find({ userId: req.session.user.id }).populate('app');
             log.info("Got all");
             res.json(subs);
         } catch (e) {
