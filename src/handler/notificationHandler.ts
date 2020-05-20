@@ -29,7 +29,7 @@ export default class NotificationHandler extends Handler {
             if (!req.query.includeDone || req.query.includeDone === "false")
                 criteria.isDone = false;
             
-            let arr = await Notification.find(criteria).skip(skip).limit(limit);
+            let arr = await Notification.find(criteria).sort({timestamp: -1}).skip(skip).limit(limit);
             res.json(arr);
         } catch (e) {
             utils.handleError(e, log, res);
