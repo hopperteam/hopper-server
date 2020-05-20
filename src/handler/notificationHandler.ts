@@ -26,13 +26,10 @@ export default class NotificationHandler extends Handler {
             let criteria: any = { userId: req.session.user.id, isArchived: false }
             if (req.query.subscription)
                 criteria.subscription = req.query.subscription;
-            if (!req.query.includeDone)
+            if (!req.query.includeDone || req.query.includeDone === "false")
                 criteria.isDone = false;
-            // the resulting behaviour is that if includeDone is set in some way, "done" notifications will be returned
-            // it does not depend on the actual value of the query parameter
-            // possible fix: include express query boolean parser as middleware and rework this logic
+            
             let arr = await Notification.find(criteria).skip(skip).limit(limit);
-            log.info("Got all");
             res.json(arr);
         } catch (e) {
             utils.handleError(e, log, res);
