@@ -1,7 +1,7 @@
 ﻿import * as express from 'express';
 import Handler from './handler';
-import App from '../types/app';
-import Subscription from '../types/subscription';
+import App, {IApp} from '../types/app';
+import Subscription, { ISubscription } from '../types/subscription';
 import SubscribeRequest from '../types/subscribeRequest';
 import Log from '../log';
 import * as utils from '../utils';
@@ -23,83 +23,138 @@ export default class SubscriptionHandler extends Handler {
     }
 
     private async getApp(req: express.Request, res: express.Response): Promise<void> {
+        let app: IApp | null;
         try {
-            let app = await App.findById(req.query.id);
-            if (!app)
-                throw new Error("Could not find app");
-            log.info("Got app: " + JSON.stringify(app));
-            res.json(app);
+            app = await App.findById(req.query.id);    
         } catch (e) {
-            utils.handleError(e, log, res);
+            log.error(e.message);
+            utils.writeDBError(e, res);
+            return;
         }
+
+        if (!app) {
+            log.warn("Could not find app");
+            utils.writeError("Could not find app", res);
+            return;
+        }
+
+        log.info("Got app: " + JSON.stringify(app));
+        res.json(app);
     }
 
     private async getSubscriptions(req: express.Request, res: express.Response): Promise<void> {
+        let subs: ISubscription[];
         try {
-            let subs = await Subscription.find({ userId: req.session.user.id }).populate('app');
-            log.info("Got all");
-            res.json(subs);
+            subs = await Subscription.find({ userId: req.session.user.id }).populate('app');
         } catch (e) {
-            utils.handleError(e, log, res);
+            log.error(e.message);
+            utils.writeDBError(e, res);
+            return;
         }
+
+        log.info("Got all");
+        res.json(subs);
     }
 
     private async deleteSubscription(req: express.Request, res: express.Response): Promise<void> {
+        let subscription: ISubscription | null;
         try {
-            let subscription = await Subscription.findByIdAndDelete(req.query.id);
-
-            this.webSocketManager.deleteSubscription(req.query.id, req.session.user.id, req.session.id);
-            log.info("Deleted subscription: " + JSON.stringify(subscription));
-            res.json({
-                "status": "success"
-            });
+            subscription = await Subscription.findByIdAndDelete(req.query.id);
         } catch (e) {
-            utils.handleError(e, log, res);
+            log.error(e.message);
+            utils.writeDBError(e, res);
+            return;
         }
+
+        if (!subscription) {
+            log.warn("Could not find subscription");
+            utils.writeError("Could not find subscription", res);
+            return;
+        }
+
+        this.webSocketManager.deleteSubscription(req.query.id, req.session.user.id, req.session.id);
+        log.info("Deleted subscription: " + JSON.stringify(subscription));
+        res.json({
+            "status": "success"
+        });
     }
 
     private async getSubscribeRequest(req: express.Request, res: express.Response): Promise<void> {
+        let app: IApp | null;
         try {
-            let app = await App.findById(req.query.id);
-            if (!app)
-                throw new Error("Could not find app");
-            let data = await utils.decryptContent(app.cert, req.query.content);
-            if (data === undefined) {
-                throw new Error("Could not verify");
-            }
-
-            data.id = req.query.id;
-            let request: SubscribeRequest = SubscribeRequest.fromRequestBody(data);
-
-            res.json({
-                "status": "success",
-                "subscribeRequest": request
-            });
+            app = await App.findById(req.query.id);
         } catch (e) {
-            utils.handleError(e, log, res);
+            log.error(e.message);
+            utils.writeDBError(e, res);
+            return;
         }
+
+        if (!app) {
+            log.warn("Could not find app");
+            utils.writeError("Could not find app", res);
+            return;
+        }
+
+        let data = await utils.decryptContent(app.cert, req.query.content);
+        if (data === undefined) {
+            log.warn("Could not verify");
+            utils.writeError("Could not verify", res);
+            return;
+        }
+
+        data.id = req.query.id;
+        let request: SubscribeRequest
+        try {
+        request = SubscribeRequest.fromRequestBody(data);
+        } catch (e) {
+            log.error(e.message);
+            utils.writeError(e.message, res);
+            return;
+        }
+
+        res.json({
+            "status": "success",
+            "subscribeRequest": request
+        });
     }
 
     private async postSubscribeRequest(req: express.Request, res: express.Response): Promise<void> {
+        let app: IApp | null;
         try {
-            let app = await App.findById(req.body.id);
-            if (!app)
-                throw new Error("Could not find app");
-            let data = await utils.decryptContent(app.cert, req.body.content);
-            if (data === undefined) {
-                throw new Error("Could not verify");
-            }
-
-            let subscription = await Subscription.create({ userId: req.session.user.id, accountName: data.accountName, app: app._id });
-
-            this.webSocketManager.loadAndCreateSubscriptionInBackground(subscription._id, req.session.user.id);
-            log.info("Created subscription: " + JSON.stringify(subscription));
-            res.json({
-                "status": "success",
-                "subscriptionId": subscription._id
-            });
+            app = await App.findById(req.body.id);
         } catch (e) {
-            utils.handleError(e, log, res);
+            log.error(e.message);
+            utils.writeDBError(e, res);
+            return;
         }
+
+        if (!app) {
+            log.warn("Could not find app");
+            utils.writeError("Could not find app", res);
+            return;
+        }
+
+        let data = await utils.decryptContent(app.cert, req.body.content);
+        if (data === undefined) {
+            log.warn("Could not verify");
+            utils.writeError("Could not verify", res);
+            return;
+        }
+
+        let subscription: ISubscription;
+        try {
+            subscription = await Subscription.create({ userId: req.session.user.id, accountName: data.accountName, app: app._id });
+        } catch (e) {
+            log.error(e.message);
+            utils.writeDBError(e, res);
+            return;
+        }
+        
+        this.webSocketManager.loadAndCreateSubscriptionInBackground(subscription._id, req.session.user.id);
+        log.info("Created subscription: " + JSON.stringify(subscription));
+        res.json({
+            "status": "success",
+            "subscriptionId": subscription._id
+        });
     }
 }
