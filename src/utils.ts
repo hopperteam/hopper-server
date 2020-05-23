@@ -7,11 +7,6 @@ import Log from './log';
 
 const logger = new Log("Utils");
 
-export function handleError(err: Error, log: Log, res: express.Response, statusCode: number = 400) {
-    log.error(err.message);
-    writeError(err.message, res, statusCode);
-}
-
 export function writeDBError(err: mongoose.Error, res: express.Response) {
     let reason: string;
     let code: number = 400;
