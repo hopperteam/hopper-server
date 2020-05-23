@@ -8,10 +8,14 @@ const logger = new Log("Utils");
 
 export function handleError(err: Error, log: Log, res: express.Response, statusCode: number = 400) {
     log.error(err.message);
-    res.status(statusCode);
+    writeError(err.message, res, statusCode);
+}
+
+export function writeError(reason: string, res: express.Response, code:number = 400) {
+    res.status(code);
     res.json({
         "status": "error",
-        "reason": err.message
+        "reason": reason
     });
 }
 
