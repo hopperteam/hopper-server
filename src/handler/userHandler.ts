@@ -16,15 +16,11 @@ export default class UserHandler extends Handler {
     }
 
     private async getUser(req: express.Request, res: express.Response): Promise<void> {
-        try {
-            res.json({
-                "firstName": req.session.user.firstName,
-                "lastName": req.session.user.lastName,
-                "email": req.session.user.email
-            });
-            log.info("Got user information");
-        } catch (e) {
-            utils.handleError(e, log, res);
-        }
+        res.json({
+            "firstName": req.session.user.firstName,
+            "lastName": req.session.user.lastName,
+            "email": req.session.user.email
+        });
+        log.info("Got user information");
     }
 }
