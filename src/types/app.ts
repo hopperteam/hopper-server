@@ -2,7 +2,7 @@
 import ISanitizer from './sanitizer';
 import { isUrl, isEmail } from '../utils';
 
-interface IApp extends mongoose.Document {
+export interface IApp extends mongoose.Document {
     name: string;
     imageUrl: string;
     isHidden: boolean;

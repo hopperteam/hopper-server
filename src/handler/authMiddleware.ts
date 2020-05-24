@@ -21,49 +21,48 @@ export default class AuthMiddleware {
         const namespacedPermission = Config.instance.permissionNamespace + "." + permissionName;
         return async function (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
             let sid = req.query.token || req.headers.authorization;
-            try {
-                if (sid == undefined) {
-                    throw new Error("No session found");
-                } 
-                let session: Session | undefined;
-                if (sid.startsWith("Bearer ")) {
-                    session = await Session.decode(sid.substr(7));
-                } else {
-                    session = await Session.decode(sid);
-                }
-                
-                if (!session)
-                    throw new Error("No session found");
+            if (sid == undefined) {
+                log.warn("No session found");
+                utils.writeError("No session found", res, 401);
+                return;
+            } 
 
-                if (!session.user.roles.includes(namespacedPermission)) {
-                    utils.handleError(new Error("No permission to use this service"), log, res, 403);
-                    return
-                }
-                
-                req.session = session;
-                next();
-            } catch (e) {
-                utils.handleError(e, log, res, 401);
+            let session: Session | undefined;
+            if (sid.startsWith("Bearer ")) {
+                session = await Session.decode(sid.substr(7));
+            } else {
+                session = await Session.decode(sid);
             }
+            
+            if (!session) {
+                log.warn("No session found");
+                utils.writeError("No session found", res, 401);
+                return;
+            }
+
+            if (!session.user.roles.includes(namespacedPermission)) {
+                log.warn("No permission to use this service");
+                utils.writeError("No permission to use this service", res, 403);
+                return
+            }
+            
+            req.session = session;
+            next();
         }
     }
 
     public static authMock(): express.Handler {
         return async function (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
-            try {
-                let sessionUser: SessionUser = {
-                    id: "testUser",
-                    email: "testuser@hoppercloud.net",
-                    firstName: "Test",
-                    lastName: "User",
-                    roles: ["User"]
-                };
+            let sessionUser: SessionUser = {
+                id: "testUser",
+                email: "testuser@hoppercloud.net",
+                firstName: "Test",
+                lastName: "User",
+                roles: ["User"]
+            };
 
-                req.session = new Session("test", sessionUser);
-                next();
-            } catch (e) {
-                utils.handleError(e, log, res, 401);
-            }
+            req.session = new Session("test", sessionUser);
+            next();
         }
     }
 }
