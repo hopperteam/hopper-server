@@ -1,10 +1,6 @@
 ﻿import * as express from 'express';
 import Handler from './handler';
 import Log from '../log';
-import Session from '../types/session';
-import Notification from '../types/notification';
-import Subscription from '../types/subscription';
-import * as utils from '../utils';
 
 const log: Log = new Log("UserHandler");
 
