@@ -6,9 +6,8 @@ import AuthMiddleware from './handler/authMiddleware';
 import LogMiddleware from './handler/logMiddleware';
 import {Config} from "./config";
 import * as mongoose from 'mongoose';
-import * as WebSocket from 'ws';
 import * as expressWs from 'express-ws'
-import * as cors from 'cors'
+import * as cors from 'cors';
 
 const log = new Log("HopperApp");
 
