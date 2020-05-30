@@ -1,7 +1,6 @@
 ﻿import * as express from 'express';
-import Handler from './handler';;
+import Handler from './handler';
 import Log from '../log';
-import * as utils from '../utils';
 import { Config } from "../config";
 
 const log: Log = new Log("GeneralHandler");
