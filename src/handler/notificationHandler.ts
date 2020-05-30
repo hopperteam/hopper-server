@@ -40,32 +40,17 @@ export default class NotificationHandler extends Handler {
     }
 
     private async markNotificationsAsDone(req: express.Request, res: express.Response): Promise<void> {
-        let notification: INotification | null;
-        try {
-            notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.user.id }, { isDone: true });
-        } catch (e) {
-            log.error(e.message);
-            utils.writeDBError(e, res);
-            return;
-        }
-
-        if (!notification) {
-            log.warn("Could not find notification");
-            utils.writeError("Could not find notification", res);
-            return;
-        }
-
-        this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.user.id, req.session.id);
-        log.info("Marked as done: " + JSON.stringify(notification));
-        res.json({
-            "status": "success"
-        });
+        await markNotification(req, res, true);
     }
 
     private async markNotificationsAsUndone(req: express.Request, res: express.Response): Promise<void> {
+        await markNotification(req, res, false);
+    }
+
+    private async markNotification(req: express.Request, res: express.Response, as: boolean): Promise<void> {
         let notification: INotification | null;
         try {
-            notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.user.id }, { isDone: false });
+            notification = await Notification.findOneAndUpdate({ _id: req.body.id, userId: req.session.user.id }, { isDone: as });
         } catch (e) {
             log.error(e.message);
             utils.writeDBError(e, res);
@@ -79,7 +64,7 @@ export default class NotificationHandler extends Handler {
         }
         
         this.webSocketManager.loadAndUpdateNotificationInBackground(notification._id, req.session.user.id, req.session.id);
-        log.info("Marked as undone: " + JSON.stringify(notification));
+        log.info("Marked isDone as " + as + ": " + JSON.stringify(notification));
         res.json({
             "status": "success"
         });
