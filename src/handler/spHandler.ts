@@ -42,39 +42,23 @@ export default class SPHandler extends Handler {
     }
 
     private async putApp(req: express.Request, res: express.Response): Promise<void> {
-        let app: IApp | null;
-        try {
-            app = await App.findById(req.body.id);
-        } catch (e) {
-            log.error(e.message);
-            utils.writeDBError(e, res);
-            return;
-        }
-
-        if (!app) {
-            log.warn("Could not find app");
-            utils.writeError("Could not find app", res);
-            return;
-        }
-
-        let data = await utils.decryptContent(app.cert, req.body.content);
-        if (data === undefined) {
-            log.warn("Could not verify");
+        let helper = await App.verifyContent(req.body.id, req.body.content, log);
+        if (!helper.app || !helper.data) {
             utils.writeError("Could not verify", res);
             return;
         }
 
-        App.sanitize(data, true);
+        App.sanitize(helper.data, true);
         try {
-            await app.updateOne(data);
+            await helper.app.updateOne(helper.data);
         } catch (e) {
             log.error(e.message);
             utils.writeDBError(e, res);
             return;
         }
 
-        this.webSocketManager.loadAndUpdateSubscriptionsForAppInBackground(app._id);
-        log.info("Updated app: " + JSON.stringify(app));
+        this.webSocketManager.loadAndUpdateSubscriptionsForAppInBackground(helper.app._id);
+        log.info("Updated app: " + JSON.stringify(helper.app));
         res.json({
             "status": "success"
         });
