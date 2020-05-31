@@ -40,11 +40,11 @@ export default class NotificationHandler extends Handler {
     }
 
     private async markNotificationsAsDone(req: express.Request, res: express.Response): Promise<void> {
-        await markNotification(req, res, true);
+        await this.markNotification(req, res, true);
     }
 
     private async markNotificationsAsUndone(req: express.Request, res: express.Response): Promise<void> {
-        await markNotification(req, res, false);
+        await this.markNotification(req, res, false);
     }
 
     private async markNotification(req: express.Request, res: express.Response, as: boolean): Promise<void> {
