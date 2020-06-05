@@ -80,24 +80,9 @@ export default class SubscriptionHandler extends Handler {
     }
 
     private async getSubscribeRequest(req: express.Request, res: express.Response): Promise<void> {
-        let app: IApp | null;
-        try {
-            app = await App.findById(req.query.id);
-        } catch (e) {
-            log.error(e.message);
-            utils.writeDBError(e, res);
-            return;
-        }
-
-        if (!app) {
-            log.warn("Could not find app");
-            utils.writeError("Could not find app", res);
-            return;
-        }
-
-        let data = await utils.decryptContent(app.cert, req.query.content);
-        if (data === undefined) {
-            log.warn("Could not verify");
+        let helper = await App.verifyContent(req.query.id, req.query.content, log);
+        let data = helper.data;
+        if (!data) {
             utils.writeError("Could not verify", res);
             return;
         }
@@ -119,23 +104,8 @@ export default class SubscriptionHandler extends Handler {
     }
 
     private async postSubscribeRequest(req: express.Request, res: express.Response): Promise<void> {
-        let app: IApp | null;
-        try {
-            app = await App.findById(req.body.id);
-        } catch (e) {
-            log.error(e.message);
-            utils.writeDBError(e, res);
-            return;
-        }
-
-        if (!app) {
-            log.warn("Could not find app");
-            utils.writeError("Could not find app", res);
-            return;
-        }
-
-        let data = await utils.decryptContent(app.cert, req.body.content);
-        if (data === undefined) {
+        let helper = await App.verifyContent(req.body.id, req.body.content, log);
+        if (!helper.app || !helper.data) {
             log.warn("Could not verify");
             utils.writeError("Could not verify", res);
             return;
@@ -143,7 +113,7 @@ export default class SubscriptionHandler extends Handler {
 
         let subscription: ISubscription;
         try {
-            subscription = await Subscription.create({ userId: req.session.user.id, accountName: data.accountName, app: app._id });
+            subscription = await Subscription.create({ userId: req.session.user.id, accountName: helper.data.accountName, app: helper.app._id });
         } catch (e) {
             log.error(e.message);
             utils.writeDBError(e, res);

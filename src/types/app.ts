@@ -1,6 +1,8 @@
 ﻿import * as mongoose from 'mongoose';
 import ISanitizer from './sanitizer';
 import { isUrl, isEmail } from '../utils';
+import Log from '../log';
+import * as utils from '../utils';
 
 export interface IApp extends mongoose.Document {
     name: string;
@@ -12,9 +14,20 @@ export interface IApp extends mongoose.Document {
     cert: string;
 }
 
+export class VerifyHelper {
+    public app: IApp | null;
+    public data: any | null;
+
+    constructor(app: IApp | null, data: any | null) {
+        this.app = app;
+        this.data = data;
+    }
+}
+
 // interface extending sanitizer
 interface IAppStatic extends mongoose.Model<IApp>, ISanitizer {
     // other static methods
+    verifyContent(id: string, content: any, log: Log): Promise<VerifyHelper>;
 }
 
 const AppSchema = new mongoose.Schema({
@@ -49,6 +62,28 @@ AppSchema.statics.sanitize = function(json: any, extended: boolean) : void {
     if (extended) {
         delete json.baseUrl;
     }
+}
+
+AppSchema.statics.verifyContent = async function(id: string, content: any, log: Log): Promise<VerifyHelper> {
+        let app: IApp | null = null;
+        let data: any | null = null;
+        try {
+            app = await App.findById(id);
+        } catch (e) {
+            log.error(e.message);
+            return new VerifyHelper(app, data);
+        }
+
+        if (!app) {
+            log.warn("Could not find app");
+            return new VerifyHelper(app, data);
+        }
+
+        data = await utils.decryptContent(app.cert, content);
+        if (data === undefined) {
+            log.warn("Could not verify");
+        }
+        return new VerifyHelper(app, data);
 }
 
 const App: IAppStatic = mongoose.model<IApp, IAppStatic>("App", AppSchema);
