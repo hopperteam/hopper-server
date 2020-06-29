@@ -5,8 +5,8 @@ const log = new Log("Config");
 
 export namespace Config {
 
-    export const HOPPER_VERSION = "0.3.1";
-    export const HOPPER_VERSION_TYPE = "dev";
+    export const HOPPER_VERSION = "1.0.0";
+    export const HOPPER_VERSION_TYPE = "prod";
 
     export async function parseConfig(file: string) {
         var data: any = JSON.parse(fs.readFileSync(file).toString());
