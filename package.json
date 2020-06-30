@@ -23,6 +23,7 @@
       "json",
       "node"
     ],
+    "coverageReporters": ["lcov", "text", "teamcity"],
     "testResultsProcessor": "jest-teamcity-reporter"
   },
   "author": "The hopper team",
